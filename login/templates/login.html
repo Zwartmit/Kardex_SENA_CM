@@ -1,0 +1,131 @@
+{% load static %}
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Kardex - SENA CM</title>
+    <link href="{% static 'img/logoSENA_V.png' %}" rel="icon">
+    <link rel="stylesheet" href="{% static 'lib/adminlte-3.0.4/plugins/font-awesome-5.11.1/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'lib/adminlte-3.0.4/css/adminlte.min.css' %}">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <script src="{% static 'lib/sweetalert2/sweetalert2.all.min.js' %}"></script>
+    <style>
+        .card {
+            border-radius: 14px;
+        }
+
+        .card-header {
+            background-color: #094b39;
+            border-radius: 10px;
+            color: white;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body class="hold-transition login-page">
+    <div style="display: block; justify-content: center; align-items: center;">
+        <strong style="font-size: 90px; color: white; filter: drop-shadow(0 0 13px #000000);"><em>Kardex</em></strong>
+    </div>
+    <div style="display: block; justify-content: center; align-items: center;">
+        <strong style="font-size: 60px; color: white; filter: drop-shadow(0 0 13px #000000);"><em>SENA - Centro Minero</em></strong>
+    </div>
+    <div class="login-box" style="padding-top: 20px; filter: drop-shadow(0 0 5px #000000);">
+        <div class="card card-outline card-primary">
+            <div class="card-header text-center">
+                <a><img src="{% static 'img/logoSENA_B.png' %}" style="height: 80px; width: 80px; filter: drop-shadow(0 0 10px #000000);" alt="Logo SENA"></a>
+            </div>
+            <div class="card-body">
+                <p class="login-box-msg" style="font-size: 23px;">Iniciar sesión</p>
+                <form action="#" method="post">
+                    {% csrf_token %}
+                    <div class="input-group mb-3">
+                        {{ form.username | add_class:'form-control' | attr:'id:username' | attr:'autocomplete:on' | attr:'placeholder:Ingrese su usuario' }}
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-envelope" style="color: white;"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        {{ form.password | add_class:'form-control' | attr:'id:password' | attr:'autocomplete:off' | attr:'placeholder:Ingrese su contraseña' }}
+                        <div class="input-group-append">
+                            <div class="input-group-append">
+                                <span type="button" class="btn btn-outline-secondary toggle-password">
+                                    <i class="fas fa-eye" id="togglePasswordIcon"></i>
+                                </span>
+                            </div>
+                            <div class="input-group-text">
+                                <span class="fas fa-lock" style="color: white;"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="icheck-primary">
+                                <p class="mb-1">
+                                    <a href="{% url 'password_reset' %}">Restablecer contraseña</a>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <button type="submit" class="btn btn-primary btn-block"><em>Ingresar</em></button>
+                        </div>
+                    </div>
+                    <script>
+                        {% if form.errors %}
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Usuario o contraseña incorrectos, intente nuevamente.',
+                            icon: 'error',
+                        });
+                        {% endif %}
+                    </script>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'lib/adminlte-3.0.4/plugins/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'lib/adminlte-3.0.4/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'lib/adminlte-3.0.4/js/adminlte.min.js' %}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const togglePasswordButton = document.querySelector('.toggle-password');
+            const passwordField = document.getElementById("password");
+            const togglePasswordIcon = document.getElementById("togglePasswordIcon");
+
+            togglePasswordButton.addEventListener('click', function () {
+                const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordField.setAttribute('type', type);
+
+                if (type === 'password') {
+                    togglePasswordIcon.classList.remove('fa-eye-slash');
+                    togglePasswordIcon.classList.add('fa-eye');
+                } else {
+                    togglePasswordIcon.classList.remove('fa-eye');
+                    togglePasswordIcon.classList.add('fa-eye-slash');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,132 @@
+.nav-item {
+    border-radius: 10px;
+}
+
+.nav-item:hover {
+    background-color: white;
+    color: #034231;
+}
+
+.nav-item:hover .nav-link,
+.nav-item:hover .nav-icon {
+    color: #034231 !important;
+}
+
+.nav-itemm {
+    border-radius: 10px;
+}
+
+.nav-itemm:hover {
+    background-color: rgb(235, 235, 235);
+    color: #034231;
+}
+
+.nav-itemm:hover .nav-link,
+.nav-itemm:hover .nav-icon {
+    color: #034231 !important;
+}
+
+.main-footer {
+    background-color: #034231;
+    border-color: #034231;
+    color: #ffffff;
+}
+
+.content-wrapper {
+    background-image: url("/static/img/dashback.jpeg");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.main-sidebar {
+    background: linear-gradient(#000000, #094b39, #094b39, #000000);
+    align-content: center;
+}
+
+.main-header {
+    background: #094b39;
+}
+
+.h1,
+h1 {
+    text-shadow: 3px 3px 2.5px black;
+}
+
+.dropdown-item:hover {
+    background-color: #043b2e;
+    border-radius: 10px;
+}
+
+.breadcrumb-item a {
+    color: #ffffff;
+}
+
+.breadcrumb-item {
+    background-color: #034231;
+    border-color: #034231;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected], .select2-container--default .select2-results__option--highlighted[aria-selected]:hover {
+    background-color: #034231;
+    color: black;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected], .select2-container--default .select2-results__option--highlighted[aria-selected]:hover {
+    background-color: #034231;
+    color: #fff;
+}
+
+.logout-menu {
+    background-color: #034231;
+    border-color: #ffffff;
+    border-radius: 10px
+}
+
+.img_db {
+    margin-top: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+table,
+th,
+td {
+    border: 1px solid #ddd;
+    color: black;
+    text-shadow: none;
+}
+
+th,
+td {
+    padding: 15px;
+    text-align: left;
+}
+
+th {
+    background-color: #f4f4f4;
+}
+
+td {
+    background-color: #fff;
+}
+
+tr:nth-child(even) td {
+    background-color: #f9f9f9;
+}
+
+tr:hover td {
+    background-color: #f1f1f1;
+}
+
+.empty-message {
+    text-align: center;
+    padding: 20px;
+    color: #777;
+    font-style: italic;
+}
