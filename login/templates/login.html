@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Kardex - SENA CM</title>
     <link href="{% static 'img/logoSENA_V.png' %}" rel="icon">
-    <link rel="stylesheet" href="{% static 'lib/adminlte-3.0.4/plugins/font-awesome-5.11.1/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'lib/adminlte-3.0.4/plugins/fontawesome-6.6.0/css/all.min.css' %}">
     <link rel="stylesheet" href="{% static 'lib/adminlte-3.0.4/css/adminlte.min.css' %}">
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <script src="{% static 'lib/sweetalert2/sweetalert2.all.min.js' %}"></script>
@@ -42,19 +42,19 @@
 </head>
 
 <body class="hold-transition login-page">
-    <div style="display: block; justify-content: center; align-items: center;">
-        <strong style="font-size: 90px; color: white; filter: drop-shadow(0 0 13px #000000);"><em>Kardex</em></strong>
-    </div>
-    <div style="display: block; justify-content: center; align-items: center;">
-        <strong style="font-size: 60px; color: white; filter: drop-shadow(0 0 13px #000000);"><em>SENA - Centro Minero</em></strong>
-    </div>
     <div class="login-box" style="padding-top: 20px; filter: drop-shadow(0 0 5px #000000);">
         <div class="card card-outline card-primary">
             <div class="card-header text-center">
-                <a><img src="{% static 'img/logoSENA_B.png' %}" style="height: 80px; width: 80px; filter: drop-shadow(0 0 10px #000000);" alt="Logo SENA"></a>
+                <div style="display: block; justify-content: center; align-items: center;">
+                    <a><img src="{% static 'img/logoSENA_B.png' %}" style="height: 60px; width: 60px; filter: drop-shadow(0 0 10px #000000);" alt="Logo SENA"></a>
+                </div>
+                <strong style="font-size: 50px; color: white; filter: drop-shadow(0 0 13px #000000);"><em>Kardex</em></strong>
+                <div style="display: block; justify-content: center; align-items: center;">
+                    <strong style="font-size: 20px; color: white; filter: drop-shadow(0 0 13px #000000);"><em>SENA - Centro Minero</em></strong>
+                </div>
             </div>
             <div class="card-body">
-                <p class="login-box-msg" style="font-size: 23px;">Iniciar sesión</p>
+                <p class="login-box-msg" style="font-size: 22px; filter: drop-shadow(0 0 15px #000000);">Iniciar sesión</p>
                 <form action="#" method="post">
                     {% csrf_token %}
                     <div class="input-group mb-3">
@@ -69,12 +69,12 @@
                         {{ form.password | add_class:'form-control' | attr:'id:password' | attr:'autocomplete:off' | attr:'placeholder:Ingrese su contraseña' }}
                         <div class="input-group-append">
                             <div class="input-group-append">
-                                <span type="button" class="btn btn-outline-secondary toggle-password">
+                                <span type="button" class="btn btn-outline-secondary toggle-password" style="color: rgb(0, 0, 0);">
                                     <i class="fas fa-eye" id="togglePasswordIcon"></i>
                                 </span>
                             </div>
                             <div class="input-group-text">
-                                <span class="fas fa-lock" style="color: white;"></span>
+                                <span class="fas fa-lock" style="color: rgb(255, 255, 255);"></span>
                             </div>
                         </div>
                     </div>
@@ -82,12 +82,12 @@
                         <div class="col-8">
                             <div class="icheck-primary">
                                 <p class="mb-1">
-                                    <a href="{% url 'password_reset' %}">Restablecer contraseña</a>
+                                    <a href="{% url 'password_reset' %} filter: drop-shadow(0 0 15px #000000);">Restablecer contraseña</a>
                                 </p>
                             </div>
                         </div>
                         <div class="col-4">
-                            <button type="submit" class="btn btn-primary btn-block"><em>Ingresar</em></button>
+                            <button type="submit" class="btn btn-primary btn-block" style="filter: drop-shadow(0 0 3px #000000);"><em>Ingresar</em></button>
                         </div>
                     </div>
                     <script>
@@ -96,6 +96,8 @@
                             title: 'Error',
                             text: 'Usuario o contraseña incorrectos, intente nuevamente.',
                             icon: 'error',
+                            confirmButtonText: 'Aceptar',
+                            confirmButtonColor: '#094b39',
                         });
                         {% endif %}
                     </script>
