@@ -9,29 +9,22 @@ from django import forms
 from django.contrib.auth.models import User
 from django.forms import ModelForm, TextInput, Select, NumberInput, EmailInput, PasswordInput
 
-class ElementoForm(ModelForm):
+class ElementoForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         
     class Meta:
         model = Elemento
-        fields = "__all__"
+        fields = ['item', 'cantidad']
         widgets = {
-            "elemento": TextInput(
-                attrs={
-                    "placeholder": "Nombre del elemento",
-                }
-            ),
-            "cantidad": NumberInput(
-                attrs={
-                    "placeholder": "Cantidad a registrar",
-                }
-            ),
-            "descripcion": TextInput(
-                attrs={
-                    "placeholder": "Descripción del elemento",
-                }
-            )
+            'item': forms.TextInput(attrs={
+                'placeholder': 'Nombre del elemento',
+                'class': 'form-control',
+            }),
+            'cantidad': forms.NumberInput(attrs={
+                'placeholder': 'Cantidad a registrar',
+                'class': 'form-control',
+            })
         }
 
 class MovimientoForm(forms.ModelForm):
@@ -40,16 +33,21 @@ class MovimientoForm(forms.ModelForm):
         
     class Meta:
         model = Movimiento
-        fields = ['elemento', 'tipo', 'cantidad']
+        fields = ['descripcion', 'proyecto', 'num_ficha', 'tipo']
         widgets = {
-            'elemento': forms.Select(attrs={
+            'descripcion': forms.Textarea(attrs={
+                'placeholder': 'Descripción del movimiento',
+                'class': 'form-control',
+            }),
+            'proyecto': forms.TextInput(attrs={
+                'placeholder': 'Nombre del proyecto',
+                'class': 'form-control',
+            }),
+            'num_ficha': forms.NumberInput(attrs={
+                'placeholder': 'Número de ficha',
                 'class': 'form-control',
             }),
             'tipo': forms.Select(attrs={
-                'class': 'form-control',
-            }),
-            'cantidad': forms.NumberInput(attrs={
-                'placeholder': 'Cantidad a registrar',
                 'class': 'form-control',
             }),
         }
@@ -62,3 +60,12 @@ class MovimientoForm(forms.ModelForm):
         if tipo == 'salida' and elemento.cantidad < cantidad:
             raise forms.ValidationError("No hay suficiente stock para realizar la salida.")
         return cantidad
+
+MovimientoFormSet = modelformset_factory(Movimiento, form=MovimientoForm, extra=1)
+
+class ReporteForm(forms.Form):
+    FORMATO_CHOICES = [
+        ('excel', 'Excel'),
+        ('pdf', 'PDF'),
+    ]
+    formato = forms.ChoiceField(choices=FORMATO_CHOICES, label='Formato del Reporte')

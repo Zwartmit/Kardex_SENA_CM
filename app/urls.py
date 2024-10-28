@@ -21,7 +21,7 @@ urlpatterns = [
     path('movimiento/eliminar/<int:pk>/', MovimientoDeleteView.as_view(), name='movimiento_eliminar'),
 
     ### REPORTES ###
+    path('reportes/', reporte_selector, name='reportes'),
     path('reportes/elemento/excel/', export_elementos_excel, name='export_elementos_excel'),
     path('reportes/elemento/pdf/', export_elementos_pdf, name='export_elementos_pdf')
-
 ]

@@ -6,7 +6,7 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.utils.decorators import method_decorator
 from django.shortcuts import render, redirect
 from django.db.models import ProtectedError
-from app.models import Movimiento
+from app.models import Elemento, Movimiento
 from app.forms import MovimientoForm
 
 @method_decorator(never_cache, name='dispatch')
@@ -55,6 +55,8 @@ class MovimientoCreateView(CreateView):
         context['entidad'] = 'Registrar movimiento'
         context['error'] = 'Error al registrar el movimiento.'
         context['listar_url'] = reverse_lazy('app:movimiento_lista')
+        context['elementos'] = Elemento.objects.all()
+
         return context
     
     def form_valid(self, form):

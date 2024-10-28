@@ -16,8 +16,8 @@
         <td>{{ p.item }}</td>
         <td>{{ p.cantidad }}</td>
         <td>
-            <a href="{% url 'app:elemento_editar' p.id %}" class="btn btn-info btn-sm"><i class="fas fa-edit"></i>
-            </a><a href="{% url 'app:elemento_eliminar' p.id %}" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a>
+            <a href="{% url 'app:elemento_editar' p.id %}" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
+            <a href="{% url 'app:elemento_eliminar' p.id %}" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a>
         </td>
     </tr>
     {% endfor %}

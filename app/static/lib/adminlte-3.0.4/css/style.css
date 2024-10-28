@@ -26,12 +26,6 @@
     color: #034231 !important;
 }
 
-.main-footer {
-    background-color: #034231;
-    border-color: #034231;
-    color: #ffffff;
-}
-
 .content-wrapper {
     background-image: url("/static/img/dashback.jpeg");
     background-size: cover;
@@ -39,12 +33,22 @@
 }
 
 .main-sidebar {
-    background: linear-gradient(#000000, #094b39, #094b39, #000000);
+    background: linear-gradient(#000000, #000000, #094b39, #094b39);
     align-content: center;
+    border: none;
+    border-style: none;
 }
 
 .main-header {
-    background: #094b39;
+    background: linear-gradient(to right, #000000, #094b39);
+    border: none;
+}
+
+.main-footer {
+    background: linear-gradient(to right, #094b39, #000000);
+    border-color: #034231;
+    color: #ffffff;
+    border-style: none;
 }
 
 .h1,
@@ -129,4 +133,46 @@ tr:hover td {
     padding: 20px;
     color: #777;
     font-style: italic;
+}
+    
+.containerReport {
+    display: block;
+    text-align: center;
+    color: #ffffff;
+    background: #094b39;
+    border-radius: 100px;
+    border: 1.5px solid #000000;
+    filter: drop-shadow(0 0 10px #000000);
+    padding: 20px;
+}
+
+.containerReport .format-section {
+    background: #022f23;
+    border-radius: 10px;
+    padding: 20px;
+    width: 250px;
+    margin-right: 30px;
+    text-shadow: 3px 3px 2.5px black;
+    filter: drop-shadow(0 0 3px #000000);
+    border: 1.5px solid #000000;
+}
+
+.containerReport .report-section {
+    border-radius: 10px;
+    padding: 20px;
+    margin-left: 30px;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.btn_restore {
+    font-size: 28px;
+    background-color: transparent;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
 }
