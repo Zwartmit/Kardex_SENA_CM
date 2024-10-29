@@ -12,7 +12,7 @@ from django.forms import ModelForm, TextInput, Select, NumberInput, EmailInput, 
 class ElementoForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
+
     class Meta:
         model = Elemento
         fields = ['item', 'cantidad']
@@ -26,42 +26,46 @@ class ElementoForm(forms.ModelForm):
                 'class': 'form-control',
             })
         }
+    
+    def clean_item(self):
+        item = self.cleaned_data.get('item')
+        if item:
+            item = item.capitalize()
+            if Elemento.objects.filter(item__iexact=item).exists():
+                raise forms.ValidationError('Ya existe un elemento con este nombre.')
+        return item
 
 class MovimientoForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        
     class Meta:
         model = Movimiento
-        fields = ['descripcion', 'proyecto', 'num_ficha', 'tipo']
+        fields = ['elemento', 'cantidad', 'descripcion', 'proyecto', 'num_ficha']
         widgets = {
-            'descripcion': forms.Textarea(attrs={
-                'placeholder': 'Descripción del movimiento',
+            'elemento': forms.Select(attrs={
+                'placeholder': 'Nombre del elemento',
                 'class': 'form-control',
             }),
-            'proyecto': forms.TextInput(attrs={
-                'placeholder': 'Nombre del proyecto',
-                'class': 'form-control',
-            }),
-            'num_ficha': forms.NumberInput(attrs={
-                'placeholder': 'Número de ficha',
-                'class': 'form-control',
-            }),
-            'tipo': forms.Select(attrs={
+            'cantidad': forms.NumberInput(attrs={
+                'placeholder': 'Cantidad a registrar',
                 'class': 'form-control',
             }),
         }
 
+    descripcion = forms.CharField(widget=forms.Textarea(attrs={
+        'placeholder': 'Descripción del movimiento',
+        'class': 'form-control',
+    }))
+    proyecto = forms.CharField(widget=forms.TextInput(attrs={
+        'placeholder': 'Nombre del proyecto',
+        'class': 'form-control',
+    }))
+    num_ficha = forms.IntegerField(widget=forms.NumberInput(attrs={
+        'placeholder': 'Número de ficha',
+        'class': 'form-control',
+    }))
+
     def clean_cantidad(self):
         cantidad = self.cleaned_data.get('cantidad')
-        tipo = self.cleaned_data.get('tipo')
-        elemento = self.cleaned_data.get('elemento')
-
-        if tipo == 'salida' and elemento.cantidad < cantidad:
-            raise forms.ValidationError("No hay suficiente stock para realizar la salida.")
         return cantidad
-
-MovimientoFormSet = modelformset_factory(Movimiento, form=MovimientoForm, extra=1)
 
 class ReporteForm(forms.Form):
     FORMATO_CHOICES = [

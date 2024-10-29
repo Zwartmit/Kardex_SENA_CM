@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from django.urls import reverse_lazy, reverse
@@ -38,7 +39,6 @@ class MovimientoListView(ListView):
 
 ###### CREAR ######
 
-@method_decorator(never_cache, name='dispatch')
 class MovimientoCreateView(CreateView):
     model = Movimiento
     form_class = MovimientoForm
@@ -56,7 +56,6 @@ class MovimientoCreateView(CreateView):
         context['error'] = 'Error al registrar el movimiento.'
         context['listar_url'] = reverse_lazy('app:movimiento_lista')
         context['elementos'] = Elemento.objects.all()
-
         return context
     
     def form_valid(self, form):

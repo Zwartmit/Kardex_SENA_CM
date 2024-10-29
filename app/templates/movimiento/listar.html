@@ -3,14 +3,21 @@
 {% block columnas %}
 <tr>
     <th scope="col">id</th>
-    <th scope="col">Item</th>
-    <th scope="col">Cantidad</th>
+    <th scope="col">Elemento(s)</th>
     <th scope="col">Descripción</th>
     <th scope="col">Fecha</th>
     <th scope="col">Proyecto</th>
     <th scope="col">Ficha</th>
-    <!-- <th scope="col">Movimiento</th> -->
     <th scope="col">Opciones</th>
+</tr>
+<tr>
+    <th><div class="filter-container"></div></th>
+    <th></th>
+    <th><div class="filter-container"></div></th>
+    <th><div class="filter-container"></div></th>
+    <th><div class="filter-container"></div></th>
+    <th><div class="filter-container"></div></th>
+    <th></th>
 </tr>
 {% endblock %}
 
@@ -18,54 +25,99 @@
     {% for p in object_list %}
     <tr>
         <td>{{ p.id }}</td>
-        <td>{{ p.elemento.item }}</td>
-        <td>{{ p.cantidad }}</td>
+        <td>
+            <button class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#modalElementos{{ p.id }}">
+                <i class="fas fa-search"></i>
+            </button>
+            <div class="modal fade" id="modalElementos{{ p.id }}" tabindex="-1" role="dialog" aria-labelledby="modalLabel{{ p.id }}" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content" style="border-radius: 18px;">
+                        <div class="modal-header" style="display: grid; justify-content: center; background: #094b39; border-radius: 15px; color: white; filter: drop-shadow(0 0 6px #000000);">
+                            <h5 class="modal-title" id="modalLabel{{ p.id }}"><b>Detalles del movimiento<br>ID:</b> #{{ p.id }}</h5>
+                        </div>
+                        <div class="modal-body">
+                            <p><strong>Elemento(s):</strong> {{ p.elemento.item }}</p>
+                            <p><strong>Cantidad:</strong> {{ p.cantidad }}</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </td>
         <td>{{ p.descripcion }}</td>
-        <td>{{ p.fecha }}</td>
+        <td>{{ p.fecha|date:"Y-m-d H:i:s" }}</td>
         <td>{{ p.proyecto }}</td>
         <td>{{ p.num_ficha }}</td>
-        <!-- <td>{{ p.tipo }}</td> -->
         <td>
-            <a href="{% url 'app:elemento_editar' p.id %}" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
-            <a href="{% url 'app:elemento_eliminar' p.id %}" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a>
+            <a href="{% url 'app:movimiento_eliminar' p.id %}" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a>
         </td>
     </tr>
     {% endfor %}
 {% endblock %}
+
 {% block javascript %}
 <script type="application/javascript">
     $(document).ready(function () {
-        $("#tabla").DataTable({
-            responsive: true,
-            initComplete: function () {
-                var api = this.api();
-                var columnNames = ['id', 'Item', 'Cantidad', 'Descripción', 'Fecha', 'Proyecto', 'Ficha'/* , 'Movimiento' */, 'Opciones'];
-                var excludedColumnIndex = columnNames.indexOf('Opciones'); 
-                api.columns().every(function (index) {
-                    var column = this;
-                    var header = $(column.header());
-                    if (index !== excludedColumnIndex) {
-                        var filterContainer = $('<div class="filter-container"></div>').appendTo(header.empty());
-                        $('<label>' + columnNames[index] + '</label>').appendTo(filterContainer);
+    var table = $("#tabla").DataTable({
+        responsive: true,
+        initComplete: function () {
+            var api = this.api();
+            var columnNames = ['id', 'Elementos', 'Descripción', 'Fecha', 'Proyecto', 'Ficha', 'Opciones'];
+            var excludedColumns = [1, 6]; 
+
+            api.columns().every(function (index) {
+                var column = this;
+                var filterContainer = $('#tabla thead tr:eq(1) th').eq(index).find('.filter-container');
+
+                if (!excludedColumns.includes(index)) {
+                    if (index === 3) {
+                        var startDateInput = $('<input type="date" placeholder="Desde">').appendTo(filterContainer);
+
+                        var endDateInput = $('<input type="date" placeholder="Hasta">').appendTo(filterContainer);
+
+                        startDateInput.add(endDateInput).on('change', function () {
+                            var startDate = startDateInput.val();
+                            var endDate = endDateInput.val();
+
+                            var start = startDate ? new Date(startDate + "T00:00:00") : null;
+                            var end = endDate ? new Date(endDate + "T23:59:59") : null;
+
+                            $.fn.dataTable.ext.search = [];
+
+                            $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+                                var fechaVenta = data[3];
+                                var parts = fechaVenta.split(' ');
+                                var fecha = parts[0];
+                                var fechaCompleta = new Date(fecha + 'T00:00:00');
+
+                                if ((start && fechaCompleta < start) || (end && fechaCompleta > end)) {
+                                    return false;
+                                }
+                                return true;
+                            });
+
+                            table.draw();
+                        });
+                    } else { 
                         var select = $('<select><option value="">Todos</option></select>')
                             .appendTo(filterContainer)
                             .on('change', function () {
-                                var val = $.fn.dataTable.util.escapeRegex(
-                                    $(this).val()
-                                );
+                                var val = $.fn.dataTable.util.escapeRegex($(this).val());
                                 column
-                                    .search(val ? '^' + val + '$' : '', true, false)
+                                    .search(val ? '^' + val : '', true, false)
                                     .draw();
                             });
-                        column.data().unique().sort().each(function (d, j) {
-                            select.append('<option value="' + d + '">' + d + '</option>');
+
+                        column.data().unique().sort().each(function (d) {
+                            select.append('<option value="' + d.trim() + '">' + d + '</option>');
                         });
-                    } else {
-                        $('<label>' + columnNames[index] + '</label>').appendTo(header.empty());
                     }
-                });
-            }
-        });
+                }
+            });
+        }
     });
+});
 </script>
 {% endblock %}

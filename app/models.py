@@ -20,7 +20,6 @@ class Elemento(models.Model):
 
 class Movimiento(models.Model):
     elemento = models.ForeignKey(Elemento, on_delete=models.CASCADE, related_name='movimientos', null=False, blank=False, verbose_name='Elemento')
-    tipo = models.CharField(max_length=10, choices=[('entrada', 'Entrada'), ('salida', 'Salida')], null=False, blank=False, verbose_name='Tipo de movimiento')
     fecha = models.DateTimeField(auto_now_add=True, verbose_name='Fecha')
     num_ficha = models.PositiveIntegerField(null=True, blank=False, verbose_name='Ficha')
     cantidad = models.PositiveIntegerField(null=False, blank=False, verbose_name='Cantidad')

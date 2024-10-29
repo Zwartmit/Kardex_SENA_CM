@@ -69,7 +69,6 @@ class ElementoCreateView(CreateView):
         response = super().form_valid(form)
         success_url = reverse('app:elemento_crear') + '?created=True'
         return redirect(success_url)
-
     
 ###### EDITAR ######
 
@@ -93,10 +92,6 @@ class ElementoUpdateView(UpdateView):
         return context
     
     def form_valid(self, form):
-        elemento = form.cleaned_data.get('elemento')
-        if elemento is not None:
-            elemento = elemento.lower()
-            
         response = super().form_valid(form)
         success_url = reverse('app:elemento_crear') + '?updated=True'
         return redirect(success_url)
