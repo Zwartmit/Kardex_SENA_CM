@@ -26,14 +26,6 @@
     </div>
 </form>
 <script>
-    // Enfocar el campo 'elemento' al cargar la página
-    document.addEventListener('DOMContentLoaded', function() {
-        const elementoField = document.getElementById('id_item');
-        if (elementoField) {
-            elementoField.focus();
-        }
-    });
-
     {% if form.errors %}
     var errors = '';
     {% for field in form %}

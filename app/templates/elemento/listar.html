@@ -8,10 +8,16 @@
     <th scope="col">Opciones</th>
 </tr>
 <tr>
-    <th><div class="filter-container"></div></th>
-    <th><div class="filter-container"></div></th>
-    <th><div class="filter-container"></div></th>
-    <th></th> 
+    <th>
+        <input type="text" placeholder="Filtrar" class="filter-input" style="width: 100px;"/>
+    </th>
+    <th>
+        <input type="text" placeholder="Filtrar" class="filter-input" style="width: 100px;"/>
+    </th>
+    <th>
+        <input type="text" placeholder="Filtrar" class="filter-input" style="width: 100px;"/>
+    </th>
+    <th></th>
 </tr>
 {% endblock %}
 
@@ -32,33 +38,16 @@
 {% block javascript %}
 <script type="application/javascript">
     $(document).ready(function () {
-        $("#tabla").DataTable({
-            responsive: true,
-            initComplete: function () {
-                var api = this.api();
-                var columnNames = ['id', 'Item', 'Cantidad', 'Opciones'];
-                var excludedColumns = [3]; 
-                
-                api.columns().every(function (index) {
-                    var column = this;
-                    var filterContainer = $('#tabla thead tr:eq(1) th').eq(index).find('.filter-container'); 
+        var table = $("#tabla").DataTable({
+            responsive: true
+        });
 
-                    if (!excludedColumns.includes(index)) {
-                        var select = $('<select><option value="">------</option></select>')
-                            .appendTo(filterContainer)
-                            .on('change', function () {
-                                var val = $.fn.dataTable.util.escapeRegex($(this).val());
-                                column
-                                    .search(val ? '^' + val + '$' : '', true, false)
-                                    .draw();
-                            });
-
-                        column.data().unique().sort().each(function (d) {
-                            select.append('<option value="' + d + '">' + d + '</option>');
-                        });
-                    }
-                });
-            }
+        $('.filter-input').on('keyup change', function () {
+            var columnIndex = $(this).parent().index(); 
+            table
+                .column(columnIndex)
+                .search(this.value) 
+                .draw(); 
         });
     });
 </script>

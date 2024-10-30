@@ -3,121 +3,131 @@
 {% block columnas %}
 <tr>
     <th scope="col">id</th>
-    <th scope="col">Elemento(s)</th>
     <th scope="col">Descripción</th>
     <th scope="col">Fecha</th>
     <th scope="col">Proyecto</th>
     <th scope="col">Ficha</th>
+    <th scope="col">Detalles</th>
     <th scope="col">Opciones</th>
 </tr>
 <tr>
-    <th><div class="filter-container"></div></th>
+    <th>
+        <input type="text" placeholder="Filtrar" class="filter-input" style="width: 100px;" />
+    </th>
+    <th>
+        <input type="text" placeholder="Filtrar" class="filter-input" style="width: 100px;" />
+    </th>
+    <th>
+        <div class="filter-container">
+            <label for="start-date" style="margin-right: 5px;">Desde:</label>
+            <input type="date" class="filter-date" style="width: 25px;" />
+            <label for="start-date" style="margin-right: 5px;">Hasta:</label>
+            <input type="date" class="filter-date" style="width: 25px;" />
+        </div>
+    </th>
+    <th>
+        <input type="text" placeholder="Filtrar" class="filter-input" style="width: 100px;" />
+    </th>
+    <th>
+        <input type="text" placeholder="Filtrar" class="filter-input" style="width: 100px;" />
+    </th>
     <th></th>
-    <th><div class="filter-container"></div></th>
-    <th><div class="filter-container"></div></th>
-    <th><div class="filter-container"></div></th>
-    <th><div class="filter-container"></div></th>
     <th></th>
 </tr>
 {% endblock %}
 
 {% block filas %}
-    {% for p in object_list %}
-    <tr>
-        <td>{{ p.id }}</td>
-        <td>
-            <button class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#modalElementos{{ p.id }}">
-                <i class="fas fa-search"></i>
-            </button>
-            <div class="modal fade" id="modalElementos{{ p.id }}" tabindex="-1" role="dialog" aria-labelledby="modalLabel{{ p.id }}" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content" style="border-radius: 18px;">
-                        <div class="modal-header" style="display: grid; justify-content: center; background: #094b39; border-radius: 15px; color: white; filter: drop-shadow(0 0 6px #000000);">
-                            <h5 class="modal-title" id="modalLabel{{ p.id }}"><b>Detalles del movimiento<br>ID:</b> #{{ p.id }}</h5>
+{% for p in object_list %}
+<tr>
+    <td>{{ p.id }}</td>
+    <td>{{ p.descripcion }}</td>
+    <td>{{ p.fecha|date:"Y-m-d H:i:s" }}</td>
+    <td>{{ p.proyecto }}</td>
+    <td>{{ p.num_ficha }}</td>
+    <td>
+        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modalElementos{{ p.id }}"><i
+                class="fas fa-search"></i>
+        </button>
+        <div class="modal fade" id="modalElementos{{ p.id }}" tabindex="-1" role="dialog"
+            aria-labelledby="modalLabel{{ p.id }}" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" style="border-radius: 18px;">
+                    <div class="modal-header"
+                        style="display: grid; justify-content: center; background: #094b39; border-radius: 15px; color: white; filter: drop-shadow(0 0 6px #000000);">
+                        <h5 class="modal-title" id="modalLabel{{ p.id }}"><b>Detalles del movimiento (</b>ID: #{{ p.id }}<b>)</b></h5>
+                    </div>
+                    <div class="modal-body">
+                        <div style="display: grid; justify-content: center; border-radius: 15px; color: rgb(0, 0, 0)">
+                            <h4>Elementos entregados</h4>
+                            <div class="sidebar-divider" style="border-bottom: 2px solid #000000"></div>
                         </div>
-                        <div class="modal-body">
-                            <p><strong>Elemento(s):</strong> {{ p.elemento.item }}</p>
-                            <p><strong>Cantidad:</strong> {{ p.cantidad }}</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                        </div>
+                        {% for detalle in p.detalles.all %}
+                        <p><b>Item:</b> {{ detalle.elemento.item }} <br> <b>Cantidad:</b> {{ detalle.cantidad }} </p>
+                        <div style="font-size: 0px;">ㅤ</div>
+                        {% empty %}
+                        <p>No hay detalles para este movimiento.</p>
+                        {% endfor %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                     </div>
                 </div>
             </div>
-        </td>
-        <td>{{ p.descripcion }}</td>
-        <td>{{ p.fecha|date:"Y-m-d H:i:s" }}</td>
-        <td>{{ p.proyecto }}</td>
-        <td>{{ p.num_ficha }}</td>
-        <td>
-            <a href="{% url 'app:movimiento_eliminar' p.id %}" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a>
-        </td>
-    </tr>
-    {% endfor %}
+        </div>
+    </td>
+    <td>
+        <a href="{% url 'app:movimiento_eliminar' p.id %}" class="btn btn-danger btn-sm" title="Eliminar"><i
+                class="fas fa-trash"></i></a>
+        <button id="export-pdf" class="btn btn-sm fas fa-file-pdf" style="background: #c2680e; color: #ffffff;"
+            title="Generar PDF"></button>
+        <button id="export-excel" class="btn btn-sm fas fa-file-excel" style="background: #0e7023; color: #ffffff;"
+            title="Generar Excel"></button>
+    </td>
+</tr>
+{% endfor %}
 {% endblock %}
 
 {% block javascript %}
+<script>
+    document.getElementById('export-pdf').addEventListener('click', function () {
+        window.location.href = "{% url 'app:exportar_pdf' %}";
+    });
+
+    document.getElementById('export-excel').addEventListener('click', function () {
+        window.location.href = "{% url 'app:exportar_excel' %}";
+    });
+</script>
 <script type="application/javascript">
     $(document).ready(function () {
-    var table = $("#tabla").DataTable({
-        responsive: true,
-        initComplete: function () {
-            var api = this.api();
-            var columnNames = ['id', 'Elementos', 'Descripción', 'Fecha', 'Proyecto', 'Ficha', 'Opciones'];
-            var excludedColumns = [1, 6]; 
+        var table = $("#tabla").DataTable({
+            responsive: true
+        });
 
-            api.columns().every(function (index) {
-                var column = this;
-                var filterContainer = $('#tabla thead tr:eq(1) th').eq(index).find('.filter-container');
+        $('.filter-input').on('keyup change', function () {
+            var columnIndex = $(this).parent().index();
+            table
+                .column(columnIndex)
+                .search(this.value)
+                .draw();
+        });
 
-                if (!excludedColumns.includes(index)) {
-                    if (index === 3) {
-                        var startDateInput = $('<input type="date" placeholder="Desde">').appendTo(filterContainer);
+        $('.filter-date').on('change', function () {
+            var startDate = $('input[placeholder="Desde"]').val();
+            var endDate = $('input[placeholder="Hasta"]').val();
+            var start = startDate ? new Date(startDate + "T00:00:00") : null;
+            var end = endDate ? new Date(endDate + "T23:59:59") : null;
 
-                        var endDateInput = $('<input type="date" placeholder="Hasta">').appendTo(filterContainer);
-
-                        startDateInput.add(endDateInput).on('change', function () {
-                            var startDate = startDateInput.val();
-                            var endDate = endDateInput.val();
-
-                            var start = startDate ? new Date(startDate + "T00:00:00") : null;
-                            var end = endDate ? new Date(endDate + "T23:59:59") : null;
-
-                            $.fn.dataTable.ext.search = [];
-
-                            $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
-                                var fechaVenta = data[3];
-                                var parts = fechaVenta.split(' ');
-                                var fecha = parts[0];
-                                var fechaCompleta = new Date(fecha + 'T00:00:00');
-
-                                if ((start && fechaCompleta < start) || (end && fechaCompleta > end)) {
-                                    return false;
-                                }
-                                return true;
-                            });
-
-                            table.draw();
-                        });
-                    } else { 
-                        var select = $('<select><option value="">Todos</option></select>')
-                            .appendTo(filterContainer)
-                            .on('change', function () {
-                                var val = $.fn.dataTable.util.escapeRegex($(this).val());
-                                column
-                                    .search(val ? '^' + val : '', true, false)
-                                    .draw();
-                            });
-
-                        column.data().unique().sort().each(function (d) {
-                            select.append('<option value="' + d.trim() + '">' + d + '</option>');
-                        });
-                    }
+            $.fn.dataTable.ext.search = [];
+            $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+                var fechaVenta = new Date(data[3]);
+                if ((start && fechaVenta < start) || (end && fechaVenta > end)) {
+                    return false;
                 }
+                return true;
             });
-        }
+
+            table.draw();
+        });
     });
-});
 </script>
 {% endblock %}

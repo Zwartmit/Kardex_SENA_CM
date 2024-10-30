@@ -1,7 +1,13 @@
+from dataclasses import fields
+from django.forms import ModelForm
+from django.core.exceptions import ValidationError
+from django_select2.forms import Select2Widget
 from django import forms
 from django.forms import *
 from app.models import *
 from django import forms
+from django.contrib.auth.models import User
+from django.forms import ModelForm, TextInput, Select, NumberInput, EmailInput, PasswordInput
 
 class ElementoForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -32,45 +38,43 @@ class ElementoForm(forms.ModelForm):
 class MovimientoForm(forms.ModelForm):
     class Meta:
         model = Movimiento
-        fields = ['num_ficha', 'proyecto', 'descripcion']
+        fields = ['descripcion', 'proyecto', 'num_ficha']  # Eliminados elemento y cantidad
         widgets = {
-            'num_ficha': forms.NumberInput(attrs={
-                'placeholder': 'Número de ficha',
+            'descripcion': forms.Textarea(attrs={
+                'placeholder': 'Descripción del movimiento',
                 'class': 'form-control',
             }),
             'proyecto': forms.TextInput(attrs={
                 'placeholder': 'Nombre del proyecto',
                 'class': 'form-control',
             }),
-            'descripcion': forms.Textarea(attrs={
-                'placeholder': 'Descripción del movimiento',
+            'num_ficha': forms.NumberInput(attrs={
+                'placeholder': 'Número de ficha',
                 'class': 'form-control',
             }),
         }
 
+    def clean_num_ficha(self):
+        num_ficha = self.cleaned_data.get('num_ficha')
+        if num_ficha == '':
+            raise forms.ValidationError('Este campo es obligatorio y no puede estar vacío.')
+        return num_ficha
+
+
 class DetalleMovimientoForm(forms.ModelForm):
     class Meta:
-        model = Detalle_movimiento
+        model = DetalleMovimiento
         fields = ['elemento', 'cantidad']
         widgets = {
             'elemento': forms.Select(attrs={
                 'class': 'form-control',
-                'placeholder': 'Seleccione un elemento',
             }),
             'cantidad': forms.NumberInput(attrs={
                 'placeholder': 'Cantidad a registrar',
                 'class': 'form-control',
             }),
         }
-    
-    def clean_cantidad(self):
-        cantidad = self.cleaned_data.get('cantidad')
-        if cantidad <= 0:
-            raise forms.ValidationError('La cantidad debe ser mayor a 0.')
-        return cantidad
-
-DetalleMovimientoFormSet = inlineformset_factory(Movimiento, Detalle_movimiento, form=DetalleMovimientoForm, extra=1)
-    
+        
 class ReporteForm(forms.Form):
     FORMATO_CHOICES = [
         ('excel', 'Excel'),

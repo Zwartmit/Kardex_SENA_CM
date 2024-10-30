@@ -1,5 +1,4 @@
-from pyexpat.errors import messages
-from django.forms import modelformset_factory
+from django import forms
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from django.urls import reverse_lazy, reverse
@@ -8,8 +7,8 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.utils.decorators import method_decorator
 from django.shortcuts import render, redirect
 from django.db.models import ProtectedError
-from app.models import Elemento, Movimiento, Detalle_movimiento
-from app.forms import DetalleMovimientoFormSet, MovimientoForm
+from app.models import Elemento, Movimiento, DetalleMovimiento
+from app.forms import DetalleMovimientoForm, MovimientoForm
 
 @method_decorator(never_cache, name='dispatch')
 def lista_movimientos(request):
@@ -57,20 +56,21 @@ class MovimientoCreateView(CreateView):
         context['entidad'] = 'Registrar movimiento'
         context['error'] = 'Error al registrar el movimiento.'
         context['listar_url'] = reverse_lazy('app:movimiento_lista')
-        context['detalle_formset'] = DetalleMovimientoFormSet(self.request.POST or None, instance=self.object)
+        context['elementos'] = Elemento.objects.all()
+        context['detalle_form'] = DetalleMovimientoForm()
         return context
 
     def form_valid(self, form):
-        context = self.get_context_data()
-        detalle_formset = context['detalle_formset']
+        movimiento = form.save()
         
-        if form.is_valid() and detalle_formset.is_valid():
-            self.object = form.save()
-            detalle_formset.instance = self.object
-            detalle_formset.save()
-            return redirect(self.success_url)
-        else:
-            return self.form_invalid(form)
+        elementos = self.request.POST.getlist('elemento')
+        cantidades = self.request.POST.getlist('cantidad')
+
+        for elemento_id, cantidad in zip(elementos, cantidades):
+            if elemento_id and cantidad:
+                DetalleMovimiento.objects.create(movimiento=movimiento, elemento_id=elemento_id, cantidad=cantidad)
+
+        return redirect(f"{self.success_url}?created=True")
 
 ###### EDITAR ######
 
