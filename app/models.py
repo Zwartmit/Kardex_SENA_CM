@@ -19,14 +19,13 @@ class Elemento(models.Model):
         db_table = 'Elemento'
 
 class Movimiento(models.Model):
-    elemento = models.ForeignKey(Elemento, on_delete=models.CASCADE, related_name='movimientos', null=False, blank=False, verbose_name='Elemento')
     fecha = models.DateTimeField(auto_now_add=True, verbose_name='Fecha')
     num_ficha = models.PositiveIntegerField(null=True, blank=False, verbose_name='Ficha')
-    cantidad = models.PositiveIntegerField(null=False, blank=False, verbose_name='Cantidad')
     proyecto = models.CharField(max_length=200, default='', null=False, blank=False, verbose_name='Proyecto')
     descripcion = models.CharField(max_length=500, default='', null=False, blank=False, verbose_name='Descripción')
 
     def clean(self):
+        
         if self.cantidad <= 0:
             raise ValidationError('La cantidad debe ser mayor a 0.')
         
@@ -37,10 +36,7 @@ class Movimiento(models.Model):
             return num_ficha
     
     def __str__(self):
-        return (f"Movimiento: {self.tipo} - "
-                f"Elemento: {self.elemento.item} - "
-                f"Cantidad: {self.cantidad} - "
-                f"Ficha: {self.num_ficha} - "
+        return (f"Ficha: {self.num_ficha} - "
                 f"Proyecto: {self.proyecto} - "
                 f"Descripción: {self.descripcion} - "
                 f"Fecha: {self.fecha}")
@@ -49,3 +45,21 @@ class Movimiento(models.Model):
         verbose_name = "movimiento"
         verbose_name_plural = 'movimientos'
         db_table = 'Movimiento'
+
+class Detalle_movimiento(models.Model):
+    movimiento = models.ForeignKey(Movimiento, related_name='detalles', on_delete=models.CASCADE)
+    elemento = models.ForeignKey(Elemento, on_delete=models.CASCADE, related_name='movimientos', null=False, blank=False, verbose_name='Elemento')
+    cantidad = models.PositiveIntegerField(null=False, blank=False, verbose_name='Cantidad')
+
+    def clean(self):
+        if self.cantidad <= 0:
+            raise ValidationError('La cantidad debe ser mayor a 0.')
+        
+    def __str__(self):
+        return (f"Elemento: {self.elemento.item} - "
+                f"Cantidad: {self.cantidad} - ")
+
+    class Meta:
+        verbose_name = "detalle_movimiento"
+        verbose_name_plural = 'detalle_movimientos'
+        db_table = 'Detalle_movimiento'

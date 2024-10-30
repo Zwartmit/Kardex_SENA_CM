@@ -1,13 +1,7 @@
-from dataclasses import fields
-from django.forms import ModelForm
-from django.core.exceptions import ValidationError
-from django_select2.forms import Select2Widget
 from django import forms
 from django.forms import *
 from app.models import *
 from django import forms
-from django.contrib.auth.models import User
-from django.forms import ModelForm, TextInput, Select, NumberInput, EmailInput, PasswordInput
 
 class ElementoForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -38,35 +32,45 @@ class ElementoForm(forms.ModelForm):
 class MovimientoForm(forms.ModelForm):
     class Meta:
         model = Movimiento
-        fields = ['elemento', 'cantidad', 'descripcion', 'proyecto', 'num_ficha']
+        fields = ['num_ficha', 'proyecto', 'descripcion']
+        widgets = {
+            'num_ficha': forms.NumberInput(attrs={
+                'placeholder': 'Número de ficha',
+                'class': 'form-control',
+            }),
+            'proyecto': forms.TextInput(attrs={
+                'placeholder': 'Nombre del proyecto',
+                'class': 'form-control',
+            }),
+            'descripcion': forms.Textarea(attrs={
+                'placeholder': 'Descripción del movimiento',
+                'class': 'form-control',
+            }),
+        }
+
+class DetalleMovimientoForm(forms.ModelForm):
+    class Meta:
+        model = Detalle_movimiento
+        fields = ['elemento', 'cantidad']
         widgets = {
             'elemento': forms.Select(attrs={
-                'placeholder': 'Nombre del elemento',
                 'class': 'form-control',
+                'placeholder': 'Seleccione un elemento',
             }),
             'cantidad': forms.NumberInput(attrs={
                 'placeholder': 'Cantidad a registrar',
                 'class': 'form-control',
             }),
         }
-
-    descripcion = forms.CharField(widget=forms.Textarea(attrs={
-        'placeholder': 'Descripción del movimiento',
-        'class': 'form-control',
-    }))
-    proyecto = forms.CharField(widget=forms.TextInput(attrs={
-        'placeholder': 'Nombre del proyecto',
-        'class': 'form-control',
-    }))
-    num_ficha = forms.IntegerField(widget=forms.NumberInput(attrs={
-        'placeholder': 'Número de ficha',
-        'class': 'form-control',
-    }))
-
+    
     def clean_cantidad(self):
         cantidad = self.cleaned_data.get('cantidad')
+        if cantidad <= 0:
+            raise forms.ValidationError('La cantidad debe ser mayor a 0.')
         return cantidad
 
+DetalleMovimientoFormSet = inlineformset_factory(Movimiento, Detalle_movimiento, form=DetalleMovimientoForm, extra=1)
+    
 class ReporteForm(forms.Form):
     FORMATO_CHOICES = [
         ('excel', 'Excel'),

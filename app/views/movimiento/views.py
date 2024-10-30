@@ -1,4 +1,5 @@
-from django import forms
+from pyexpat.errors import messages
+from django.forms import modelformset_factory
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from django.urls import reverse_lazy, reverse
@@ -7,8 +8,8 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.utils.decorators import method_decorator
 from django.shortcuts import render, redirect
 from django.db.models import ProtectedError
-from app.models import Elemento, Movimiento
-from app.forms import MovimientoForm
+from app.models import Elemento, Movimiento, Detalle_movimiento
+from app.forms import DetalleMovimientoFormSet, MovimientoForm
 
 @method_decorator(never_cache, name='dispatch')
 def lista_movimientos(request):
@@ -39,6 +40,7 @@ class MovimientoListView(ListView):
 
 ###### CREAR ######
 
+@method_decorator(never_cache, name='dispatch')
 class MovimientoCreateView(CreateView):
     model = Movimiento
     form_class = MovimientoForm
@@ -55,13 +57,20 @@ class MovimientoCreateView(CreateView):
         context['entidad'] = 'Registrar movimiento'
         context['error'] = 'Error al registrar el movimiento.'
         context['listar_url'] = reverse_lazy('app:movimiento_lista')
-        context['elementos'] = Elemento.objects.all()
+        context['detalle_formset'] = DetalleMovimientoFormSet(self.request.POST or None, instance=self.object)
         return context
-    
+
     def form_valid(self, form):
-        response = super().form_valid(form)
-        success_url = reverse('app:movimiento_crear') + '?created=True'
-        return redirect(success_url)
+        context = self.get_context_data()
+        detalle_formset = context['detalle_formset']
+        
+        if form.is_valid() and detalle_formset.is_valid():
+            self.object = form.save()
+            detalle_formset.instance = self.object
+            detalle_formset.save()
+            return redirect(self.success_url)
+        else:
+            return self.form_invalid(form)
 
 ###### EDITAR ######
 

@@ -1,57 +1,67 @@
 {% extends 'layout.html' %}
 {% load widget_tweaks %}
+
 {% block contenido %}
-<form method="post" action=".">
+<form method="post">
     <div class="card card-default">
         <div class="card-header">
             <h3 class="card-title">
-                <i class="fas fa-plus"></i>
-                {{titulo}}
+                <i class="fas fa-plus"></i> {{titulo}}
             </h3>
         </div>
         <div class="card-body">
             {% csrf_token %}
-            <div id="elementos">
-                <div class="elemento-group row mb-3">
-                    <div class="col-md-6">
-                        <label for="elemento">Elemento:</label>
-                        <select class="form-control" name="elemento">
-                            <option value="" disabled selected>Seleccione un elemento</option>
-                            {% for elem in elementos %}
-                            <option value="{{ elem.id }}">{{ elem.item }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="cantidad">Cantidad:</label>
-                        {{ form.cantidad|add_class:'form-control' }}
-                    </div>
-                </div>
-            </div>
-            <div style="display: flex; justify-content: right;">
-                <button type="button" class="btn btn-secondary" id="agregarElemento">Agregar Otro Elemento</button>
-            </div>
+            
+            <!-- Campos del formulario Movimiento -->
             <div class="form-group">
-                <label for="descripcion">Descripción:</label>
-                {{ form.descripcion|add_class:'form-control' }}
+                <label for="num_ficha">Número de Ficha:</label>
+                {{ form.num_ficha|add_class:'form-control' }}
             </div>
             <div class="form-group">
                 <label for="proyecto">Proyecto:</label>
                 {{ form.proyecto|add_class:'form-control' }}
             </div>
             <div class="form-group">
-                <label for="num_ficha">Número de Ficha:</label>
-                {{ form.num_ficha|add_class:'form-control' }}
+                <label for="descripcion">Descripción:</label>
+                {{ form.descripcion|add_class:'form-control' }}
+            </div>
+
+            <!-- Sección para los detalles del movimiento -->
+            <h4>Detalles del Movimiento</h4>
+            <div id="elementos">
+                {% for detalle_form in detalle_formset %}
+                    <div class="elemento-group row mb-3">
+                        <div class="col-md-6">
+                            <label for="elemento">Elemento:</label>
+                            {{ detalle_form.elemento|add_class:'form-control' }}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="cantidad">Cantidad:</label>
+                            {{ detalle_form.cantidad|add_class:'form-control' }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Botón para agregar más detalles -->
+            <div style="display: flex; justify-content: right;">
+                <button type="button" class="btn btn-secondary" id="agregarElemento">Agregar Otro Elemento</button>
             </div>
         </div>
-    </div>
-    <div class="card-footer">
-        <button class="btn btn-primary btn-flat"><i class="fas fa-plus"></i> Guardar</button>
-        <a href="{{ listar_url }}" class="btn btn-danger btn-flat"><i class="fas fa-times"></i> Cancelar</a>
+        
+        <!-- Botones de guardar y cancelar -->
+        <div class="card-footer">
+            <button class="btn btn-primary btn-flat">
+                <i class="fas fa-plus"></i> Guardar
+            </button>
+            <a href="{{ listar_url }}" class="btn btn-danger btn-flat">
+                <i class="fas fa-times"></i> Cancelar
+            </a>
+        </div>
     </div>
 </form>
 
+<!-- Script para agregar dinámicamente nuevos elementos de detalle -->
 <script>
     document.getElementById('agregarElemento').addEventListener('click', function () {
         const container = document.getElementById('elementos');
@@ -61,7 +71,7 @@
             <div class="col-md-6">
                 <label for="elemento">Elemento:</label>
                 <select class="form-control" name="elemento">
-                    <option value="" disabled selected>Seleccione un elemento</option> <!-- Placeholder añadido aquí -->
+                    <option value="" disabled selected>Seleccione un elemento</option>
                     {% for elem in elementos %}
                         <option value="{{ elem.id }}">{{ elem.item }}</option>
                     {% endfor %}
@@ -74,7 +84,7 @@
             <div class="col-12 text-right mt-2">
                 <button type="button" class="btn btn-danger eliminarElemento">Eliminar</button>
             </div>`;
-
+        
         container.appendChild(newElement);
 
         newElement.querySelector('.eliminarElemento').addEventListener('click', function () {
@@ -82,18 +92,13 @@
         });
     });
 </script>
+
+<!-- Script de SweetAlert para mostrar mensajes de éxito o error -->
 <script>
     {% if form.errors %}
-    var errors = '';
-    {% for field in form %}
-    {% for error in field.errors %}
-    errors += '{{ error }}';
-    {% endfor %}
-    {% endfor %}
-
     Swal.fire({
         title: 'Error',
-        text: 'Ya existe un movimiento con este nombre.',
+        text: 'Hubo un error al registrar el movimiento.',
         icon: 'error',
         confirmButtonText: 'Aceptar',
         confirmButtonColor: '#034231'
@@ -102,18 +107,6 @@
     Swal.fire({
         title: 'Éxito',
         text: 'Movimiento registrado con éxito.',
-        icon: 'success',
-        confirmButtonText: 'Aceptar',
-        confirmButtonColor: '#034231'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            window.location.href = "{% url 'app:movimiento_lista' %}";
-        }
-    });
-    {% elif request.GET.updated %}
-    Swal.fire({
-        title: 'Éxito',
-        text: 'Movimiento editado con éxito.',
         icon: 'success',
         confirmButtonText: 'Aceptar',
         confirmButtonColor: '#034231'
