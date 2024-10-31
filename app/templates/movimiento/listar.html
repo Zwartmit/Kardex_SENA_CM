@@ -57,19 +57,33 @@
                         <h5 class="modal-title" id="modalLabel{{ p.id }}"><b>Detalles del movimiento (</b>ID: #{{ p.id }}<b>)</b></h5>
                     </div>
                     <div class="modal-body">
-                        <div style="display: grid; justify-content: center; border-radius: 15px; color: rgb(0, 0, 0)">
+                        <div style="display: flex; justify-content: center; padding-top: 10px; border-radius: 15px; color: rgb(0, 0, 0)">
                             <h4>Elementos entregados</h4>
-                            <div class="sidebar-divider" style="border-bottom: 2px solid #000000"></div>
                         </div>
-                        {% for detalle in p.detalles.all %}
-                        <p><b>Item:</b> {{ detalle.elemento.item }} <br> <b>Cantidad:</b> {{ detalle.cantidad }} </p>
-                        <div style="font-size: 0px;">ㅤ</div>
-                        {% empty %}
-                        <p>No hay detalles para este movimiento.</p>
-                        {% endfor %}
-                    </div>
+                    
+                        <table class="table table-bordered mt-3">
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Cantidad</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for detalle in p.detalles.all %}
+                                <tr>
+                                    <td>{{ detalle.elemento.item }}</td>
+                                    <td>{{ detalle.cantidad }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="2" class="text-center">No hay detalles para este movimiento.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>                    
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-danger" style="filter: drop-shadow(0 0 3px #000000);" data-dismiss="modal">Cerrar</button>
                     </div>
                 </div>
             </div>

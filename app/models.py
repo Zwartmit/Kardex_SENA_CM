@@ -25,7 +25,6 @@ class Movimiento(models.Model):
     descripcion = models.CharField(max_length=500, null=True, blank=False, verbose_name='Descripción')
 
     def clean(self):
-        # Puedes mantener validaciones relacionadas con el movimiento, si es necesario.
         pass
     
     def clean_num_ficha(self):
