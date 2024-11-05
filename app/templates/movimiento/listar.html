@@ -45,15 +45,11 @@
     <td>{{ p.proyecto }}</td>
     <td>{{ p.num_ficha }}</td>
     <td>
-        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modalElementos{{ p.id }}"><i
-                class="fas fa-search"></i>
-        </button>
-        <div class="modal fade" id="modalElementos{{ p.id }}" tabindex="-1" role="dialog"
-            aria-labelledby="modalLabel{{ p.id }}" aria-hidden="true">
+        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modalElementos{{ p.id }}"><i class="fas fa-search"></i></button>
+        <div class="modal fade" id="modalElementos{{ p.id }}" tabindex="-1" role="dialog" aria-labelledby="modalLabel{{ p.id }}" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content" style="border-radius: 18px;">
-                    <div class="modal-header"
-                        style="display: grid; justify-content: center; background: #094b39; border-radius: 15px; color: white; filter: drop-shadow(0 0 6px #000000);">
+                    <div class="modal-header" style="display: grid; justify-content: center; background: #094b39; border-radius: 15px; color: white; filter: drop-shadow(0 0 6px #000000);">
                         <h5 class="modal-title" id="modalLabel{{ p.id }}"><b>Detalles del movimiento (</b>ID: #{{ p.id }}<b>)</b></h5>
                     </div>
                     <div class="modal-body">

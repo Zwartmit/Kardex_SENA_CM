@@ -53,7 +53,7 @@
 
 .h1,
 h1 {
-    text-shadow: 3px 3px 2.5px black;
+    text-shadow: 0.5px 0.5px 3px rgb(0, 0, 0);
 }
 
 .dropdown-item:hover {

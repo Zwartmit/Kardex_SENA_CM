@@ -9,41 +9,96 @@
                 {{ titulo }}
             </h3>
         </div>
-        <div class="card-body">
-            {% csrf_token %}
+        <div class="card-header" style="display: flex; justify-content: center; align-items: center; background-color: #d4d4d4; color: black; text-align: center;">
+            <h1>Formato de entrega de materiales <br> de formación al aprendiz</h1>
+        </div>
+        {% csrf_token %}
+        <div class="card-header" style="background-color: #d4d4d4; color: black; text-align: center;">
+            <h2 style="display: flex; justify-content: center; align-items: center; background-color: #d4d4d4; color: black; text-align: center;">Datos generales</h2>
+            <div class="container">
+                <div class="form-group row mt-3">
+                    <div class="col-md-3">
+                        <label for="programa_formacion">Programa de formación:</label>
+                        {{ form.programa_formacion|add_class:'form-control' }}
+                    </div>
+                    <div class="col-md-3">
+                        <label for="num_ficha">Número de ficha:</label>
+                        {{ form.num_ficha|add_class:'form-control' }}
+                    </div>
+                    <div class="col-md-3">
+                        <label for="fecha_inicio_programa">Fecha de inicio del programa:</label>
+                        {{ form.fecha_inicio_programa|add_class:'form-control' }}
+                    </div>
+                    <div class="col-md-3">
+                        <label for="num_aprendices">Número de aprendices:</label>
+                        {{ form.num_aprendices|add_class:'form-control' }}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row mt-4">
+                <div class="col-md-4">
+                    <label for="aprendiz">Aprendiz líder (Vocero):</label>
+                    {{ form.aprendiz|add_class:'form-control' }}
+                </div>
+                <div class="col-md-4">
+                    <label for="instructor">Instructor:</label>
+                    {{ form.instructor|add_class:'form-control' }}
+                </div>
+                <div class="col-md-4">
+                    <label for="num_contrato">Número de contrato:</label>
+                    {{ form.num_contrato|add_class:'form-control' }}
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="proyectos">Proyectos:</label>
+                {{ form.proyecto|add_class:'form-control' }}
+            </div>
+        </div>
+        <div class="card-header" style="background-color: #d4d4d4; color: black; text-align: center;">
+            <h2 style="display: flex; justify-content: center; align-items: center;">Elementos a entregar</h2>
             <div id="elementos">
-                <div class="elemento-group row mb-3 align-items-end">
-                    <div class="col-md-5">
+                <div class="form-group row mt-3">
+                    <div class="col-md-3">
                         <label for="elemento">Elemento:</label>
-                        <select class="form-control" name="elemento">
+                        <select class="form-control" name="elemento" required>
                             <option value="" disabled selected>Seleccione un elemento</option>
                             {% for elem in elementos %}
                             <option value="{{ elem.id }}">{{ elem.item }}</option>
                             {% endfor %}
                         </select>
                     </div>
-
-                    <div class="col-md-4">
-                        <label for="cantidad">Cantidad:</label>
-                        <input type="number" name="cantidad" class="form-control" placeholder="Cantidad a registrar" />
+                    <div class="col-md-3">
+                        <label for="cantidad_recibida">Cantidad recibida:</label>
+                        {{ form.cantidad_recibida|add_class:'form-control' }}
+                    </div>
+                    <div class="col-md-3">
+                        <label for="cantidad_contratada">Cantidad contratada:</label>
+                        {{ form.cantidad_contratada|add_class:'form-control' }}
+                    </div>
+                </div>
+                <div class="form-group row mt-3">
+                    <div class="col-md-3">
+                        <label for="descripcion">Descripción:</label>
+                        {{ form.descripcion|add_class:'form-control' }}
+                    </div>
+                    <div class="col-md-3">
+                        <label for="saldo_pendiente">Saldo pendiente:</label>
+                        {{ form.saldo_pendiente|add_class:'form-control' }}
+                    </div>
+                    <div class="col-md-6">
+                        <label for="observaciones">Observaciones sobre el elemento:</label>
+                        {{ form.observaciones|add_class:'form-control' }}
                     </div>
                 </div>
             </div>
-
-            <div style="display: flex; justify-content: right;">
-                <button type="button" class="btn btn-info" style="color: rgb(255, 255, 255); filter: drop-shadow(0 0 3px #000000);" id="agregarElemento">Agregar otro elemento a la lista</button>
-            </div>
             <div class="form-group">
-                <label for="descripcion">Descripción:</label>
-                {{ form.descripcion|add_class:'form-control' }}
+                <button type="button" class="btn btn-info" id="agregarElemento">Agregar elemento a la lista</button>
             </div>
+        </div>
+        <div class="card-header" style="background-color: #d4d4d4; color: black; text-align: center;">
+            <h2 style="display: flex; justify-content: center; align-items: center; background-color: #d4d4d4; color: black; text-align: center;">Observaciones generales</h2>
             <div class="form-group">
-                <label for="proyecto">Proyecto:</label>
-                {{ form.proyecto|add_class:'form-control' }}
-            </div>
-            <div class="form-group">
-                <label for="num_ficha">Número de Ficha:</label>
-                {{ form.num_ficha|add_class:'form-control' }}
+                <textarea name="obs_general" class="form-control" rows="3" placeholder="Observaciones generales" required></textarea>
             </div>
         </div>
     </div>
@@ -55,74 +110,41 @@
 
 <script>
     document.getElementById('agregarElemento').addEventListener('click', function () {
-        const container = document.getElementById('elementos');
-        const newElement = document.createElement('div');
-        newElement.className = 'elemento-group row mb-3';
-        newElement.innerHTML = `
-            <div class="col-md-5">
-                <label for="elemento">Elemento:</label>
-                <select class="form-control" name="elemento">
-                    <option value="" disabled selected>Seleccione un elemento</option>
-                    {% for elem in elementos %}
-                        <option value="{{ elem.id }}">{{ elem.item }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-md-4">
-                <label for="cantidad">Cantidad:</label>
-                <input type="number" name="cantidad" class="form-control" placeholder="Cantidad a registrar" />
-            </div>
-            <div class="col-md-3" style="display: flex; align-items: center; padding-top: 30px">
-                <button type="button" class="btn btn-danger btn-sm eliminarElemento" title="Eliminar elemento"><i class="fas fa-trash"></i></button>
-            </div>`;
-            
-        container.appendChild(newElement);
-
-        newElement.querySelector('.eliminarElemento').addEventListener('click', function () {
-            container.removeChild(newElement);
-        });
+        var elementoDiv = document.createElement('div');
+        elementoDiv.className = 'elemento-group row mb-3 align-items-end';
+        elementoDiv.innerHTML = `
+        <div class="col-md-3">
+            <label for="elemento">Elemento:</label>
+            <select class="form-control" name="elemento" required>
+                <option value="" disabled selected>Seleccione un elemento</option>
+                {% for elem in elementos %}
+                <option value="{{ elem.id }}">{{ elem.item }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="descripcion">Descripción:</label>
+            <input type="number" name="descripcion" class="form-control" placeholder="Descripción del elemento" min="1" required />
+        </div>
+        <div class="col-md-3">
+            <label for="cantidad">Cantidad:</label>
+            <input type="number" name="cantidad" class="form-control" placeholder="Cantidad a registrar" min="1" required />
+        </div>
+        <div class="col-md-3">
+            <label for="observaciones">Observaciones sobre el elemento:</label>
+        <textarea name="observaciones" class="form-control" rows="1" placeholder="Observaciones" required></textarea>
+        </div>
+        <div style="display: flex; justify-content: flex-end;">
+            <button type="button" class="btn btn-danger eliminarElemento">Eliminar</button>
+        </div>
+    `;
+        document.getElementById('elementos').appendChild(elementoDiv);
     });
-</script>
-<script>
-    {% if form.errors %}
-    var errors = '';
-    {% for field in form %}
-    {% for error in field.errors %}
-    errors += '{{ error }}\\n';
-    {% endfor %}
-    {% endfor %}
 
-    Swal.fire({
-        title: 'Error',
-        text: errors || 'Error desconocido.',
-        icon: 'error',
-        confirmButtonText: 'Aceptar',
-        confirmButtonColor: '#034231'
-    });
-    {% elif request.GET.created %}
-    Swal.fire({
-        title: 'Éxito',
-        text: 'Movimiento registrado con éxito.',
-        icon: 'success',
-        confirmButtonText: 'Aceptar',
-        confirmButtonColor: '#034231'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            window.location.href = "{% url 'app:movimiento_lista' %}";
+    document.getElementById('elementos').addEventListener('click', function (e) {
+        if (e.target.classList.contains('eliminarElemento')) {
+            e.target.closest('.elemento-group').remove();
         }
     });
-    {% elif request.GET.updated %}
-    Swal.fire({
-        title: 'Éxito',
-        text: 'Movimiento editado con éxito.',
-        icon: 'success',
-        confirmButtonText: 'Aceptar',
-        confirmButtonColor: '#034231'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            window.location.href = "{% url 'app:movimiento_lista' %}";
-        }
-    });
-    {% endif %}
 </script>
 {% endblock %}
