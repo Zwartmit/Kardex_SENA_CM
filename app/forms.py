@@ -6,36 +6,16 @@ from app.models import Elemento, Movimiento, DetalleMovimiento
 class ElementoForm(forms.ModelForm):
     class Meta:
         model = Elemento
-        fields = ['item', 'saldo', 'cantidad_recibida', 'cantidad_contratada', 'descripcion', 'observaciones']
+        fields = ['item', 'cantidad']
         widgets = {
             'item': forms.TextInput(attrs={
                 'placeholder': 'Nombre del elemento',
                 'class': 'form-control',
             }),
-            'saldo': forms.NumberInput(attrs={
-                'placeholder': 'Saldo del elemento',
-                'class': 'form-control',
-                'min': 0,
-            }),
-            'cantidad_recibida': forms.NumberInput(attrs={
-                'placeholder': 'Cantidad recibida',
-                'class': 'form-control',
-                'min': 1,
-            }),
-            'cantidad_contratada': forms.NumberInput(attrs={
+            'cantidad': forms.NumberInput(attrs={
                 'placeholder': 'Cantidad contratada',
                 'class': 'form-control',
                 'min': 1,
-            }),
-            'descripcion': forms.Textarea(attrs={
-                'placeholder': 'Descripción del elemento',
-                'class': 'form-control',
-                'rows': 3,
-            }),
-            'observaciones': forms.Textarea(attrs={
-                'placeholder': 'Observaciones sobre el elemento',
-                'class': 'form-control',
-                'rows': 3,
             }),
         }
 
@@ -47,16 +27,10 @@ class ElementoForm(forms.ModelForm):
                 raise ValidationError('Ya existe un elemento con este nombre.')
         return item
 
-    def clean_cantidad_recibida(self):
-        cantidad = self.cleaned_data.get('cantidad_recibida')
+    def clean_cantidad(self):
+        cantidad = self.cleaned_data.get('cantidad')
         if cantidad <= 0:
             raise ValidationError('La cantidad recibida debe ser mayor a 0.')
-        return cantidad
-
-    def clean_cantidad_contratada(self):
-        cantidad = self.cleaned_data.get('cantidad_contratada')
-        if cantidad <= 0:
-            raise ValidationError('La cantidad contratada debe ser mayor a 0.')
         return cantidad
 
 class MovimientoForm(forms.ModelForm):
@@ -101,7 +75,6 @@ class MovimientoForm(forms.ModelForm):
             'obs_general': forms.Textarea(attrs={
                 'placeholder': 'Observaciones generales',
                 'class': 'form-control',
-                'rows': 3,
             }),
             'fecha_inicio_programa': forms.DateInput(attrs={
                 'placeholder': 'Fecha de inicio del programa',
