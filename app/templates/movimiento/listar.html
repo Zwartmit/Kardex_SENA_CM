@@ -2,48 +2,53 @@
 
 {% block columnas %}
 <tr>
-    <th scope="col">id</th>
-    <th scope="col">Descripción</th>
-    <th scope="col">Fecha</th>
-    <th scope="col">Proyecto</th>
-    <th scope="col">Ficha</th>
-    <th scope="col">Detalles</th>
-    <th scope="col">Opciones</th>
+    <th scope="col" style="text-align: center;">id</th>
+    <th scope="col" style="text-align: center;">Ficha</th>
+    <th scope="col" style="text-align: center;">Programa de formación</th>
+    <th scope="col" style="text-align: center;">Vocero</th>
+    <th scope="col" style="text-align: center;">Instructor</th>
+    <th scope="col" style="text-align: center;">Fecha</th>
+    <th scope="col" style="text-align: center;">Detalles</th>
+    <th scope="col" style="text-align: center;">Opciones</th>
 </tr>
 <tr>
-    <th>
+    <th style="text-align: center;">
         <input type="text" placeholder="Filtrar" class="filter-input" style="width: 100px;" />
     </th>
-    <th>
+    <th style="text-align: center;">
         <input type="text" placeholder="Filtrar" class="filter-input" style="width: 100px;" />
     </th>
-    <th>
+    <th style="text-align: center;">
+        <input type="text" placeholder="Filtrar" class="filter-input" style="width: 100px;" />
+    </th>
+    <th style="text-align: center;">
+        <input type="text" placeholder="Filtrar" class="filter-input" style="width: 100px;" />
+    </th>
+    <th style="text-align: center;">
+        <input type="text" placeholder="Filtrar" class="filter-input" style="width: 100px;" />
+    </th>
+    <th style="text-align: left;">
         <div class="filter-container">
-            <label for="start-date" style="margin-right: 5px;">Desde:</label>
-            <input type="date" class="filter-date" style="width: 25px;" />
-            <label for="start-date" style="margin-right: 5px;">Hasta:</label>
-            <input type="date" class="filter-date" style="width: 25px;" />
+            <label for="start-date" style="font-size: 13px;">Desde:</label>
+            <input type="date" class="filter-date" style="width: 22px; font-size: 13px;" />
+            <label for="start-date" style="font-size: 13px;">Hasta:</label>
+            <input type="date" class="filter-date" style="width: 22px; font-size: 13px;" />
         </div>
     </th>
-    <th>
-        <input type="text" placeholder="Filtrar" class="filter-input" style="width: 100px;" />
-    </th>
-    <th>
-        <input type="text" placeholder="Filtrar" class="filter-input" style="width: 100px;" />
-    </th>
-    <th></th>
-    <th></th>
+    <th style="text-align: center;"></th>
+    <th style="text-align: center;"></th>
 </tr>
 {% endblock %}
 
 {% block filas %}
 {% for p in object_list %}
 <tr>
-    <td>{{ p.id }}</td>
-    <td>{{ p.descripcion }}</td>
-    <td>{{ p.fecha|date:"Y-m-d H:i:s" }}</td>
-    <td>{{ p.proyecto }}</td>
-    <td>{{ p.num_ficha }}</td>
+    <td style="text-align: center;">{{ p.id }}</td>
+    <td style="text-align: center;">{{ p.num_ficha }}</td>
+    <td style="text-align: center;">{{ p.programa_formacion }}</td>
+    <td style="text-align: center;">{{ p.aprendiz }}</td>
+    <td style="text-align: center;">{{ p.instructor }}</td>
+    <td style="text-align: center;">{{ p.fecha|date:"Y-m-d H:i:s" }}</td>
     <td>
         <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modalElementos{{ p.id }}"><i class="fas fa-search"></i></button>
         <div class="modal fade" id="modalElementos{{ p.id }}" tabindex="-1" role="dialog" aria-labelledby="modalLabel{{ p.id }}" aria-hidden="true">
@@ -85,13 +90,9 @@
             </div>
         </div>
     </td>
-    <td>
-        <a href="{% url 'app:movimiento_eliminar' p.id %}" class="btn btn-danger btn-sm" title="Eliminar"><i
-                class="fas fa-trash"></i></a>
-        <button id="export-pdf" class="btn btn-sm fas fa-file-pdf" style="background: #c2680e; color: #ffffff;"
-            title="Generar PDF"></button>
-        <button id="export-excel" class="btn btn-sm fas fa-file-excel" style="background: #0e7023; color: #ffffff;"
-            title="Generar Excel"></button>
+    <td style="text-align: center;">
+        <button id="export-pdf" class="btn btn-sm fas fa-file-pdf" style="background: #c2680e; color: #ffffff;" title="Generar PDF"></button>
+        <button id="export-excel" class="btn btn-sm fas fa-file-excel" style="background: #0e7023; color: #ffffff;" title="Generar Excel"></button>
     </td>
 </tr>
 {% endfor %}
@@ -127,9 +128,14 @@
             var start = startDate ? new Date(startDate + "T00:00:00") : null;
             var end = endDate ? new Date(endDate + "T23:59:59") : null;
 
+            // Vaciar filtros anteriores
             $.fn.dataTable.ext.search = [];
+
+            // Añadir filtro de fecha
             $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
-                var fechaVenta = new Date(data[3]);
+                var fechaVenta = new Date(data[5]);  // Cambiado a la columna correcta (índice 5)
+
+                // Si hay un rango de fechas, comprobar si la fecha está dentro del rango
                 if ((start && fechaVenta < start) || (end && fechaVenta > end)) {
                     return false;
                 }
@@ -140,4 +146,5 @@
         });
     });
 </script>
+
 {% endblock %}

@@ -2,32 +2,32 @@
 
 {% block columnas %}
 <tr>
-    <th scope="col">id</th>
-    <th scope="col">Item</th>
-    <th scope="col">Cantidad</th>
-    <th scope="col">Opciones</th>
+    <th scope="col" style="text-align: center;">id</th>
+    <th scope="col" style="text-align: center;">Item</th>
+    <th scope="col" style="text-align: center;">Cantidad</th>
+    <th scope="col" style="text-align: center;">Opciones</th>
 </tr>
 <tr>
-    <th>
+    <th style="text-align: center;">
         <input type="text" placeholder="Filtrar" class="filter-input" style="width: 100px;"/>
     </th>
-    <th>
+    <th style="text-align: center;">
         <input type="text" placeholder="Filtrar" class="filter-input" style="width: 100px;"/>
     </th>
-    <th>
+    <th style="text-align: center;">
         <input type="text" placeholder="Filtrar" class="filter-input" style="width: 100px;"/>
     </th>
-    <th></th>
+    <th style="text-align: center;"></th>
 </tr>
 {% endblock %}
 
 {% block filas %}
     {% for p in object_list %}
     <tr>
-        <td>{{ p.id }}</td>
-        <td>{{ p.item }}</td>
-        <td>{{ p.cantidad }}</td>
-        <td>
+        <td style="text-align: center;">{{ p.id }}</td>
+        <td style="text-align: center;">{{ p.item }}</td>
+        <td style="text-align: center;">{{ p.cantidad }}</td>
+        <td style="text-align: center;">
             <a href="{% url 'app:elemento_editar' p.id %}" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
             <a href="{% url 'app:elemento_eliminar' p.id %}" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a>
         </td>

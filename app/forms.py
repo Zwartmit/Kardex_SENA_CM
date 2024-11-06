@@ -41,7 +41,7 @@ class MovimientoForm(forms.ModelForm):
             'num_aprendices', 'num_contrato', 'obs_general', 'fecha_inicio_programa'
         ]
         widgets = {
-            'programa_formacion': forms.TextInput(attrs={
+            'programa_formacion': forms.Select(attrs={
                 'placeholder': 'Nombre del programa',
                 'class': 'form-control',
             }),

@@ -1,4 +1,5 @@
 from django import forms
+from .choices import programas
 from django.core.exceptions import ValidationError
 from django.db import models
 
@@ -16,7 +17,7 @@ class Elemento(models.Model):
 
 class Movimiento(models.Model):
     fecha = models.DateTimeField(auto_now_add=True, verbose_name='Fecha')
-    programa_formacion = models.CharField(max_length=100, null=True, blank=False, verbose_name='Programa de formación')
+    programa_formacion = models.CharField(max_length=100, choices=[(prog, prog) for prog in programas], null=True, blank=False, verbose_name='Programa de formación')
     num_ficha = models.PositiveIntegerField(null=True, blank=False, verbose_name='Ficha')
     proyecto = models.CharField(max_length=200, null=True, blank=False, verbose_name='Proyecto')
     instructor = models.CharField(max_length=200, null=True, blank=False, verbose_name='Instructor')
