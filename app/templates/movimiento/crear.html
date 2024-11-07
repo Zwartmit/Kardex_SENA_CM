@@ -161,5 +161,46 @@
         });
     });
 </script>
+<script>
+    {% if form.errors %}
+    var errors = '';
+    {% for field in form %}
+    {% for error in field.errors %}
+    errors += '{{ error }}\\n';
+    {% endfor %}
+    {% endfor %}
 
+    Swal.fire({
+        title: 'Error',
+        text: errors || 'Error desconocido.',
+        icon: 'error',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#034231'
+    });
+    {% elif request.GET.created %}
+    Swal.fire({
+        title: 'Éxito',
+        text: 'Movimiento registrado con éxito.',
+        icon: 'success',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#034231'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = "{% url 'app:movimiento_lista' %}";
+        }
+    });
+    {% elif request.GET.updated %}
+    Swal.fire({
+        title: 'Éxito',
+        text: 'Movimiento editado con éxito.',
+        icon: 'success',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#034231'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = "{% url 'app:movimiento_lista' %}";
+        }
+    });
+    {% endif %}
+</script>
 {% endblock %}

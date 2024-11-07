@@ -120,14 +120,6 @@ td {
     background-color: #fff;
 }
 
-tr:nth-child(even) td {
-    background-color: #f9f9f9;
-}
-
-tr:hover td {
-    background-color: #f1f1f1;
-}
-
 .empty-message {
     text-align: center;
     padding: 20px;

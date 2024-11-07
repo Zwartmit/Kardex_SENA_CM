@@ -1,104 +1,189 @@
 {% extends 'listar.html' %}
+{% load static %}
 
 {% block columnas %}
 <tr>
-    <th scope="col" style="text-align: center;">id</th>
-    <th scope="col" style="text-align: center;">Ficha</th>
-    <th scope="col" style="text-align: center;">Programa de formación</th>
-    <th scope="col" style="text-align: center;">Vocero</th>
-    <th scope="col" style="text-align: center;">Instructor</th>
-    <th scope="col" style="text-align: center;">Fecha</th>
-    <th scope="col" style="text-align: center;">Detalles</th>
-    <th scope="col" style="text-align: center;">Opciones</th>
+    <th scope="col" style="width: auto; align-content: center; text-align: center;">id</th>
+    <th scope="col" style="width: auto; align-content: center; text-align: center;">Ficha</th>
+    <th scope="col" style="width: auto; align-content: center; text-align: center;">Programa de formación</th>
+    <th scope="col" style="width: auto; align-content: center; text-align: center;">Vocero</th>
+    <th scope="col" style="width: auto; align-content: center; text-align: center;">Instructor</th>
+    <th scope="col" style="width: 100px; align-content: center; text-align: center;">Fecha</th>
+    <th scope="col" style="width: auto; align-content: center; text-align: center;">Detalles</th>
+    <!-- <th scope="col" style="width: auto; align-content: center; text-align: center;">Opciones</th> -->
 </tr>
 <tr>
-    <th style="text-align: center;">
+    <th style="width: auto; text-align: center; align-content: center;">
         <input type="text" placeholder="Filtrar" class="filter-input" style="width: 100px;" />
     </th>
-    <th style="text-align: center;">
+    <th style="width: auto; text-align: center; align-content: center;">
         <input type="text" placeholder="Filtrar" class="filter-input" style="width: 100px;" />
     </th>
-    <th style="text-align: center;">
+    <th style="width: auto; text-align: center; align-content: center;">
         <input type="text" placeholder="Filtrar" class="filter-input" style="width: 100px;" />
     </th>
-    <th style="text-align: center;">
+    <th style="width: auto; text-align: center; align-content: center;">
         <input type="text" placeholder="Filtrar" class="filter-input" style="width: 100px;" />
     </th>
-    <th style="text-align: center;">
+    <th style="width: auto; text-align: center; align-content: center;">
         <input type="text" placeholder="Filtrar" class="filter-input" style="width: 100px;" />
     </th>
-    <th style="text-align: left;">
+    <th style="width: auto; text-align: left; align-content: center;">
         <div class="filter-container">
-            <label for="start-date" style="font-size: 13px;">Desde:</label>
+            <label for="start-date" style="font-size: 13px; width: auto; text-align: left; align-content: center;">Desde:</label>
             <input type="date" class="filter-date" style="width: 22px; font-size: 13px;" />
-            <label for="start-date" style="font-size: 13px;">Hasta:</label>
+            <label for="start-date" style="font-size: 13px; width: auto; text-align: left; align-content: center;">Hasta:</label>
             <input type="date" class="filter-date" style="width: 22px; font-size: 13px;" />
         </div>
     </th>
-    <th style="text-align: center;"></th>
-    <th style="text-align: center;"></th>
+    <th style="width: auto; text-align: center; align-content: center;"></th>
+    <!-- <th style="width: auto; text-align: center; align-content: center;"></th> -->
 </tr>
 {% endblock %}
 
 {% block filas %}
 {% for p in object_list %}
 <tr>
-    <td style="text-align: center;">{{ p.id }}</td>
-    <td style="text-align: center;">{{ p.num_ficha }}</td>
-    <td style="text-align: center;">{{ p.programa_formacion }}</td>
-    <td style="text-align: center;">{{ p.aprendiz }}</td>
-    <td style="text-align: center;">{{ p.instructor }}</td>
-    <td style="text-align: center;">{{ p.fecha|date:"Y-m-d H:i:s" }}</td>
-    <td>
+    <td style="width: auto; text-align: center; align-content: center;">{{ p.id }}</td>
+    <td style="width: auto; text-align: center; align-content: center;">{{ p.num_ficha }}</td>
+    <td style="width: auto; text-align: center; align-content: center;">{{ p.programa_formacion }}</td>
+    <td style="width: auto; text-align: center; align-content: center;">{{ p.aprendiz }}</td>
+    <td style="width: auto; text-align: center; align-content: center;">{{ p.instructor }}</td>
+    <td style="width: auto; text-align: center; align-content: center;">{{ p.fecha|date:"Y-m-d H:i:s" }}</td>
+    <td style="width: auto; text-align: center; align-content: center;">
         <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modalElementos{{ p.id }}"><i class="fas fa-search"></i></button>
-        <div class="modal fade" id="modalElementos{{ p.id }}" tabindex="-1" role="dialog" aria-labelledby="modalLabel{{ p.id }}" aria-hidden="true">
-            <div class="modal-dialog" role="document">
+        <div class="modal fade" id="modalElementos{{ p.id }}" tabindex="-1" role="dialog"
+            aria-labelledby="modalLabel{{ p.id }}" aria-hidden="true">
+            <div class="modal-dialog" style="max-width: 90%; width: auto;">
                 <div class="modal-content" style="border-radius: 18px;">
-                    <div class="modal-header" style="display: grid; justify-content: center; background: #094b39; border-radius: 15px; color: white; filter: drop-shadow(0 0 6px #000000);">
+                    <div class="modal-header"
+                        style="display: grid; justify-content: center; background: #094b39; border-radius: 15px; color: white; filter: drop-shadow(0 0 6px #000000);">
                         <h5 class="modal-title" id="modalLabel{{ p.id }}"><b>Detalles del movimiento (</b>ID: #{{ p.id }}<b>)</b></h5>
                     </div>
                     <div class="modal-body">
-                        <div style="display: flex; justify-content: center; padding-top: 10px; border-radius: 15px; color: rgb(0, 0, 0)">
-                            <h4>Elementos entregados</h4>
+                        <div class="table-container" style="display: flex; justify-content: center; align-items: center;">
+                            <table class="table table-bordered" style="width: auto; max-width: auto; margin: auto;">
+                                <tr>
+                                    <td rowspan="2" class="logo" style="text-align: center; align-content: center;">
+                                        <img src="{% static 'img/logoSENA_N.jpg' %}" style="height: 80px; width: 80px;" alt="Logo SENA" class="logo-image img-fluid">
+                                    </td>
+                                    <td colspan="5" class="header" style="text-align: center; align-content: center;">
+                                        <strong style="font-size: 25px;">SISTEMA INTEGRADO DE GESTIÓN</strong><br>
+                                        <b>Formato: </b>Entrega de materiales de formación al aprendiz (SENA, Centro Minero)<br>
+                                        <b>Proceso: </b>Gestión de formación profesional integral<br>
+                                        <b>Procedimiento: </b>Ejecución de la formación profesional integral
+                                    </td>
+                                </tr>
+                                <tr></tr>
+                                <tr>
+                                    <th style="width: auto; text-align: center; align-content: center;"><b>Programa de formación:</b></th>
+                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.programa_formacion }}</span></td>
+                                    <th style="width: auto; text-align: center; align-content: center;"><b>Nº de ficha:</b></th>
+                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.num_ficha }}</span></td>
+                                    <th style="width: auto; text-align: center; align-content: center;"><b>Fecha de inicio:</b></th>
+                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.fecha_inicio_programa }}</span></td>
+                                </tr>
+                                <tr>
+                                    <th style="width: auto; text-align: center; align-content: center;"><b>Nº Aprendices:</b></th>
+                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.num_aprendices }}</span></td>
+                                    <th style="width: auto; text-align: center; align-content: center;"><b>Aprendiz vocero:</b></th>
+                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.aprendiz }}</span></td>
+                                    <th style="width: auto; text-align: center; align-content: center;"><b>Instructor:</b></th>
+                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.instructor }}</span></td>
+                                </tr>
+                                <tr style="background-color: #000000;"></tr>
+                                <tr>
+                                    <th style="width: auto; text-align: center; align-content: center;"><b>Proyectos asociados:</b></th>
+                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.proyecto }}</span></td>
+                                    <th style="width: auto; text-align: center; align-content: center;"><b>Nº de contrato:</b></th>
+                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.num_contrato }}</span></td>
+                                    <th style="width: auto; text-align: center; align-content: center;"><b>Fecha de entrega:</b></th>
+                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.fecha }}</span></td>
+                                </tr>
+                                <th colspan="6"></th>
+                                <tr>
+                                    <th style="width: auto; text-align: center; align-content: center;">Item</th>
+                                    <th style="width: auto; text-align: center; align-content: center;">Descripción del elemento</th>
+                                    <th style="width: auto; text-align: center; align-content: center;">Cantidad Recibida</th>
+                                    <th style="width: auto; text-align: center; align-content: center;">Cantidad contratada</th>
+                                    <th style="width: auto; text-align: center; align-content: center;">Saldo pendiente de entrega</th>
+                                    <th style="width: auto; text-align: center; align-content: center;">Observaciones</th>
+                                </tr>
+                                <tr>
+                                    <th style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.detalle.elemento.item }}</span></th>
+                                    <th style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.detalle.descripcion }}</span></th>
+                                    <th style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.detalle.cantidad_recibida }}</span></th>
+                                    <th style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.detalle.cantidad_contratada }}</span></th>
+                                    <th style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.detalle.saldo }}</span></th>
+                                    <th style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.detalle.observaciones }}</span></th>
+                                </tr>
+                                <tr></tr>
+                                <tr>
+                                    <th style="width: auto; text-align: center;"><b>Observaciones generales:</b></th>
+                                        <th style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.obs_general }}</span></th>
+                                    </tr>
+                            </table>
                         </div>
-                    
-                        <table class="table table-bordered mt-3">
-                            <thead>
-                                <tr>
-                                    <th>Item</th>
-                                    <th>Cantidad</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for detalle in p.detalles.all %}
-                                <tr>
-                                    <td>{{ detalle.elemento.item }}</td>
-                                    <td>{{ detalle.cantidad }}</td>
-                                </tr>
-                                {% empty %}
-                                <tr>
-                                    <td colspan="2" class="text-center">No hay detalles para este movimiento.</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>                    
+                    </div>
                     <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" style="filter: drop-shadow(0 0 3px #000000);" id="generatePdfButton"><i class="fas fa-file-pdf"></i>Generar PDF</button>
+                        <!-- <button type="button" class="btn btn-success" id="generateExcelButton"><i class="fas fa-file-excel"></i>Generar Excel</button> -->
                         <button type="button" class="btn btn-danger" style="filter: drop-shadow(0 0 3px #000000);" data-dismiss="modal">Cerrar</button>
                     </div>
                 </div>
             </div>
         </div>
-    </td>
-    <td style="text-align: center;">
+    </th>
+    <!-- <th style="width: auto; text-align: center; align-content: center;">
         <button id="export-pdf" class="btn btn-sm fas fa-file-pdf" style="background: #c2680e; color: #ffffff;" title="Generar PDF"></button>
         <button id="export-excel" class="btn btn-sm fas fa-file-excel" style="background: #0e7023; color: #ffffff;" title="Generar Excel"></button>
-    </td>
+    </th> -->
 </tr>
 {% endfor %}
 {% endblock %}
 
 {% block javascript %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script> -->
+<!-- <script>
+    document.getElementById('generateExcelButton').addEventListener('click', function() {
+    // Seleccionar la tabla dentro del modal
+    const table = document.querySelector('.modal-body table');
+
+    // Crear una nueva hoja de trabajo de Excel
+    const worksheet = XLSX.utils.table_to_sheet(table);
+    const workbook = XLSX.utils.book_new();
+
+    // Agregar la hoja de trabajo al libro
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'ContenidoModal');
+
+    // Descargar el archivo Excel
+    XLSX.writeFile(workbook, 'contenido_modal.xlsx');
+});
+</script> -->
+<script>
+    document.getElementById('generatePdfButton').addEventListener('click', function() {
+    // Selecciona el contenido del modal
+    const modalContent = document.querySelector('.modal-body');
+
+    // Usa html2canvas para convertir el contenido en una imagen
+    html2canvas(modalContent, { scale: 2 }).then(canvas => {
+        // Crea un archivo PDF usando jsPDF
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF('p', 'mm', 'a4');
+
+        // Calcula el ancho y alto para ajustar la imagen al PDF
+        const imgData = canvas.toDataURL('image/png');
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+        // Agrega la imagen al PDF
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        pdf.save('contenido_modal.pdf');
+    });
+});
+</script>
 <script>
     document.getElementById('export-pdf').addEventListener('click', function () {
         window.location.href = "{% url 'app:exportar_pdf' %}";

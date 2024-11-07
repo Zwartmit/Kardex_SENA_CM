@@ -40,7 +40,6 @@ class Movimiento(models.Model):
         verbose_name_plural = 'movimientos'
         db_table = 'Movimiento'
 
-
 class DetalleMovimiento(models.Model):
     movimiento = models.ForeignKey(Movimiento, on_delete=models.CASCADE, related_name='detalles', verbose_name='Movimiento')
     elemento = models.ForeignKey(Elemento, on_delete=models.CASCADE, related_name='detalles', verbose_name='Elemento')
