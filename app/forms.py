@@ -6,16 +6,41 @@ from app.models import Elemento, Movimiento, DetalleMovimiento
 class ElementoForm(forms.ModelForm):
     class Meta:
         model = Elemento
-        fields = ['item', 'cantidad']
+        fields = ['item', 'cantidad', 'saldo', 'cantidad_recibida', 'cantidad_contratada', 'descripcion', 'observaciones']
         widgets = {
             'item': forms.TextInput(attrs={
                 'placeholder': 'Nombre del elemento',
                 'class': 'form-control',
             }),
             'cantidad': forms.NumberInput(attrs={
-                'placeholder': 'Cantidad contratada',
+                'placeholder': 'Cantidad disponible',
                 'class': 'form-control',
                 'min': 1,
+            }),
+            'saldo': forms.NumberInput(attrs={
+                'placeholder': 'Saldo',
+                'class': 'form-control',
+                'min': 0,
+            }),
+            'cantidad_recibida': forms.NumberInput(attrs={
+                'placeholder': 'Cantidad recibida',
+                'class': 'form-control',
+                'min': 0,
+            }),
+            'cantidad_contratada': forms.NumberInput(attrs={
+                'placeholder': 'Cantidad contratada',
+                'class': 'form-control',
+                'min': 0,
+            }),
+            'descripcion': forms.Textarea(attrs={
+                'placeholder': 'Descripción',
+                'class': 'form-control',
+                'rows': 3,
+            }),
+            'observaciones': forms.Textarea(attrs={
+                'placeholder': 'Observaciones',
+                'class': 'form-control',
+                'rows': 3,
             }),
         }
 
@@ -30,7 +55,7 @@ class ElementoForm(forms.ModelForm):
     def clean_cantidad(self):
         cantidad = self.cleaned_data.get('cantidad')
         if cantidad <= 0:
-            raise ValidationError('La cantidad recibida debe ser mayor a 0.')
+            raise ValidationError('La cantidad debe ser mayor a 0.')
         return cantidad
 
 class MovimientoForm(forms.ModelForm):

@@ -64,9 +64,9 @@
                         <div class="table-container" style="display: flex; justify-content: center; align-items: center;">
                             <table class="table table-bordered" style="width: auto; max-width: auto; margin: auto;">
                                 <tr>
-                                    <td rowspan="2" class="logo" style="text-align: center; align-content: center;">
+                                    <th rowspan="2" class="logo" style="text-align: center; align-content: center;">
                                         <img src="{% static 'img/logoSENA_N.jpg' %}" style="height: 80px; width: 80px;" alt="Logo SENA" class="logo-image img-fluid">
-                                    </td>
+                                    </th>
                                     <td colspan="5" class="header" style="text-align: center; align-content: center;">
                                         <strong style="font-size: 25px;">SISTEMA INTEGRADO DE GESTIÓN</strong><br>
                                         <b>Formato: </b>Entrega de materiales de formación al aprendiz (SENA, Centro Minero)<br>
@@ -109,18 +109,20 @@
                                     <th style="width: auto; text-align: center; align-content: center;">Saldo pendiente de entrega</th>
                                     <th style="width: auto; text-align: center; align-content: center;">Observaciones</th>
                                 </tr>
+                                {% for detalle in p.detalles.all %}
                                 <tr>
-                                    <th style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.detalle.elemento.item }}</span></th>
-                                    <th style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.detalle.descripcion }}</span></th>
-                                    <th style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.detalle.cantidad_recibida }}</span></th>
-                                    <th style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.detalle.cantidad_contratada }}</span></th>
-                                    <th style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.detalle.saldo }}</span></th>
-                                    <th style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.detalle.observaciones }}</span></th>
+                                    <th style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ detalle.elemento.item }}</span></th>
+                                    <th style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ detalle.elemento.descripcion }}</span></th>
+                                    <th style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ detalle.elemento.cantidad_recibida }}</span></th>
+                                    <th style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ detalle.elemento.cantidad_contratada }}</span></th>
+                                    <th style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ detalle.elemento.saldo }}</span></th>
+                                    <th style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ detalle.elemento.observaciones }}</span></th>
                                 </tr>
+                                {% endfor %}
                                 <tr></tr>
                                 <tr>
                                     <th style="width: auto; text-align: center;"><b>Observaciones generales:</b></th>
-                                        <th style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.obs_general }}</span></th>
+                                        <td colspan="5" style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.obs_general }}</span></td>
                                     </tr>
                             </table>
                         </div>

@@ -72,55 +72,55 @@ class MovimientoCreateView(CreateView):
 
         return redirect(f"{self.success_url}?created=True")
 
-###### EDITAR ######
+# ###### EDITAR ######
 
-@method_decorator(never_cache, name='dispatch')
-class MovimientoUpdateView(UpdateView):
-    model = Movimiento
-    form_class = MovimientoForm
-    template_name = 'movimiento/crear.html'
-    success_url = reverse_lazy('app:movimiento_lista')
+# @method_decorator(never_cache, name='dispatch')
+# class MovimientoUpdateView(UpdateView):
+#     model = Movimiento
+#     form_class = MovimientoForm
+#     template_name = 'movimiento/crear.html'
+#     success_url = reverse_lazy('app:movimiento_lista')
 
-    @method_decorator(login_required)
-    def dispatch(self, request, *args, **kwargs):
-        return super().dispatch(request, *args, **kwargs)
+#     @method_decorator(login_required)
+#     def dispatch(self, request, *args, **kwargs):
+#         return super().dispatch(request, *args, **kwargs)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['titulo'] = 'Editar movimiento'
-        context['entidad'] = 'Editar movimiento'
-        context['error'] = 'Error al editar el movimiento.'
-        context['listar_url'] = reverse_lazy('app:movimiento_lista')
-        return context
-    
-    def form_valid(self, form):
-        response = super().form_valid(form)
-        success_url = reverse('app:movimiento_crear') + '?updated=True'
-        return redirect(success_url)
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['titulo'] = 'Editar movimiento'
+#         context['entidad'] = 'Editar movimiento'
+#         context['error'] = 'Error al editar el movimiento.'
+#         context['listar_url'] = reverse_lazy('app:movimiento_lista')
+#         return context
 
-###### ELIMINAR ######
+#     def form_valid(self, form):
+#         response = super().form_valid(form)
+#         success_url = reverse('app:movimiento_crear') + '?updated=True'
+#         return redirect(success_url)
 
-@method_decorator(never_cache, name='dispatch')
-class MovimientoDeleteView(DeleteView):
-    model = Movimiento
-    template_name = 'movimiento/eliminar.html'
-    success_url = reverse_lazy('app:movimiento_lista')
+# ###### ELIMINAR ######
 
-    @method_decorator(login_required)
-    def dispatch(self, request, *args, **kwargs):
-        return super().dispatch(request, *args, **kwargs)
+# @method_decorator(never_cache, name='dispatch')
+# class MovimientoDeleteView(DeleteView):
+#     model = Movimiento
+#     template_name = 'movimiento/eliminar.html'
+#     success_url = reverse_lazy('app:movimiento_lista')
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['titulo'] = 'Eliminar movimiento'
-        context['entidad'] = 'Eliminar movimiento'
-        context['listar_url'] = reverse_lazy('app:movimiento_lista')
-        return context
+#     @method_decorator(login_required)
+#     def dispatch(self, request, *args, **kwargs):
+#         return super().dispatch(request, *args, **kwargs)
 
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        try:
-            self.object.delete()
-            return JsonResponse({'success': True, 'message': 'Movimiento eliminado con éxito.'})
-        except ProtectedError:
-            return JsonResponse({'success': False, 'message': 'No se puede eliminar el movimiento.'})
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['titulo'] = 'Eliminar movimiento'
+#         context['entidad'] = 'Eliminar movimiento'
+#         context['listar_url'] = reverse_lazy('app:movimiento_lista')
+#         return context
+
+#     def post(self, request, *args, **kwargs):
+#         self.object = self.get_object()
+#         try:
+#             self.object.delete()
+#             return JsonResponse({'success': True, 'message': 'Movimiento eliminado con éxito.'})
+#         except ProtectedError:
+#             return JsonResponse({'success': False, 'message': 'No se puede eliminar el movimiento.'})

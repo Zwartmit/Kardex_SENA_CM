@@ -15,8 +15,8 @@ urlpatterns = [
     ### CRUD MOVIMIENTOS ###
     path('movimiento/listar/', MovimientoListView.as_view(), name='movimiento_lista'),
     path('movimiento/crear/', MovimientoCreateView.as_view(), name='movimiento_crear'),
-    path('movimiento/editar/<int:pk>/', MovimientoUpdateView.as_view(), name='movimiento_editar'),
-    path('movimiento/eliminar/<int:pk>/', MovimientoDeleteView.as_view(), name='movimiento_eliminar'),
+    # path('movimiento/editar/<int:pk>/', MovimientoUpdateView.as_view(), name='movimiento_editar'),
+    # path('movimiento/eliminar/<int:pk>/', MovimientoDeleteView.as_view(), name='movimiento_eliminar'),
 
     ### REPORTES ###
     path('export/pdf/', exportar_pdf, name='exportar_pdf'),

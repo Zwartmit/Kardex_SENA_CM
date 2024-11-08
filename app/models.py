@@ -6,6 +6,11 @@ from django.db import models
 class Elemento(models.Model):
     item = models.CharField(max_length=100, unique=True, null=True, blank=False, verbose_name='Elemento')
     cantidad = models.PositiveIntegerField(null=True, blank=False, verbose_name='Cantidad')
+    saldo = models.PositiveIntegerField(null=True, blank=False, verbose_name='Saldo')
+    cantidad_recibida = models.PositiveIntegerField(null=True, blank=False, verbose_name='Cantidad recibida')
+    cantidad_contratada = models.PositiveIntegerField(null=True, blank=False, verbose_name='Cantidad contratada')
+    descripcion = models.CharField(max_length=500, null=True, blank=False, verbose_name='Descripción')
+    observaciones = models.CharField(max_length=500, null=True, blank=False, verbose_name='Observaciones')
 
     def __str__(self):
         return self.item
@@ -44,11 +49,6 @@ class DetalleMovimiento(models.Model):
     movimiento = models.ForeignKey(Movimiento, on_delete=models.CASCADE, related_name='detalles', verbose_name='Movimiento')
     elemento = models.ForeignKey(Elemento, on_delete=models.CASCADE, related_name='detalles', verbose_name='Elemento')
     cantidad = models.PositiveIntegerField(null=True, blank=False, verbose_name='Cantidad')
-    saldo = models.PositiveIntegerField(null=True, blank=False, verbose_name='Saldo')
-    cantidad_recibida = models.PositiveIntegerField(null=True, blank=False, verbose_name='Cantidad recibida')
-    cantidad_contratada = models.PositiveIntegerField(null=True, blank=False, verbose_name='Cantidad contratada')
-    descripcion = models.CharField(max_length=500, null=True, blank=False, verbose_name='Descripción')
-    observaciones = models.CharField(max_length=500, null=True, blank=False, verbose_name='Observaciones')
 
     def clean(self):
         super().clean()
