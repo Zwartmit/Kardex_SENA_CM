@@ -35,12 +35,12 @@ class ElementoForm(forms.ModelForm):
             'descripcion': forms.Textarea(attrs={
                 'placeholder': 'Descripción',
                 'class': 'form-control',
-                'rows': 3,
+                'rows': 1,
             }),
             'observaciones': forms.Textarea(attrs={
                 'placeholder': 'Observaciones',
                 'class': 'form-control',
-                'rows': 3,
+                'rows': 1,
             }),
         }
 
@@ -111,23 +111,11 @@ class MovimientoForm(forms.ModelForm):
 class DetalleMovimientoForm(forms.ModelForm):
     class Meta:
         model = DetalleMovimiento
-        fields = ['elemento', 'cantidad']
+        fields = ['elemento', 'movimiento']
         widgets = {
-            'elemento': Select2Widget(attrs={
-                'class': 'form-control',
-            }),
-            'cantidad': forms.NumberInput(attrs={
-                'placeholder': 'Cantidad a registrar',
-                'class': 'form-control',
-                'min': 1,
-            }),
+            'elemento': forms.Select(attrs={'class': 'form-control'}),
+            'movimiento': forms.Select(attrs={'class': 'form-control'}),
         }
-
-    def clean_cantidad(self):
-        cantidad = self.cleaned_data.get('cantidad')
-        if cantidad <= 0:
-            raise ValidationError('La cantidad debe ser mayor a 0.')
-        return cantidad
 
 class ReporteForm(forms.Form):
     FORMATO_CHOICES = [

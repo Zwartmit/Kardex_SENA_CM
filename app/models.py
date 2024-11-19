@@ -46,17 +46,11 @@ class Movimiento(models.Model):
         db_table = 'Movimiento'
 
 class DetalleMovimiento(models.Model):
-    movimiento = models.ForeignKey(Movimiento, on_delete=models.CASCADE, related_name='detalles', verbose_name='Movimiento')
     elemento = models.ForeignKey(Elemento, on_delete=models.CASCADE, related_name='detalles', verbose_name='Elemento')
-    cantidad = models.PositiveIntegerField(null=True, blank=False, verbose_name='Cantidad')
-
-    def clean(self):
-        super().clean()
-        if self.cantidad <= 0:
-            raise ValidationError('La cantidad debe ser mayor a 0.')
-
+    movimiento = models.ForeignKey(Movimiento, on_delete=models.CASCADE, related_name='detalles', verbose_name='Movimiento'
+                                   )
     def __str__(self):
-        return f"{self.elemento.item} - Cantidad: {self.cantidad} en {self.movimiento}"
+        return f"Elemento: {self.elemento.item} - Movimiento: {self.movimiento}"
 
     class Meta:
         verbose_name = "detalle_movimiento"

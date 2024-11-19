@@ -109,14 +109,14 @@
                                     <th style="width: auto; text-align: center; align-content: center;">Saldo pendiente de entrega</th>
                                     <th style="width: auto; text-align: center; align-content: center;">Observaciones</th>
                                 </tr>
-                                {% for detalle in p.detalles.all %}
+                                {% for p in elementos %}
                                 <tr>
-                                    <th style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ detalle.elemento.item }}</span></th>
-                                    <th style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ detalle.elemento.descripcion }}</span></th>
-                                    <th style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ detalle.elemento.cantidad_recibida }}</span></th>
-                                    <th style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ detalle.elemento.cantidad_contratada }}</span></th>
-                                    <th style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ detalle.elemento.saldo }}</span></th>
-                                    <th style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ detalle.elemento.observaciones }}</span></th>
+                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.item }}</span></td>
+                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.descripcion }}</span></td>
+                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.cantidad_recibida }}</span></td>
+                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.cantidad_contratada }}</span></td>
+                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.saldo }}</span></td>
+                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.observaciones }}</span></td>
                                 </tr>
                                 {% endfor %}
                                 <tr></tr>

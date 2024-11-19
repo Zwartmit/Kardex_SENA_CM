@@ -63,42 +63,12 @@
         <div class="card-header" style="background-color: #d4d4d4; color: black; text-align: center;">
             <h2 style="display: flex; justify-content: center; align-items: center;">Elementos a entregar</h2>
             <div id="elementos">
-                <div class="form-group row mt-4">
-                    <div class="col-md-4">
-                        <label for="elemento">Elemento:</label>
-                        <select class="form-control" name="elemento" required>
-                            <option value="" disabled selected>Seleccione un elemento</option>
-                            {% for elem in elementos %}
-                            <option value="{{ elem.id }}">{{ elem.item }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="col-md-4">
-                        <label for="cantidad_recibida">Cantidad recibida:</label>
-                        <input type="number" name="cantidad_recibida" class="form-control" placeholder="Cantidad recibida" required />
-                    </div>
-                    <div class="col-md-4">
-                        <label for="cantidad_contratada">Cantidad contratada:</label>
-                        <input type="number" name="cantidad_contratada" class="form-control" placeholder="Cantidad contratada" required />
-                    </div>
-                </div>
-                <div class="form-group row mt-4">
-                    <div class="col-md-4">
-                        <label for="descripcion">Descripción:</label>
-                        <input type="text" name="descripcion" class="form-control" placeholder="Descripción del elemento" required />
-                    </div>
-                    <div class="col-md-4">
-                        <label for="saldo_pendiente">Saldo pendiente:</label>
-                        <input type="number" name="saldo_pendiente" class="form-control" placeholder="Saldo pendiente" required />
-                    </div>
-                    <div class="col-md-4">
-                        <label for="observaciones">Observaciones sobre el elemento:</label>
-                        <input type="text" name="observaciones" class="form-control" placeholder="Observaciones sobre el elemento" required />
-                    </div>
+                <div class="form-group">
+                    {{ elemento_form.as_p }}
                 </div>
             </div>
             <div class="form-group">
-                <button type="button" class="btn btn-info" id="agregarElemento">Agregar elemento a la lista</button>
+                <button type="button" class="btn btn-info" id="agregarElemento">Agregar otro elemento</button>
             </div>
         </div>
         <div class="card-header" style="background-color: #d4d4d4; color: black; text-align: center;">
@@ -114,50 +84,36 @@
     </div>
 </form>
 <script>
-    document.getElementById('agregarElemento').addEventListener('click', function () {
-        var elementoDiv = document.createElement('div');
-        elementoDiv.className = 'elemento-group row mb-3 align-items-end';
-        elementoDiv.innerHTML = `
-        <div class="col-md-12">
-            <hr style="border-top: 2px solid #000; margin-bottom: 15px;">
-        </div>
-        <div class="col-md-4">
-            <label for="elemento">Elemento:</label>
-            <select class="form-control" name="elemento" required>
-                <option value="" disabled selected>Seleccione un elemento</option>
-                {% for elem in elementos %}
-                <option value="{{ elem.id }}">{{ elem.item }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="col-md-4">
-            <label for="cantidad_recibida">Cantidad recibida:</label>
-            <input type="number" name="cantidad_recibida" class="form-control" placeholder="Cantidad recibida" required />
-        </div>
-        <div class="col-md-4">
-            <label for="cantidad_contratada">Cantidad contratada:</label>
-            <input type="number" name="cantidad_contratada" class="form-control" placeholder="Cantidad contratada" required />
-        </div>
-        <div class="col-md-4">
-            <label for="descripcion">Descripción:</label>
-            <input type="text" name="descripcion" class="form-control" placeholder="Descripción del elemento" required />
-        </div>
-        <div class="col-md-4">
-            <label for="saldo_pendiente">Saldo pendiente:</label>
-            <input type="number" name="saldo_pendiente" class="form-control" placeholder="Saldo pendiente" required />
-        </div>
-        <div class="col-md-4">
-            <label for="observaciones">Observaciones sobre el elemento:</label>
-            <textarea name="observaciones" class="form-control" rows="1" placeholder="Observaciones sobre el elemento" required></textarea>
-        </div>
-        <div class="col-md-12 text-right">
-            <button type="button" class="btn btn-danger eliminarElemento">Eliminar</button>
-        </div>
-        `;
-        document.getElementById('elementos').appendChild(elementoDiv);
-        
-        elementoDiv.querySelector('.eliminarElemento').addEventListener('click', function () {
-            elementoDiv.remove();
+    document.addEventListener('DOMContentLoaded', function () {
+        const agregarElementoBtn = document.getElementById('agregarElemento');
+        const elementosContainer = document.getElementById('elementos');
+
+        agregarElementoBtn.addEventListener('click', function () {
+            // Crea un nuevo div contenedor para el formulario
+            const nuevoElemento = document.createElement('div');
+            nuevoElemento.classList.add('form-group');
+
+            // Inserta los campos del formulario junto con el botón de eliminación
+            nuevoElemento.innerHTML = `
+                <div class="elemento-contenedor">
+                    <div class="col-md-12">
+                        <hr style="border-top: 2px solid #000; margin-bottom: 15px;">
+                    </div>
+                    {{ elemento_form.as_p|safe }}
+                    <button type="button" class="btn btn-danger btn-sm eliminarElemento" style="margin-top: 10px;">
+                        Eliminar elemento
+                    </button>
+                </div>
+            `;
+
+            // Añade el nuevo elemento al contenedor de elementos
+            elementosContainer.appendChild(nuevoElemento);
+
+            // Agrega un event listener para eliminar el elemento
+            const eliminarBtn = nuevoElemento.querySelector('.eliminarElemento');
+            eliminarBtn.addEventListener('click', function () {
+                elementosContainer.removeChild(nuevoElemento);
+            });
         });
     });
 </script>

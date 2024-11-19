@@ -7,8 +7,8 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.utils.decorators import method_decorator
 from django.shortcuts import render, redirect
 from django.db.models import ProtectedError
-from app.models import Elemento, Movimiento, DetalleMovimiento
-from app.forms import DetalleMovimientoForm, MovimientoForm
+from app.models import *
+from app.forms import *
 
 @method_decorator(never_cache, name='dispatch')
 def lista_movimientos(request):
@@ -35,6 +35,9 @@ class MovimientoListView(ListView):
         context['entidad'] = 'Listado de movimientos'
         context['listar_url'] = reverse_lazy('app:movimiento_lista')
         context['crear_url'] = reverse_lazy('app:movimiento_crear')
+
+        # Obtener los elementos relacionados a los movimientos
+        context['elementos'] = Elemento.objects.all()  # O ajusta la consulta según tu lógica
         return context
 
 ###### CREAR ######
@@ -56,19 +59,26 @@ class MovimientoCreateView(CreateView):
         context['entidad'] = 'Registrar movimiento'
         context['error'] = 'Error al registrar el movimiento.'
         context['listar_url'] = reverse_lazy('app:movimiento_lista')
-        context['elementos'] = Elemento.objects.all()
-        context['detalle_form'] = DetalleMovimientoForm()
+        context['elementos'] = Elemento.objects.all()  # Lista de elementos opcional
+        context['detalle_formset'] = DetalleMovimientoForm(self.request.POST or None, instance=self.object)
+        context['elemento_form'] = ElementoForm()  # Formulario para el modelo Elemento
         return context
 
     def form_valid(self, form):
+        # Guardar el objeto Movimiento
         movimiento = form.save()
-        
-        elementos = self.request.POST.getlist('elemento')
-        cantidades = self.request.POST.getlist('cantidad')
 
-        for elemento_id, cantidad in zip(elementos, cantidades):
-            if elemento_id and cantidad:
-                DetalleMovimiento.objects.create(movimiento=movimiento, elemento_id=elemento_id, cantidad=cantidad)
+        # Manejar el formulario de DetalleMovimiento si está incluido en el request
+        detalle_form = DetalleMovimientoForm(self.request.POST)
+        if detalle_form.is_valid():
+            detalle = detalle_form.save(commit=False)
+            detalle.movimiento = movimiento  # Asocia el detalle al movimiento creado
+            detalle.save()
+
+        # Manejar el formulario de Elemento si es necesario (opcional)
+        elemento_form = ElementoForm(self.request.POST)
+        if elemento_form.is_valid():
+            elemento = elemento_form.save()
 
         return redirect(f"{self.success_url}?created=True")
 
