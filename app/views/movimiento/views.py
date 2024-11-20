@@ -1,4 +1,5 @@
-from django import forms
+from pyexpat.errors import messages
+from django.forms import modelformset_factory
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from django.urls import reverse_lazy, reverse
@@ -7,8 +8,8 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.utils.decorators import method_decorator
 from django.shortcuts import render, redirect
 from django.db.models import ProtectedError
-from app.models import *
-from app.forms import *
+from app.models import Elemento, Movimiento, Detalle_movimiento
+from app.forms import DetalleMovimientoFormSet, ElementoForm, MovimientoForm
 
 @method_decorator(never_cache, name='dispatch')
 def lista_movimientos(request):
@@ -35,9 +36,6 @@ class MovimientoListView(ListView):
         context['entidad'] = 'Listado de movimientos'
         context['listar_url'] = reverse_lazy('app:movimiento_lista')
         context['crear_url'] = reverse_lazy('app:movimiento_crear')
-
-        # Obtener los elementos relacionados a los movimientos
-        context['elementos'] = Elemento.objects.all()  # O ajusta la consulta según tu lógica
         return context
 
 ###### CREAR ######
@@ -59,29 +57,22 @@ class MovimientoCreateView(CreateView):
         context['entidad'] = 'Registrar movimiento'
         context['error'] = 'Error al registrar el movimiento.'
         context['listar_url'] = reverse_lazy('app:movimiento_lista')
-        context['elementos'] = Elemento.objects.all()  # Lista de elementos opcional
-        context['detalle_formset'] = DetalleMovimientoForm(self.request.POST or None, instance=self.object)
-        context['elemento_form'] = ElementoForm()  # Formulario para el modelo Elemento
+        context['detalle_formset'] = DetalleMovimientoFormSet(self.request.POST or None, instance=self.object)
+        context['elemento_form'] = ElementoForm()
         return context
 
     def form_valid(self, form):
-        # Guardar el objeto Movimiento
-        movimiento = form.save()
-
-        # Manejar el formulario de DetalleMovimiento si está incluido en el request
-        detalle_form = DetalleMovimientoForm(self.request.POST)
-        if detalle_form.is_valid():
-            detalle = detalle_form.save(commit=False)
-            detalle.movimiento = movimiento  # Asocia el detalle al movimiento creado
-            detalle.save()
-
-        # Manejar el formulario de Elemento si es necesario (opcional)
-        elemento_form = ElementoForm(self.request.POST)
-        if elemento_form.is_valid():
-            elemento = elemento_form.save()
-
-        return redirect(f"{self.success_url}?created=True")
-
+        context = self.get_context_data()
+        detalle_formset = context['detalle_formset']
+        
+        if form.is_valid() and detalle_formset.is_valid():
+            self.object = form.save()
+            detalle_formset.instance = self.object
+            detalle_formset.save()
+            return redirect(self.success_url)
+        else:
+            return self.form_invalid(form)
+        
 # ###### EDITAR ######
 
 # @method_decorator(never_cache, name='dispatch')
@@ -102,7 +93,7 @@ class MovimientoCreateView(CreateView):
 #         context['error'] = 'Error al editar el movimiento.'
 #         context['listar_url'] = reverse_lazy('app:movimiento_lista')
 #         return context
-
+    
 #     def form_valid(self, form):
 #         response = super().form_valid(form)
 #         success_url = reverse('app:movimiento_crear') + '?updated=True'

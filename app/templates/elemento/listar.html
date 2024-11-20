@@ -2,32 +2,26 @@
 
 {% block columnas %}
 <tr>
-    <th scope="col" style="text-align: center;">id</th>
-    <th scope="col" style="text-align: center;">Item</th>
-    <th scope="col" style="text-align: center;">Cantidad</th>
-    <th scope="col" style="text-align: center;">Opciones</th>
+    <th scope="col">id</th>
+    <th scope="col">Item</th>
+    <th scope="col">Cantidad</th>
+    <th scope="col">Opciones</th>
 </tr>
 <tr>
-    <th style="text-align: center; align-content: center;">
-        <input type="text" placeholder="Filtrar" class="filter-input" style="width: 100px;"/>
-    </th>
-    <th style="text-align: center; align-content: center;">
-        <input type="text" placeholder="Filtrar" class="filter-input" style="width: 100px;"/>
-    </th>
-    <th style="text-align: center; align-content: center;">
-        <input type="text" placeholder="Filtrar" class="filter-input" style="width: 100px;"/>
-    </th>
-    <th style="text-align: center; align-content: center;"></th>
+    <th><div class="filter-container"></div></th>
+    <th><div class="filter-container"></div></th>
+    <th><div class="filter-container"></div></th>
+    <th></th> 
 </tr>
 {% endblock %}
 
 {% block filas %}
     {% for p in object_list %}
     <tr>
-        <td style="text-align: center; align-content: center;">{{ p.id }}</td>
-        <td style="text-align: center; align-content: center;">{{ p.item }}</td>
-        <td style="text-align: center; align-content: center;">{{ p.cantidad }}</td>
-        <td style="text-align: center; align-content: center;">
+        <td>{{ p.id }}</td>
+        <td>{{ p.item }}</td>
+        <td>{{ p.cantidad }}</td>
+        <td>
             <a href="{% url 'app:elemento_editar' p.id %}" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
             <a href="{% url 'app:elemento_eliminar' p.id %}" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a>
         </td>
@@ -38,16 +32,33 @@
 {% block javascript %}
 <script type="application/javascript">
     $(document).ready(function () {
-        var table = $("#tabla").DataTable({
-            responsive: true
-        });
+        $("#tabla").DataTable({
+            responsive: true,
+            initComplete: function () {
+                var api = this.api();
+                var columnNames = ['id', 'Item', 'Cantidad', 'Opciones'];
+                var excludedColumns = [3]; 
+                
+                api.columns().every(function (index) {
+                    var column = this;
+                    var filterContainer = $('#tabla thead tr:eq(1) th').eq(index).find('.filter-container'); 
 
-        $('.filter-input').on('keyup change', function () {
-            var columnIndex = $(this).parent().index(); 
-            table
-                .column(columnIndex)
-                .search(this.value) 
-                .draw(); 
+                    if (!excludedColumns.includes(index)) {
+                        var select = $('<select><option value="">------</option></select>')
+                            .appendTo(filterContainer)
+                            .on('change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                                column
+                                    .search(val ? '^' + val + '$' : '', true, false)
+                                    .draw();
+                            });
+
+                        column.data().unique().sort().each(function (d) {
+                            select.append('<option value="' + d + '">' + d + '</option>');
+                        });
+                    }
+                });
+            }
         });
     });
 </script>

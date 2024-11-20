@@ -1,26 +1,19 @@
 from django import forms
-from django.core.exceptions import ValidationError
-from django_select2.forms import Select2Widget
-from app.models import Elemento, Movimiento, DetalleMovimiento
+from django.forms import *
+from app.models import *
+from django import forms
 
 class ElementoForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
     class Meta:
         model = Elemento
-        fields = ['item', 'cantidad', 'saldo', 'cantidad_recibida', 'cantidad_contratada', 'descripcion', 'observaciones']
+        fields = ['item', 'cantidad_recibida', 'cantidad_contratada', 'unidad_medida', 'observaciones']
         widgets = {
             'item': forms.TextInput(attrs={
                 'placeholder': 'Nombre del elemento',
                 'class': 'form-control',
-            }),
-            'cantidad': forms.NumberInput(attrs={
-                'placeholder': 'Cantidad disponible',
-                'class': 'form-control',
-                'min': 1,
-            }),
-            'saldo': forms.NumberInput(attrs={
-                'placeholder': 'Saldo',
-                'class': 'form-control',
-                'min': 0,
             }),
             'cantidad_recibida': forms.NumberInput(attrs={
                 'placeholder': 'Cantidad recibida',
@@ -32,7 +25,7 @@ class ElementoForm(forms.ModelForm):
                 'class': 'form-control',
                 'min': 0,
             }),
-            'descripcion': forms.Textarea(attrs={
+            'unidad_medida': forms.Textarea(attrs={
                 'placeholder': 'Descripción',
                 'class': 'form-control',
                 'rows': 1,
@@ -43,7 +36,7 @@ class ElementoForm(forms.ModelForm):
                 'rows': 1,
             }),
         }
-
+    
     def clean_item(self):
         item = self.cleaned_data.get('item')
         if item:
@@ -51,12 +44,6 @@ class ElementoForm(forms.ModelForm):
             if Elemento.objects.filter(item__iexact=item).exists():
                 raise ValidationError('Ya existe un elemento con este nombre.')
         return item
-
-    def clean_cantidad(self):
-        cantidad = self.cleaned_data.get('cantidad')
-        if cantidad <= 0:
-            raise ValidationError('La cantidad debe ser mayor a 0.')
-        return cantidad
 
 class MovimientoForm(forms.ModelForm):
     class Meta:
@@ -110,20 +97,18 @@ class MovimientoForm(forms.ModelForm):
 
 class DetalleMovimientoForm(forms.ModelForm):
     class Meta:
-        model = DetalleMovimiento
+        model = Detalle_movimiento
         fields = ['elemento', 'movimiento']
         widgets = {
             'elemento': forms.Select(attrs={'class': 'form-control'}),
             'movimiento': forms.Select(attrs={'class': 'form-control'}),
         }
-
+    
+DetalleMovimientoFormSet = inlineformset_factory(Movimiento, Detalle_movimiento, form=DetalleMovimientoForm, extra=1)
+    
 class ReporteForm(forms.Form):
     FORMATO_CHOICES = [
         ('excel', 'Excel'),
         ('pdf', 'PDF'),
     ]
-    formato = forms.ChoiceField(
-        choices=FORMATO_CHOICES,
-        label='Formato del Reporte',
-        widget=forms.RadioSelect(attrs={'class': 'form-check-input'}),
-    )
+    formato = forms.ChoiceField(choices=FORMATO_CHOICES, label='Formato del Reporte')

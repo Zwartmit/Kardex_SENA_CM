@@ -1,7 +1,6 @@
 from django.urls import path
 from app.views import *
 from app.views.elemento.views import *
-from app.views.reportes.views import exportar_pdf, exportar_excel
 from app.views.movimiento.views import *
 
 app_name = 'app'
@@ -17,8 +16,4 @@ urlpatterns = [
     path('movimiento/crear/', MovimientoCreateView.as_view(), name='movimiento_crear'),
     # path('movimiento/editar/<int:pk>/', MovimientoUpdateView.as_view(), name='movimiento_editar'),
     # path('movimiento/eliminar/<int:pk>/', MovimientoDeleteView.as_view(), name='movimiento_eliminar'),
-
-    ### REPORTES ###
-    path('export/pdf/', exportar_pdf, name='exportar_pdf'),
-    path('export/excel/', exportar_excel, name='exportar_excel'),
 ]

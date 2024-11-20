@@ -1,134 +1,144 @@
 {% extends 'layout.html' %}
 {% load widget_tweaks %}
+
 {% block contenido %}
-<form method="post" action=".">
+<form method="post">
     <div class="card card-default">
         <div class="card-header">
             <h3 class="card-title">
-                <i class="fas fa-plus"></i>
-                {{ titulo }}
+                <i class="fas fa-plus"></i>{{titulo}}
             </h3>
         </div>
-        <div class="card-header" style="display: flex; justify-content: center; align-items: center; background-color: #d4d4d4; color: black; text-align: center;">
-            <h1>Formato de entrega de materiales <br> de formación al aprendiz</h1>
-        </div>
-        {% csrf_token %}
-        <div class="card-header" style="background-color: #d4d4d4; color: black; text-align: center;">
+        <div class="card-body">
+            <div class="card-header"
+                style="display: flex; justify-content: center; align-items: center; background-color: #d4d4d4; color: black; text-align: center;">
+                <h1>Formato de entrega de materiales <br> de formación al aprendiz</h1>
+            </div>
+            {% csrf_token %}
+
+            <!-- Campos del formulario Movimiento -->
+            <div class="card-header" style="background-color: #d4d4d4; color: black; text-align: center;">
+                <div style="background-color: #d4d4d4;">
+                    <h1 style="font-size: 8px;">ㅤ</h1>
+                </div>
+                <h2 style="display: flex; justify-content: center; align-items: center;">Datos generales</h2>
+                <div class="container">
+                    <div class="form-group row mt-3">
+                        <div class="col-md-3">
+                            <label for="programa_formacion">Programa de formación:</label>
+                            {{ form.programa_formacion|add_class:'form-control' }}
+                        </div>
+                        <div class="col-md-3">
+                            <label for="num_ficha">Número de ficha:</label>
+                            {{ form.num_ficha|add_class:'form-control' }}
+                        </div>
+                        <div class="col-md-3">
+                            <label for="fecha_inicio_programa">Fecha de inicio del programa:</label>
+                            {{ form.fecha_inicio_programa|add_class:'form-control' }}
+                        </div>
+                        <div class="col-md-3">
+                            <label for="num_aprendices">Número de aprendices:</label>
+                            {{ form.num_aprendices|add_class:'form-control' }}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row mt-4">
+                    <div class="col-md-4">
+                        <label for="aprendiz">Aprendiz líder (Vocero):</label>
+                        {{ form.aprendiz|add_class:'form-control' }}
+                    </div>
+                    <div class="col-md-4">
+                        <label for="instructor">Instructor:</label>
+                        {{ form.instructor|add_class:'form-control' }}
+                    </div>
+                    <div class="col-md-4">
+                        <label for="num_contrato">Número de contrato:</label>
+                        {{ form.num_contrato|add_class:'form-control' }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="proyecto">Proyectos:</label>
+                    {{ form.proyecto|add_class:'form-control' }}
+                </div>
+            </div>
             <div style="background-color: #d4d4d4;">
                 <h1 style="font-size: 8px;">ㅤ</h1>
             </div>
-            <h2 style="display: flex; justify-content: center; align-items: center;">Datos generales</h2>
-            <div class="container">
-                <div class="form-group row mt-3">
-                    <div class="col-md-3">
-                        <label for="programa_formacion">Programa de formación:</label>
-                        {{ form.programa_formacion|add_class:'form-control' }}
+
+            <!-- Sección para los detalles del movimiento -->
+            <div class="card-header" style="background-color: #d4d4d4; color: black; text-align: center;">
+                <h2 style="display: flex; justify-content: center; align-items: center;">Elementos a entregar</h2>
+                <div id="elementos">
+                    {% for detalle_form in detalle_formset %}
+                    <div class="elemento-group row mb-3">
+                        <div class="col-md-6">
+                            <label for="elemento">Elemento:</label>
+                            {{ detalle_form.elemento|add_class:'form-control' }}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="cantidad">Cantidad:</label>
+                            {{ detalle_form.cantidad|add_class:'form-control' }}
+                        </div>
                     </div>
-                    <div class="col-md-3">
-                        <label for="num_ficha">Número de ficha:</label>
-                        {{ form.num_ficha|add_class:'form-control' }}
-                    </div>
-                    <div class="col-md-3">
-                        <label for="fecha_inicio_programa">Fecha de inicio del programa:</label>
-                        {{ form.fecha_inicio_programa|add_class:'form-control' }}
-                    </div>
-                    <div class="col-md-3">
-                        <label for="num_aprendices">Número de aprendices:</label>
-                        {{ form.num_aprendices|add_class:'form-control' }}
-                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Botón para agregar más detalles -->
+                <div style="display: flex; justify-content: right;">
+                    <button type="button" class="btn btn-secondary" id="agregarElemento">Agregar Otro Elemento</button>
                 </div>
             </div>
-            <div class="form-group row mt-4">
-                <div class="col-md-4">
-                    <label for="aprendiz">Aprendiz líder (Vocero):</label>
-                    {{ form.aprendiz|add_class:'form-control' }}
-                </div>
-                <div class="col-md-4">
-                    <label for="instructor">Instructor:</label>
-                    {{ form.instructor|add_class:'form-control' }}
-                </div>
-                <div class="col-md-4">
-                    <label for="num_contrato">Número de contrato:</label>
-                    {{ form.num_contrato|add_class:'form-control' }}
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="proyecto">Proyectos:</label>
-                {{ form.proyecto|add_class:'form-control' }}
+
+            <!-- Botones de guardar y cancelar -->
+            <div class="card-footer">
+                <button class="btn btn-primary btn-flat">
+                    <i class="fas fa-plus"></i> Guardar
+                </button>
+                <a href="{{ listar_url }}" class="btn btn-danger btn-flat">
+                    <i class="fas fa-times"></i> Cancelar
+                </a>
             </div>
         </div>
-        <div style="background-color: #d4d4d4;">
-            <h1 style="font-size: 8px;">ㅤ</h1>
-        </div>
-        <div class="card-header" style="background-color: #d4d4d4; color: black; text-align: center;">
-            <h2 style="display: flex; justify-content: center; align-items: center;">Elementos a entregar</h2>
-            <div id="elementos">
-                <div class="form-group">
-                    {{ elemento_form.as_p }}
-                </div>
-            </div>
-            <div class="form-group">
-                <button type="button" class="btn btn-info" id="agregarElemento">Agregar otro elemento</button>
-            </div>
-        </div>
-        <div class="card-header" style="background-color: #d4d4d4; color: black; text-align: center;">
-            <h2 style="display: flex; justify-content: center; align-items: center;">Observaciones generales</h2>
-            <div class="form-group">
-                <textarea name="obs_general" class="form-control" rows="3" placeholder="Observaciones generales" required></textarea>
-            </div>
-        </div>
-    </div>
-    <div class="card-footer">
-        <button class="btn btn-primary btn-flat" style="filter: drop-shadow(0 0 5px #000000);"><i class="fas fa-plus"></i> Guardar</button>
-        <a href="{{ listar_url }}" class="btn btn-danger btn-flat" style="filter: drop-shadow(0 0 5px #000000);"><i class="fas fa-times"></i> Cancelar</a>
-    </div>
 </form>
+
+<!-- Script para agregar dinámicamente nuevos elementos de detalle -->
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const agregarElementoBtn = document.getElementById('agregarElemento');
-        const elementosContainer = document.getElementById('elementos');
+    document.getElementById('agregarElemento').addEventListener('click', function () {
+        const container = document.getElementById('elementos');
+        const newElement = document.createElement('div');
+        newElement.className = 'elemento-group row mb-3';
+        newElement.innerHTML = `
+            <div class="col-md-6">
+                <label for="elemento">Elemento:</label>
+                <select class="form-control" name="elemento">
+                    <option value="" disabled selected>Seleccione un elemento</option>
+                    {% for elem in elementos %}
+                        <option value="{{ elem.id }}">{{ elem.item }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="cantidad">Cantidad:</label>
+                <input type="number" name="cantidad" class="form-control" placeholder="Cantidad a registrar" />
+            </div>
+            <div class="col-12 text-right mt-2">
+                <button type="button" class="btn btn-danger eliminarElemento">Eliminar</button>
+            </div>`;
 
-        agregarElementoBtn.addEventListener('click', function () {
-            // Crea un nuevo div contenedor para el formulario
-            const nuevoElemento = document.createElement('div');
-            nuevoElemento.classList.add('form-group');
+        container.appendChild(newElement);
 
-            // Inserta los campos del formulario junto con el botón de eliminación
-            nuevoElemento.innerHTML = `
-                <div class="elemento-contenedor">
-                    <div class="col-md-12">
-                        <hr style="border-top: 2px solid #000; margin-bottom: 15px;">
-                    </div>
-                    {{ elemento_form.as_p|safe }}
-                    <button type="button" class="btn btn-danger btn-sm eliminarElemento" style="margin-top: 10px;">
-                        Eliminar elemento
-                    </button>
-                </div>
-            `;
-
-            // Añade el nuevo elemento al contenedor de elementos
-            elementosContainer.appendChild(nuevoElemento);
-
-            // Agrega un event listener para eliminar el elemento
-            const eliminarBtn = nuevoElemento.querySelector('.eliminarElemento');
-            eliminarBtn.addEventListener('click', function () {
-                elementosContainer.removeChild(nuevoElemento);
-            });
+        newElement.querySelector('.eliminarElemento').addEventListener('click', function () {
+            container.removeChild(newElement);
         });
     });
 </script>
+
+<!-- Script de SweetAlert para mostrar mensajes de éxito o error -->
 <script>
     {% if form.errors %}
-    var errors = '';
-    {% for field in form %}
-    {% for error in field.errors %}
-    errors += '{{ error }}\\n';
-    {% endfor %}
-    {% endfor %}
-
     Swal.fire({
         title: 'Error',
-        text: errors || 'Error desconocido.',
+        text: 'Hubo un error al registrar el movimiento.',
         icon: 'error',
         confirmButtonText: 'Aceptar',
         confirmButtonColor: '#034231'
@@ -137,18 +147,6 @@
     Swal.fire({
         title: 'Éxito',
         text: 'Movimiento registrado con éxito.',
-        icon: 'success',
-        confirmButtonText: 'Aceptar',
-        confirmButtonColor: '#034231'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            window.location.href = "{% url 'app:movimiento_lista' %}";
-        }
-    });
-    {% elif request.GET.updated %}
-    Swal.fire({
-        title: 'Éxito',
-        text: 'Movimiento editado con éxito.',
         icon: 'success',
         confirmButtonText: 'Aceptar',
         confirmButtonColor: '#034231'

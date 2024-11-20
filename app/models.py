@@ -5,15 +5,13 @@ from django.db import models
 
 class Elemento(models.Model):
     item = models.CharField(max_length=100, unique=True, null=True, blank=False, verbose_name='Elemento')
-    cantidad = models.PositiveIntegerField(null=True, blank=False, verbose_name='Cantidad')
-    saldo = models.PositiveIntegerField(null=True, blank=False, verbose_name='Saldo')
     cantidad_recibida = models.PositiveIntegerField(null=True, blank=False, verbose_name='Cantidad recibida')
     cantidad_contratada = models.PositiveIntegerField(null=True, blank=False, verbose_name='Cantidad contratada')
-    descripcion = models.CharField(max_length=500, null=True, blank=False, verbose_name='Descripción')
+    unidad_medida = models.CharField(max_length=100, null=True, blank=False, verbose_name='Unidad de medida')
     observaciones = models.CharField(max_length=500, null=True, blank=False, verbose_name='Observaciones')
 
     def __str__(self):
-        return self.item
+        return f"Elemento: {self.item} - Cantidad recibida: {self.cantidad_recibida} - Cantidad contratada: {self.cantidad_contratada} - Unidad de medida: {self.unidad_medida} - Observaciones: {self.observaciones}"
     
     class Meta:
         verbose_name = "elemento"
@@ -32,11 +30,6 @@ class Movimiento(models.Model):
     obs_general = models.CharField(max_length=500, null=True, blank=False, verbose_name='Observaciones generales')
     fecha_inicio_programa = models.DateField(null=True, blank=False, verbose_name='Fecha de inicio del programa de formación')
 
-    def clean(self):
-        super().clean()
-        if not self.proyecto.strip():
-            raise ValidationError('El proyecto no puede estar vacío.')
-
     def __str__(self):
         return f"Ficha: {self.num_ficha} - Proyecto: {self.proyecto} - Fecha: {self.fecha}"
 
@@ -45,12 +38,12 @@ class Movimiento(models.Model):
         verbose_name_plural = 'movimientos'
         db_table = 'Movimiento'
 
-class DetalleMovimiento(models.Model):
-    elemento = models.ForeignKey(Elemento, on_delete=models.CASCADE, related_name='detalles', verbose_name='Elemento')
-    movimiento = models.ForeignKey(Movimiento, on_delete=models.CASCADE, related_name='detalles', verbose_name='Movimiento'
-                                   )
+class Detalle_movimiento(models.Model):
+    elemento = models.ForeignKey(Elemento, null=True, blank=False, on_delete=models.CASCADE, related_name='detalles', verbose_name='Elemento')
+    movimiento = models.ForeignKey(Movimiento, null=True, blank=False, on_delete=models.CASCADE, related_name='detalles', verbose_name='Movimiento')
+    
     def __str__(self):
-        return f"Elemento: {self.elemento.item} - Movimiento: {self.movimiento}"
+        return f"Elemento: {self.elemento.item} - Cantidad recibida: {self.elemento.cantidad_recibida} - Cantidad contratada: {self.elemento.cantidad_contratada} -  Movimiento: {self.movimiento}"
 
     class Meta:
         verbose_name = "detalle_movimiento"
