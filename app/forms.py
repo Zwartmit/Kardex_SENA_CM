@@ -1,60 +1,21 @@
 from django import forms
-from django.forms import *
+from django.forms import inlineformset_factory
 from app.models import *
-from django import forms
 
-class ElementoForm(forms.ModelForm):
+class MovimientoForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
     class Meta:
-        model = Elemento
-        fields = ['item', 'cantidad_recibida', 'cantidad_contratada', 'unidad_medida', 'observaciones']
-        widgets = {
-            'item': forms.TextInput(attrs={
-                'placeholder': 'Nombre del elemento',
-                'class': 'form-control',
-            }),
-            'cantidad_recibida': forms.NumberInput(attrs={
-                'placeholder': 'Cantidad recibida',
-                'class': 'form-control',
-                'min': 0,
-            }),
-            'cantidad_contratada': forms.NumberInput(attrs={
-                'placeholder': 'Cantidad contratada',
-                'class': 'form-control',
-                'min': 0,
-            }),
-            'unidad_medida': forms.Textarea(attrs={
-                'placeholder': 'Descripción',
-                'class': 'form-control',
-                'rows': 1,
-            }),
-            'observaciones': forms.Textarea(attrs={
-                'placeholder': 'Observaciones',
-                'class': 'form-control',
-                'rows': 1,
-            }),
-        }
-    
-    def clean_item(self):
-        item = self.cleaned_data.get('item')
-        if item:
-            item = item.capitalize()
-            if Elemento.objects.filter(item__iexact=item).exists():
-                raise ValidationError('Ya existe un elemento con este nombre.')
-        return item
-
-class MovimientoForm(forms.ModelForm):
-    class Meta:
         model = Movimiento
         fields = [
-            'programa_formacion', 'num_ficha', 'proyecto', 'instructor', 'aprendiz', 
-            'num_aprendices', 'num_contrato', 'obs_general', 'fecha_inicio_programa'
+            'programa_formacion', 'num_ficha', 'proyecto', 'instructor', 'aprendiz',
+            'num_aprendices', 'num_contrato', 'obs_general', 'fecha_inicio_programa',
+            'dependencia'
         ]
         widgets = {
             'programa_formacion': forms.Select(attrs={
-                'placeholder': 'Nombre del programa',
+                'placeholder': 'Programa de formación',
                 'class': 'form-control',
             }),
             'num_ficha': forms.NumberInput(attrs={
@@ -63,7 +24,7 @@ class MovimientoForm(forms.ModelForm):
                 'min': 1,
             }),
             'proyecto': forms.Textarea(attrs={
-                'placeholder': 'Proyectos asociados',
+                'placeholder': 'Proyectos',
                 'class': 'form-control',
                 'rows': 3,
             }),
@@ -72,7 +33,7 @@ class MovimientoForm(forms.ModelForm):
                 'class': 'form-control',
             }),
             'aprendiz': forms.TextInput(attrs={
-                'placeholder': 'Nombre del aprendiz',
+                'placeholder': 'Nombre del vocero',
                 'class': 'form-control',
             }),
             'num_aprendices': forms.NumberInput(attrs={
@@ -81,31 +42,58 @@ class MovimientoForm(forms.ModelForm):
                 'min': 1,
             }),
             'num_contrato': forms.NumberInput(attrs={
-                'placeholder': 'Número de contrato',
+                'placeholder': 'Número del contrato',
                 'class': 'form-control',
             }),
             'obs_general': forms.Textarea(attrs={
-                'placeholder': 'Observaciones generales',
+                'placeholder': 'Observaciones',
                 'class': 'form-control',
+                'rows': 3,
             }),
             'fecha_inicio_programa': forms.DateInput(attrs={
                 'placeholder': 'Fecha de inicio del programa',
                 'class': 'form-control',
                 'type': 'date',
             }),
+            'dependencia': forms.TextInput(attrs={
+                'placeholder': 'Dependencia',
+                'class': 'form-control',
+            }),
         }
+ElementoFormSet = inlineformset_factory(
+    Movimiento,
+    Elemento,
+    fields=['item', 'descripcion', 'cantidad_recibida', 'cantidad_contratada', 'saldo', 'observaciones'],
+    widgets={
+        'item': forms.TextInput(attrs={
+            'placeholder': 'Ítem',
+            'class': 'form-control',
+        }),
+        'descripcion': forms.TextInput(attrs={
+            'placeholder': 'Descripción del elemento',
+            'class': 'form-control',
+        }),
+        'cantidad_recibida': forms.NumberInput(attrs={
+            'placeholder': 'Cantidad recibida',
+            'class': 'form-control',
+        }),
+        'cantidad_contratada': forms.NumberInput(attrs={
+            'placeholder': 'Cantidad contratada',
+            'class': 'form-control',
+        }),
+        'saldo': forms.NumberInput(attrs={
+            'placeholder': 'Saldo pendiente de entrega',
+            'class': 'form-control',
+        }),
+        'observaciones': forms.TextInput(attrs={
+            'placeholder': 'Observaciones',
+            'class': 'form-control',
+        })
+    },
+    extra=1,  # Número de formularios vacíos adicionales para agregar
+    can_delete=True  # Permite eliminar elementos
+)
 
-class DetalleMovimientoForm(forms.ModelForm):
-    class Meta:
-        model = Detalle_movimiento
-        fields = ['elemento', 'movimiento']
-        widgets = {
-            'elemento': forms.Select(attrs={'class': 'form-control'}),
-            'movimiento': forms.Select(attrs={'class': 'form-control'}),
-        }
-    
-DetalleMovimientoFormSet = inlineformset_factory(Movimiento, Detalle_movimiento, form=DetalleMovimientoForm, extra=1)
-    
 class ReporteForm(forms.Form):
     FORMATO_CHOICES = [
         ('excel', 'Excel'),

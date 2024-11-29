@@ -16,11 +16,7 @@
             </div>
             {% csrf_token %}
 
-            <!-- Campos del formulario Movimiento -->
             <div class="card-header" style="background-color: #d4d4d4; color: black; text-align: center;">
-                <div style="background-color: #d4d4d4;">
-                    <h1 style="font-size: 8px;">ㅤ</h1>
-                </div>
                 <h2 style="display: flex; justify-content: center; align-items: center;">Datos generales</h2>
                 <div class="container">
                     <div class="form-group row mt-3">
@@ -41,99 +37,130 @@
                             {{ form.num_aprendices|add_class:'form-control' }}
                         </div>
                     </div>
-                </div>
-                <div class="form-group row mt-4">
-                    <div class="col-md-4">
-                        <label for="aprendiz">Aprendiz líder (Vocero):</label>
-                        {{ form.aprendiz|add_class:'form-control' }}
+                    <div class="form-group row mt-3">
+                        <div class="col-md-3">
+                            <label for="aprendiz">Aprendiz líder (Vocero):</label>
+                            {{ form.aprendiz|add_class:'form-control' }}
+                        </div>
+                        <div class="col-md-3">
+                            <label for="instructor">Instructor responsable:</label>
+                            {{ form.instructor|add_class:'form-control' }}
+                        </div>
+                        <div class="col-md-3">
+                            <label for="num_contrato">Contrato de compra N°:</label>
+                            {{ form.num_contrato|add_class:'form-control' }}
+                        </div>
+                        <div class="col-md-3">
+                            <label for="dependencia">Dependencia:</label>
+                            {{ form.dependencia|add_class:'form-control' }}
+                        </div>
                     </div>
-                    <div class="col-md-4">
-                        <label for="instructor">Instructor:</label>
-                        {{ form.instructor|add_class:'form-control' }}
+                    <div class="form-group">
+                        <label for="proyecto">Proyectos asociados:</label>
+                        {{ form.proyecto|add_class:'form-control' }}
                     </div>
-                    <div class="col-md-4">
-                        <label for="num_contrato">Número de contrato:</label>
-                        {{ form.num_contrato|add_class:'form-control' }}
+                    <div class="form-group">
+                        <label for="obs_general">Observaciones generales:</label>
+                        {{ form.obs_general|add_class:'form-control' }}
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="proyecto">Proyectos:</label>
-                    {{ form.proyecto|add_class:'form-control' }}
-                </div>
-            </div>
-            <div style="background-color: #d4d4d4;">
-                <h1 style="font-size: 8px;">ㅤ</h1>
             </div>
 
-            <!-- Sección para los detalles del movimiento -->
             <div class="card-header" style="background-color: #d4d4d4; color: black; text-align: center;">
                 <h2 style="display: flex; justify-content: center; align-items: center;">Elementos a entregar</h2>
-                <div id="elementos">
-                    {% for detalle_form in detalle_formset %}
-                    <div class="elemento-group row mb-3">
-                        <div class="col-md-6">
-                            <label for="elemento">Elemento:</label>
-                            {{ detalle_form.elemento|add_class:'form-control' }}
+                <div class="container">
+                    <div class="formset">
+                        {{ formset.management_form }}
+
+                        {% for form in formset %}
+                        <div class="form-group row mt-4">
+                            <div class="col-md-4">
+                                <label for="{{ form.item.id_for_label }}">Ítem:</label>
+                                {{ form.item|add_class:'form-control' }}
+                            </div>
+                            <div class="col-md-4">
+                                <label for="{{ form.descripcion.id_for_label }}">Descripción del elemento:</label>
+                                {{ form.descripcion|add_class:'form-control' }}
+                            </div>
+                            <div class="col-md-4">
+                                <label for="{{ form.observaciones.id_for_label }}">Observaciones:</label>
+                                {{ form.observaciones|add_class:'form-control' }}
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <label for="cantidad">Cantidad:</label>
-                            {{ detalle_form.cantidad|add_class:'form-control' }}
+                        <div class="form-group row mt-4">
+                            <div class="col-md-4">
+                                <label for="{{ form.cantidad_recibida.id_for_label }}">Cantidad recibida:</label>
+                                {{ form.cantidad_recibida|add_class:'form-control' }}
+                            </div>
+                            <div class="col-md-4">
+                                <label for="{{ form.cantidad_contratada.id_for_label }}">Cantidad contratada:</label>
+                                {{ form.cantidad_contratada|add_class:'form-control' }}
+                            </div>
+                            <div class="col-md-4">
+                                <label for="{{ form.saldo.id_for_label }}">Saldo pendiente de entrega:</label>
+                                {{ form.saldo|add_class:'form-control' }}
+                            </div>
                         </div>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
+                    <button type="button" id="addElement" class="btn btn-success">Agregar Elemento</button>
                 </div>
-
-                <!-- Botón para agregar más detalles -->
-                <div style="display: flex; justify-content: right;">
-                    <button type="button" class="btn btn-secondary" id="agregarElemento">Agregar Otro Elemento</button>
-                </div>
-            </div>
-
-            <!-- Botones de guardar y cancelar -->
-            <div class="card-footer">
-                <button class="btn btn-primary btn-flat">
-                    <i class="fas fa-plus"></i> Guardar
-                </button>
-                <a href="{{ listar_url }}" class="btn btn-danger btn-flat">
-                    <i class="fas fa-times"></i> Cancelar
-                </a>
             </div>
         </div>
+        <div class="card-footer">
+            <button class="btn btn-primary btn-flat"><i class="fas fa-plus"></i> Guardar</button>
+            <a href="{{ listar_url }}" class="btn btn-danger btn-flat"><i class="fas fa-times"></i> Cancelar</a>
+        </div>
+    </div>
 </form>
-
-<!-- Script para agregar dinámicamente nuevos elementos de detalle -->
 <script>
-    document.getElementById('agregarElemento').addEventListener('click', function () {
-        const container = document.getElementById('elementos');
-        const newElement = document.createElement('div');
-        newElement.className = 'elemento-group row mb-3';
-        newElement.innerHTML = `
-            <div class="col-md-6">
-                <label for="elemento">Elemento:</label>
-                <select class="form-control" name="elemento">
-                    <option value="" disabled selected>Seleccione un elemento</option>
-                    {% for elem in elementos %}
-                        <option value="{{ elem.id }}">{{ elem.item }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-md-6">
-                <label for="cantidad">Cantidad:</label>
-                <input type="number" name="cantidad" class="form-control" placeholder="Cantidad a registrar" />
-            </div>
-            <div class="col-12 text-right mt-2">
-                <button type="button" class="btn btn-danger eliminarElemento">Eliminar</button>
-            </div>`;
+    document.getElementById("addElement").addEventListener("click", function () {
+        var formset = document.querySelector(".formset");
+        var formCount = formset.querySelectorAll(".form-group").length / 2; // Calcular el número de formularios actuales
 
-        container.appendChild(newElement);
+        // Crear un nuevo formulario duplicado
+        var newForm = formset.querySelector(".form-group").cloneNode(true);
+        var newFormQuantity = formset.querySelector(".form-group").cloneNode(true);
 
-        newElement.querySelector('.eliminarElemento').addEventListener('click', function () {
-            container.removeChild(newElement);
+        // Asignar un nuevo id único a los elementos del formulario duplicado
+        newForm.id = "formset-" + (formCount + 1);
+        newFormQuantity.id = "formset-quantity-" + (formCount + 1);
+
+        // Asegurar que los campos tengan ids únicos
+        newForm.querySelectorAll('input, select, textarea').forEach(function (input) {
+            input.id = input.id.replace(formCount, formCount + 1);
+            input.name = input.name.replace(formCount, formCount + 1);
         });
+
+        newFormQuantity.querySelectorAll('input, select, textarea').forEach(function (input) {
+            input.id = input.id.replace(formCount, formCount + 1);
+            input.name = input.name.replace(formCount, formCount + 1);
+        });
+
+        // Agregar el nuevo formulario al formset
+        formset.appendChild(newForm);
+        formset.appendChild(newFormQuantity);
+
+        // Actualizar el management form para reflejar el nuevo número de formularios
+        var managementForm = formset.querySelector("form").querySelector(".management_form");
+        var totalForms = formset.querySelectorAll(".form-group").length / 2;
+        managementForm.querySelector("#id_form-TOTAL_FORMS").value = totalForms;
+    });
+
+    // Agregar funcionalidad para eliminar un formulario
+    document.addEventListener("click", function (e) {
+        if (e.target && e.target.classList.contains("delete-element")) {
+            var formGroup = e.target.closest(".form-group");
+            formGroup.parentNode.removeChild(formGroup); // Elimina el formulario del DOM
+
+            // Actualizar el management form después de la eliminación
+            var formset = document.querySelector(".formset");
+            var totalForms = formset.querySelectorAll(".form-group").length / 2;
+            var managementForm = formset.querySelector("form").querySelector(".management_form");
+            managementForm.querySelector("#id_form-TOTAL_FORMS").value = totalForms;
+        }
     });
 </script>
-
-<!-- Script de SweetAlert para mostrar mensajes de éxito o error -->
 <script>
     {% if form.errors %}
     Swal.fire({

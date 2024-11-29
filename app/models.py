@@ -1,22 +1,5 @@
-from django import forms
-from .choices import programas
-from django.core.exceptions import ValidationError
 from django.db import models
-
-class Elemento(models.Model):
-    item = models.CharField(max_length=100, unique=True, null=True, blank=False, verbose_name='Elemento')
-    cantidad_recibida = models.PositiveIntegerField(null=True, blank=False, verbose_name='Cantidad recibida')
-    cantidad_contratada = models.PositiveIntegerField(null=True, blank=False, verbose_name='Cantidad contratada')
-    unidad_medida = models.CharField(max_length=100, null=True, blank=False, verbose_name='Unidad de medida')
-    observaciones = models.CharField(max_length=500, null=True, blank=False, verbose_name='Observaciones')
-
-    def __str__(self):
-        return f"Elemento: {self.item} - Cantidad recibida: {self.cantidad_recibida} - Cantidad contratada: {self.cantidad_contratada} - Unidad de medida: {self.unidad_medida} - Observaciones: {self.observaciones}"
-    
-    class Meta:
-        verbose_name = "elemento"
-        verbose_name_plural = 'elementos'
-        db_table = 'Elemento'
+from .choices import programas
 
 class Movimiento(models.Model):
     fecha = models.DateTimeField(auto_now_add=True, verbose_name='Fecha')
@@ -29,23 +12,29 @@ class Movimiento(models.Model):
     num_contrato = models.PositiveIntegerField(null=True, blank=False, verbose_name='Contrato')
     obs_general = models.CharField(max_length=500, null=True, blank=False, verbose_name='Observaciones generales')
     fecha_inicio_programa = models.DateField(null=True, blank=False, verbose_name='Fecha de inicio del programa de formación')
+    dependencia = models.CharField(max_length=200, null=True, blank=False, verbose_name='Dependencia')
 
     def __str__(self):
-        return f"Ficha: {self.num_ficha} - Proyecto: {self.proyecto} - Fecha: {self.fecha}"
+        return f"Movimiento {self.num_ficha} - Proyecto: {self.proyecto}"
 
     class Meta:
-        verbose_name = "movimiento"
-        verbose_name_plural = 'movimientos'
+        verbose_name = "Movimiento"
+        verbose_name_plural = "Movimientos"
         db_table = 'Movimiento'
 
-class Detalle_movimiento(models.Model):
-    elemento = models.ForeignKey(Elemento, null=True, blank=False, on_delete=models.CASCADE, related_name='detalles', verbose_name='Elemento')
-    movimiento = models.ForeignKey(Movimiento, null=True, blank=False, on_delete=models.CASCADE, related_name='detalles', verbose_name='Movimiento')
-    
+class Elemento(models.Model):
+    movimiento = models.ForeignKey(Movimiento, on_delete=models.CASCADE, related_name='elementos', verbose_name='Movimiento asociado')
+    item = models.CharField(max_length=100, verbose_name='Ítem')
+    descripcion = models.CharField(max_length=200, verbose_name='Descripción')
+    cantidad_recibida = models.PositiveIntegerField(verbose_name='Cantidad recibida')
+    cantidad_contratada = models.PositiveIntegerField(verbose_name='Cantidad contratada')
+    saldo = models.PositiveIntegerField(verbose_name='Saldo pendiente de entrega')
+    observaciones = models.CharField(max_length=500, null=True, blank=True, verbose_name='Observaciones')
+
     def __str__(self):
-        return f"Elemento: {self.elemento.item} - Cantidad recibida: {self.elemento.cantidad_recibida} - Cantidad contratada: {self.elemento.cantidad_contratada} -  Movimiento: {self.movimiento}"
+        return f"Ítem: {self.item} - Movimiento: {self.movimiento.id}"
 
     class Meta:
-        verbose_name = "detalle_movimiento"
-        verbose_name_plural = 'detalles_movimiento'
-        db_table = 'DetalleMovimiento'
+        verbose_name = "Elemento"
+        verbose_name_plural = 'Elementos'
+        db_table = 'Elemento'
