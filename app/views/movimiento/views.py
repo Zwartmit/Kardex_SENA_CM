@@ -1,12 +1,13 @@
 from pyexpat.errors import messages
 from django.forms import modelformset_factory
 from django.contrib.auth.decorators import login_required
+from django.views import View
 from django.views.decorators.cache import never_cache
 from django.urls import reverse_lazy, reverse
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.utils.decorators import method_decorator
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.db.models import ProtectedError
 from app.models import *
 from app.forms import *
@@ -25,7 +26,7 @@ def lista_movimientos(request):
 class MovimientoListView(ListView):
     model = Movimiento
     template_name = 'movimiento/listar.html'
-    context_object_name = 'movimientos'  # Definimos el nombre de la variable que pasará el listado de movimientos al contexto
+    context_object_name = 'movimientos'
     
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
@@ -34,22 +35,19 @@ class MovimientoListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
-        # Añadimos información extra al contexto
         context['titulo'] = 'Listado de movimientos'
         context['entidad'] = 'Listado de movimientos'
         context['listar_url'] = reverse_lazy('app:movimiento_lista')
         context['crear_url'] = reverse_lazy('app:movimiento_crear')
 
-        # Añadimos los elementos asociados a cada movimiento
         movimientos_con_elementos = []
         for movimiento in context['movimientos']:
-            elementos = movimiento.elementos.all()  # Obtener los elementos relacionados con el movimiento
+            elementos = movimiento.elementos.all() 
             movimientos_con_elementos.append({
                 'movimiento': movimiento,
                 'elementos': elementos
             })
         
-        # Pasamos los movimientos con sus elementos al contexto
         context['movimientos_con_elementos'] = movimientos_con_elementos
 
         return context
@@ -71,19 +69,15 @@ class MovimientoCreateView(CreateView):
         formset = ElementoFormSet(request.POST)
 
         if form.is_valid() and formset.is_valid():
-            # Guardar el objeto Movimiento
             movimiento = form.save()
 
-            # Guardamos los elementos, asociándolos con el movimiento
             elementos = formset.save(commit=False)
             for elemento in elementos:
                 elemento.movimiento = movimiento
                 elemento.save()
 
-            # Redirigimos a la lista de movimientos con un mensaje de éxito
             return redirect(f"{reverse_lazy('app:movimiento_lista')}?created=True")
 
-        # Si el formulario no es válido, mostramos el formulario con los errores
         return render(request, self.template_name, {'form': form, 'formset': formset, 'titulo': 'Registrar movimiento'})
     
 # ###### EDITAR ######

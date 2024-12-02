@@ -44,18 +44,28 @@ class PasswordResetView(FormView):
 
     def form_valid(self, form):
         email = form.cleaned_data['email']
-        user = UserModel.objects.get(email=email)
+        
+        try:
+            user = get_user_model().objects.get(email=email)
+        except get_user_model().DoesNotExist:
+            messages.success(self.request, 'Si ese correo está registrado, se ha enviado un correo de restablecimiento de contraseña.')
+            return super().form_valid(form)
+
         token = default_token_generator.make_token(user)
         uid = urlsafe_base64_encode(force_bytes(user.pk))
         reset_url = self.request.build_absolute_uri(
             reverse_lazy('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
         )
+
+
         subject = 'Restablecer contraseña'
         message = render_to_string('register/password_reset_email.html', {
             'user': user,
-            'reset_url': reset_url
+            'reset_url': reset_url,
         })
-        send_mail(subject, message, None, [email])
+
+        send_mail(subject, message, None, [email], html_message=message)
+
         messages.success(self.request, 'Se ha enviado un correo de restablecimiento de contraseña.')
         return super().form_valid(form)
     

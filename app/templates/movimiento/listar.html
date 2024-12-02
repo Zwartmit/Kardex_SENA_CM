@@ -10,7 +10,6 @@
     <th scope="col" style="width: auto; align-content: center; text-align: center;">Instructor</th>
     <th scope="col" style="width: 100px; align-content: center; text-align: center;">Fecha</th>
     <th scope="col" style="width: auto; align-content: center; text-align: center;">Detalles</th>
-    <!-- <th scope="col" style="width: auto; align-content: center; text-align: center;">Opciones</th> -->
 </tr>
 <tr>
     <th style="width: auto; text-align: center; align-content: center;">
@@ -30,14 +29,9 @@
     </th>
     <th style="width: auto; text-align: left; align-content: center;">
         <div class="filter-container">
-            <label for="start-date" style="font-size: 13px; width: auto; text-align: left; align-content: center;">Desde:</label>
-            <input type="date" class="filter-date" style="width: 22px; font-size: 13px;" />
-            <label for="start-date" style="font-size: 13px; width: auto; text-align: left; align-content: center;">Hasta:</label>
-            <input type="date" class="filter-date" style="width: 22px; font-size: 13px;" />
         </div>
     </th>
     <th style="width: auto; text-align: center; align-content: center;"></th>
-    <!-- <th style="width: auto; text-align: center; align-content: center;"></th> -->
 </tr>
 {% endblock %}
 
@@ -61,12 +55,12 @@
                     </div>
                     <div class="modal-body">
                         <div class="table-container" style="display: flex; justify-content: center; align-items: center;">
-                            <table class="table table-bordered" style="width: auto; max-width: auto; margin: auto;">
+                            <table class="table table-bordered" id="tabla-datos" style="width: auto; max-width: auto; margin: auto;">
                                 <tr>
-                                    <th rowspan="2" class="logo" style="text-align: center; align-content: center; background-color: #e8e8e8;">
+                                    <th rowspan="2" class="logo" style="text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">
                                         <img src="{% static 'img/logoSENA_N.jpg' %}" style="height: 80px; width: 80px;" alt="Logo SENA" class="logo-image img-fluid">
                                     </th>
-                                    <td colspan="5" class="header" style="text-align: center; align-content: center; background-color: #e8e8e8;">
+                                    <td colspan="5" class="header" style="text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">
                                         <strong style="font-size: 25px;">SISTEMA INTEGRADO DE GESTIÓN</strong><br>
                                         <b>Formato: </b>Entrega de materiales de formación al aprendiz (SENA, Centro Minero)<br>
                                         <b>Proceso: </b>Gestión de formación profesional integral<br>
@@ -75,62 +69,79 @@
                                 </tr>
                                 <tr></tr>
                                 <tr>
-                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; ">Programa de formación:</th>
-                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.programa_formacion }}</span></td>
-                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; ;">Nº de ficha:</th>
-                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.num_ficha }}</span></td>
-                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; ">Fecha de inicio:</th>
-                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.fecha_inicio_programa }}</span></td>
+                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Programa de formación:</th>
+                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ p.programa_formacion }}</span></td>
+                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Nº de ficha:</th>
+                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ p.num_ficha }}</span></td>
+                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Fecha de inicio:</th>
+                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ p.fecha_inicio_programa }}</span></td>
                                 </tr>
                                 <tr>
-                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8;">Nº Aprendices:</th>
-                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; "><span>{{ p.num_aprendices }}</span></td>
-                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; ">Vocero:</th>
-                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.aprendiz }}</span></td>
-                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; ">Instructor:</th>
-                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.instructor }}</span></td>
+                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Nº Aprendices:</th>
+                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ p.num_aprendices }}</span></td>
+                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Vocero:</th>
+                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ p.aprendiz }}</span></td>
+                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Instructor:</th>
+                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ p.instructor }}</span></td>
                                 </tr>
                                 <tr>
-                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; ">Nº de contrato:</th>
-                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.num_contrato }}</span></td>
-                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; ">Fecha de entrega:</th>
-                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.fecha }}</span></td>
-                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; ">Dependencia:</th>
-                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.dependencia }}</span> </td>
+                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Nº de contrato:</th>
+                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ p.num_contrato }}</span></td>
+                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Fecha de entrega:</th>
+                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ p.fecha }}</span></td>
+                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Dependencia:</th>
+                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ p.dependencia }}</span> </td>
                                 </tr>
                                 <tr>
-                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; ">Proyectos asociados:</th>
-                                    <td colspan="5" style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.proyecto }}</span></td>
+                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Proyectos asociados:</th>
+                                    <td colspan="5" style="width: auto; text-align: center; align-content: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ p.proyecto }}</span></td>
                                 </tr>
-                                <th colspan="6"></th>
+                                <th colspan="6" style="border: 0.5px solid #000000"></th>
                                 <tr>
-                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8;">Ítem</th>
-                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8;">Descripción del elemento</th>
-                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8;">Cantidad recibida</th>
-                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8;">Cantidad contratada</th>
-                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8;">Saldo pendiente de entrega</th>
-                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8;">Observaciones</th>
+                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Ítem</th>
+                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Descripción del elemento</th>
+                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Cantidad recibida</th>
+                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Cantidad contratada</th>
+                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Saldo pendiente de entrega</th>
+                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Observaciones</th>
                                 </tr>
                                 {% for elemento in p.elementos.all %}
                                 <tr>
-                                    <td style="text-align: center; background: #ffffff; color: #000000;"><span>{{ elemento.item }}</span></td>
-                                    <td style="text-align: center; background: #ffffff; color: #000000;"><span>{{ elemento.descripcion }}</span></td>
-                                    <td style="text-align: center; background: #ffffff; color: #000000;"><span>{{ elemento.cantidad_recibida }}</span></td>
-                                    <td style="text-align: center; background: #ffffff; color: #000000;"><span>{{ elemento.cantidad_contratada }}</span></td>
-                                    <td style="text-align: center; background: #ffffff; color: #000000;"><span>$ {{ elemento.saldo }}</span></td>
-                                    <td style="text-align: center; background: #ffffff; color: #000000;"><span>{{ elemento.observaciones }}</span></td>
+                                    <td style="text-align: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ elemento.item }}</span></td>
+                                    <td style="text-align: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ elemento.descripcion }}</span></td>
+                                    <td style="text-align: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ elemento.cantidad_recibida }}</span></td>
+                                    <td style="text-align: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ elemento.cantidad_contratada }}</span></td>
+                                    <td style="text-align: center; background: #ffffff; border: 0.5px solid #000000"><span>$ {{ elemento.saldo }}</span></td>
+                                    <td style="text-align: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ elemento.observaciones }}</span></td>
                                 </tr>
                                 {% endfor %}
-                                <th colspan="6"></th>
+                                <th colspan="6" style="border: 0.5px solid #000000"></th>
                                 <tr>
-                                    <th style="width: auto; text-align: center;"><b>Observaciones generales:</b></th>
-                                    <td colspan="5" style="width: auto; text-align: center; align-content: center; background: #ffffff; color: #000000;"><span>{{ p.obs_general }}</span></td>
+                                    <th style="width: auto; text-align: center; background-color: #e8e8e8; border: 0.5px solid #000000"><b>Observaciones generales:</b></th>
+                                    <td colspan="5" style="width: auto; text-align: center; align-content: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ p.obs_general }}</span></td>
                                 </tr>
-                            </table>
+                                <tr>
+                                    <th colspan="6" style="border: 0.5px solid #000000"></th>
+                                </tr>
+                                <td colspan="6" style="text-align: center; background-color: #e8e8e8; border: 0.5px solid #000000; font-size: 18px"><b>FIRMAS</b></td>
+                                <tr>
+                                    <td colspan="2" style="text-align: center; border: 0.5px solid #000000; height: 90px;">
+                                    </td>
+                                    <td colspan="2" style="text-align: center; border: 0.5px solid #000000; height: 90px;">
+                                    </td>
+                                    <td colspan="2" style="text-align: center; border: 0.5px solid #000000; height: 90px;">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" style="text-align: center; background-color: #e8e8e8; border: 0.5px solid #000000"><b>Coordinador academico</b></td>
+                                    <td colspan="2" style="text-align: center; background-color: #e8e8e8; border: 0.5px solid #000000"><b>Instructor</b></td>
+                                    <td colspan="2" style="text-align: center; background-color: #e8e8e8; border: 0.5px solid #000000"><b>Vocero</b></td>
+                                </tr>
+                            </table>                          
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" style="filter: drop-shadow(0 0 3px #000000);" onclick="generateExcel()">Generar Excel</button>
+                        <button type="button" class="btn btn-primary" id="generatePdfButton"><i class="fas fa-file-pdf"></i>Generar PDF</button>
                         <button type="button" class="btn btn-danger" style="filter: drop-shadow(0 0 3px #000000);" data-dismiss="modal">Cerrar</button>
                     </div>
                 </div>
@@ -142,77 +153,6 @@
 {% endblock %}
 
 {% block javascript %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
-<script>
-    function generateExcel() {
-        const data = {
-            programa_formacion: "{{ p.programa_formacion }}",
-            num_ficha: "{{ p.num_ficha }}",
-            fecha_inicio_programa: "{{ p.fecha_inicio_programa }}",
-            num_aprendices: "{{ p.num_aprendices }}",
-            aprendiz: "{{ p.aprendiz }}",
-            instructor: "{{ p.instructor }}",
-            num_contrato: "{{ p.num_contrato }}",
-            fecha: "{{ p.fecha }}",
-            dependencia: "{{ p.dependencia }}",
-            proyecto: "{{ p.proyecto }}",
-            items: [
-                [
-                    "{{ p.item }}",
-                    "{{ p.descripcion }}",
-                    "{{ p.cantidad_recibida }}",
-                    "{{ p.cantidad_contratada }}",
-                    "{{ p.saldo }}",
-                    "{{ p.observaciones }}"
-                ]
-            ],
-            obs_general: "{{ p.obs_general }}"
-        };
-
-        fetch('/generate-excel', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-            .then(response => response.blob())
-            .then(blob => {
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.style.display = 'none';
-                a.href = url;
-                a.download = 'Formato_SENA.xlsx';
-                document.body.appendChild(a);
-                a.click();
-                window.URL.revokeObjectURL(url);
-            })
-            .catch(error => console.error('Error al generar el Excel:', error));
-    }    
-</script>
-<script>
-    document.getElementById('generatePdfButton').addEventListener('click', function () {
-        // Selecciona el contenido del modal
-        const modalContent = document.querySelector('.modal-body');
-
-        // Usa html2canvas para convertir el contenido en una imagen
-        html2canvas(modalContent, { scale: 2 }).then(canvas => {
-            // Crea un archivo PDF usando jsPDF
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF('p', 'mm', 'a4');
-
-            // Calcula el ancho y alto para ajustar la imagen al PDF
-            const imgData = canvas.toDataURL('image/png');
-            const pdfWidth = pdf.internal.pageSize.getWidth();
-            const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-            // Agrega la imagen al PDF
-            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-            pdf.save('contenido_modal.pdf');
-        });
-    });
-</script>
 <script type="application/javascript">
     $(document).ready(function () {
         var table = $("#tabla").DataTable({
@@ -227,9 +167,8 @@
                     var filterContainer = $('#tabla thead tr:eq(1) th').eq(index).find('.filter-container');
 
                     if (!excludedColumns.includes(index)) {
-                        if (index === 3) {
+                        if (index === 5) {  // Cambié de 3 a 5 para que coincida con la columna de "Fecha"
                             var startDateInput = $('<input type="date" placeholder="Desde">').appendTo(filterContainer);
-
                             var endDateInput = $('<input type="date" placeholder="Hasta">').appendTo(filterContainer);
 
                             startDateInput.add(endDateInput).on('change', function () {
@@ -242,12 +181,10 @@
                                 $.fn.dataTable.ext.search = [];
 
                                 $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
-                                    var fechaVenta = data[3];
-                                    var parts = fechaVenta.split(' ');
-                                    var fecha = parts[0];
-                                    var fechaCompleta = new Date(fecha + 'T00:00:00');
+                                    var fechaVenta = data[5]; // Corregí el índice de la fecha
+                                    var fecha = new Date(fechaVenta); // Convierte la fecha en formato Date
 
-                                    if ((start && fechaCompleta < start) || (end && fechaCompleta > end)) {
+                                    if ((start && fecha < start) || (end && fecha > end)) {
                                         return false;
                                     }
                                     return true;

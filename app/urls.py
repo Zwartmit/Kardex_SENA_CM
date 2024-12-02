@@ -4,7 +4,6 @@ from app.views.movimiento.views import *
 
 app_name = 'app'
 urlpatterns = [
-    ### CRUD MOVIMIENTOS ###
     path('movimiento/listar/', MovimientoListView.as_view(), name='movimiento_lista'),
     path('movimiento/crear/', MovimientoCreateView.as_view(), name='movimiento_crear'),
     # path('movimiento/editar/<int:pk>/', MovimientoUpdateView.as_view(), name='movimiento_editar'),

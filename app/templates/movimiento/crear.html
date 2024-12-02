@@ -22,7 +22,7 @@
                     <div class="form-group row mt-3">
                         <div class="col-md-3">
                             <label for="programa_formacion">Programa de formación:</label>
-                            {{ form.programa_formacion|add_class:'form-control' }}
+                            {{ form.programa_formacion|add_class:'form-control select2' }}
                         </div>
                         <div class="col-md-3">
                             <label for="num_ficha">Número de ficha:</label>
@@ -65,7 +65,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="card-header" style="background-color: #d4d4d4; color: black; text-align: center;">
                 <h2 style="display: flex; justify-content: center; align-items: center;">Elementos a entregar</h2>
                 <div class="container">
@@ -114,51 +113,12 @@
     </div>
 </form>
 <script>
-    document.getElementById("addElement").addEventListener("click", function () {
-        var formset = document.querySelector(".formset");
-        var formCount = formset.querySelectorAll(".form-group").length / 2; // Calcular el número de formularios actuales
-
-        // Crear un nuevo formulario duplicado
-        var newForm = formset.querySelector(".form-group").cloneNode(true);
-        var newFormQuantity = formset.querySelector(".form-group").cloneNode(true);
-
-        // Asignar un nuevo id único a los elementos del formulario duplicado
-        newForm.id = "formset-" + (formCount + 1);
-        newFormQuantity.id = "formset-quantity-" + (formCount + 1);
-
-        // Asegurar que los campos tengan ids únicos
-        newForm.querySelectorAll('input, select, textarea').forEach(function (input) {
-            input.id = input.id.replace(formCount, formCount + 1);
-            input.name = input.name.replace(formCount, formCount + 1);
+    $(document).ready(function() {
+        $('.select2').select2({
+            placeholder: 'Seleccione un programa',
+            allowClear: true,
+            width: '100%'
         });
-
-        newFormQuantity.querySelectorAll('input, select, textarea').forEach(function (input) {
-            input.id = input.id.replace(formCount, formCount + 1);
-            input.name = input.name.replace(formCount, formCount + 1);
-        });
-
-        // Agregar el nuevo formulario al formset
-        formset.appendChild(newForm);
-        formset.appendChild(newFormQuantity);
-
-        // Actualizar el management form para reflejar el nuevo número de formularios
-        var managementForm = formset.querySelector("form").querySelector(".management_form");
-        var totalForms = formset.querySelectorAll(".form-group").length / 2;
-        managementForm.querySelector("#id_form-TOTAL_FORMS").value = totalForms;
-    });
-
-    // Agregar funcionalidad para eliminar un formulario
-    document.addEventListener("click", function (e) {
-        if (e.target && e.target.classList.contains("delete-element")) {
-            var formGroup = e.target.closest(".form-group");
-            formGroup.parentNode.removeChild(formGroup); // Elimina el formulario del DOM
-
-            // Actualizar el management form después de la eliminación
-            var formset = document.querySelector(".formset");
-            var totalForms = formset.querySelectorAll(".form-group").length / 2;
-            var managementForm = formset.querySelector("form").querySelector(".management_form");
-            managementForm.querySelector("#id_form-TOTAL_FORMS").value = totalForms;
-        }
     });
 </script>
 <script>

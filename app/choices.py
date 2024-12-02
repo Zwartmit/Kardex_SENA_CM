@@ -71,6 +71,7 @@ programas = [
     "Tnlgo. en formulación de proyectos",
     "Tnlgo. en gestión ciclo de vida del producto",
     "Tnlgo. en gestión de la producción industrial",
+    "Tnlgo. en gestión de la seguridad y salud en el trabajo",
     "Tnlgo. en gestión de mercados",
     "Tnlgo. en gestión de proyectos de desarrollo económico y social",
     "Tnlgo. en gestión de redes de datos",

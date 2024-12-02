@@ -67,26 +67,32 @@ ElementoFormSet = inlineformset_factory(
     widgets={
         'item': forms.TextInput(attrs={
             'placeholder': 'Ítem',
+            'required': True,
             'class': 'form-control',
         }),
         'descripcion': forms.TextInput(attrs={
             'placeholder': 'Descripción del elemento',
+            'required': True,
             'class': 'form-control',
         }),
         'cantidad_recibida': forms.NumberInput(attrs={
             'placeholder': 'Cantidad recibida',
+            'required': True,
             'class': 'form-control',
         }),
         'cantidad_contratada': forms.NumberInput(attrs={
             'placeholder': 'Cantidad contratada',
+            'required': True,
             'class': 'form-control',
         }),
         'saldo': forms.NumberInput(attrs={
             'placeholder': 'Saldo pendiente de entrega',
+            'required': True,
             'class': 'form-control',
         }),
         'observaciones': forms.TextInput(attrs={
             'placeholder': 'Observaciones',
+            'required': True,
             'class': 'form-control',
         })
     },
