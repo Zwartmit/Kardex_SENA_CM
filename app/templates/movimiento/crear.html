@@ -1,24 +1,23 @@
 {% extends 'layout.html' %}
+{% load static %}
 {% load widget_tweaks %}
 
 {% block contenido %}
-<form method="post">
+<form method="post" id="formMovimiento" action="{% url 'app:movimiento_crear' %}">
     <div class="card card-default">
         <div class="card-header">
             <h3 class="card-title">
-                <i class="fas fa-plus"></i>{{titulo}}
+                <i class="fas fa-plus"></i><b>{{titulo}}</b>
             </h3>
         </div>
         <div class="card-body">
-            <div class="card-header"
-                style="display: flex; justify-content: center; align-items: center; background-color: #d4d4d4; color: black; text-align: center;">
+            <div class="card-header" style="display: flex; justify-content: center; align-items: center; background-color: #094b39; color: white; text-align: center;">
                 <h1>Formato de entrega de materiales <br> de formación al aprendiz</h1>
             </div>
             {% csrf_token %}
-
             <div class="card-header" style="background-color: #d4d4d4; color: black; text-align: center;">
-                <h2 style="display: flex; justify-content: center; align-items: center;">Datos generales</h2>
-                <div class="container">
+                <h2 style="display: flex; justify-content: center; align-items: center;"><b>Datos generales</b></h2>
+                <div class="container-mov">
                     <div class="form-group row mt-3">
                         <div class="col-md-3">
                             <label for="programa_formacion">Programa de formación:</label>
@@ -66,8 +65,8 @@
                 </div>
             </div>
             <div class="card-header" style="background-color: #d4d4d4; color: black; text-align: center;">
-                <h2 style="display: flex; justify-content: center; align-items: center;">Elementos a entregar</h2>
-                <div class="container">
+                <h2 style="display: flex; justify-content: center; align-items: center;"><b>Elementos a entregar</b></h2>
+                <div class="container-ele">
                     <div class="formset">
                         {{ formset.management_form }}
 
@@ -102,18 +101,79 @@
                         </div>
                         {% endfor %}
                     </div>
-                    <button type="button" id="addElement" class="btn btn-success">Agregar Elemento</button>
+                    <button type="button" id="addElement" class="btn btn-success mt-3" style="background: #094b39; color: white;"><i class="fas fa-plus"></i> Agregar elemento</button>
                 </div>
             </div>
         </div>
         <div class="card-footer">
-            <button class="btn btn-primary btn-flat"><i class="fas fa-plus"></i> Guardar</button>
-            <a href="{{ listar_url }}" class="btn btn-danger btn-flat"><i class="fas fa-times"></i> Cancelar</a>
+            <button class="btn btn-primary btn-flat" type="submit"><i class="fas fa-plus"></i> Guardar</button>
+            <a href="#" class="btn btn-danger btn-flat" onclick="confirmCancel(event)"><i class="fas fa-times"></i> Cancelar</a>
         </div>
     </div>
 </form>
+<script src="{% static 'lib/sweetalert2/sweetHeader.js' %}"></script>
 <script>
-    $(document).ready(function() {
+    function confirmCancel(event) {
+        event.preventDefault();
+        Swal.fire({
+            title: '¿Desea cancelar el movimiento?',
+            text: "",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#094b39',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, cancelar',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "{% url 'app:movimiento_lista' %}";
+            }
+        });
+    }
+</script>
+<script>
+    $(document).ready(function () {
+        $('#formMovimiento').on('submit', function (event) {
+            event.preventDefault();
+    
+            $.ajax({
+                type: $(this).attr('method'),
+                url: $(this).attr('action'),
+                data: $(this).serialize(),
+                success: function (response) {
+                    if (response.success) {
+                        Swal.fire({
+                            text: response.message,
+                            icon: 'success',
+                            confirmButtonText: 'Aceptar',
+                            confirmButtonColor: '#04644b'
+                        }).then(() => {
+                            window.location.href = "{% url 'app:movimiento_lista' %}";
+                        });
+                    } else {
+                        let errorMessages = '';
+                        let errors = JSON.parse(response.errors);
+                        for (let field in errors) {
+                            for (let error of errors[field]) {
+                                errorMessages += `${error.message}<br>`;
+                            }
+                        }
+    
+                        Swal.fire({
+                            title: 'Error',
+                            html: errorMessages,
+                            icon: 'error',
+                            confirmButtonText: 'Aceptar',
+                            confirmButtonColor: '#04644b'
+                        });
+                    }
+                }
+            });
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
         $('.select2').select2({
             placeholder: 'Seleccione un programa',
             allowClear: true,
@@ -122,26 +182,72 @@
     });
 </script>
 <script>
-    {% if form.errors %}
-    Swal.fire({
-        title: 'Error',
-        text: 'Hubo un error al registrar el movimiento.',
-        icon: 'error',
-        confirmButtonText: 'Aceptar',
-        confirmButtonColor: '#034231'
+    document.addEventListener('DOMContentLoaded', function () {
+        const addButton = document.getElementById('addElement');
+        const container = document.querySelector('.container-ele');
+        const initialFormset = container.querySelector('.formset');
+    
+        addButton.addEventListener('click', function () {
+            const lastFormset = container.querySelector('.formset:last-of-type');
+            const newFormset = lastFormset.cloneNode(true);
+    
+            const existingDeleteButtons = newFormset.querySelectorAll('.btn-danger');
+            existingDeleteButtons.forEach(button => button.remove());
+    
+            const inputs = newFormset.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                const name = input.name;
+                const id = input.id;
+    
+                if (name) {
+                    const newName = name.replace(/-\d+-/, `-${document.querySelectorAll('.formset').length}-`);
+                    input.name = newName;
+                }
+                if (id) {
+                    const newId = id.replace(/-\d+-/, `-${document.querySelectorAll('.formset').length}-`);
+                    input.id = newId;
+                }
+                if (input.type !== 'hidden') {
+                    input.value = '';
+                }
+            });
+    
+            const deleteButton = document.createElement('button');
+            deleteButton.type = 'button';
+            deleteButton.className = 'btn btn-danger mt-3';
+            deleteButton.textContent = 'Eliminar';
+            deleteButton.addEventListener('click', function () {
+                container.removeChild(newFormset);
+                container.removeChild(newSeparator);
+            });
+    
+            newFormset.appendChild(deleteButton);
+    
+            const newSeparator = document.createElement('hr');
+            newSeparator.className = 'form-separator';
+    
+            container.insertBefore(newFormset, addButton);
+            container.insertBefore(newSeparator, newFormset);
+        });
+    
+        const formsets = container.querySelectorAll('.formset');
+        formsets.forEach((formset, index) => {
+            if (formset !== initialFormset) {
+                const deleteButton = document.createElement('button');
+                deleteButton.type = 'button';
+                deleteButton.className = 'btn btn-danger mt-3';
+                deleteButton.textContent = 'Eliminar';
+                deleteButton.addEventListener('click', function () {
+                    container.removeChild(formset);
+                    container.removeChild(formset.previousElementSibling);
+                });
+                formset.appendChild(deleteButton);
+    
+                const separator = document.createElement('hr');
+                separator.className = 'form-separator';
+                formset.parentNode.insertBefore(separator, formset);
+            }
+        });
     });
-    {% elif request.GET.created %}
-    Swal.fire({
-        title: 'Éxito',
-        text: 'Movimiento registrado con éxito.',
-        icon: 'success',
-        confirmButtonText: 'Aceptar',
-        confirmButtonColor: '#034231'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            window.location.href = "{% url 'app:movimiento_lista' %}";
-        }
-    });
-    {% endif %}
 </script>
 {% endblock %}

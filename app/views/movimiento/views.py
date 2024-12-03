@@ -1,14 +1,10 @@
-from pyexpat.errors import messages
-from django.forms import modelformset_factory
 from django.contrib.auth.decorators import login_required
-from django.views import View
-from django.views.decorators.cache import never_cache
-from django.urls import reverse_lazy, reverse
 from django.http import HttpResponse, JsonResponse
+from django.views.decorators.cache import never_cache
+from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.utils.decorators import method_decorator
-from django.shortcuts import get_object_or_404, render, redirect
-from django.db.models import ProtectedError
+from django.shortcuts import render
 from app.models import *
 from app.forms import *
 
@@ -35,8 +31,8 @@ class MovimientoListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
-        context['titulo'] = 'Listado de movimientos'
-        context['entidad'] = 'Listado de movimientos'
+        context['titulo'] = 'Movimientos realizados'
+        context['entidad'] = 'Movimientos realizados'
         context['listar_url'] = reverse_lazy('app:movimiento_lista')
         context['crear_url'] = reverse_lazy('app:movimiento_crear')
 
@@ -45,7 +41,8 @@ class MovimientoListView(ListView):
             elementos = movimiento.elementos.all() 
             movimientos_con_elementos.append({
                 'movimiento': movimiento,
-                'elementos': elementos
+                'elementos': elementos,
+                'num_ficha': movimiento.num_ficha 
             })
         
         context['movimientos_con_elementos'] = movimientos_con_elementos
@@ -62,8 +59,17 @@ class MovimientoCreateView(CreateView):
     def get(self, request, *args, **kwargs):
         form = MovimientoForm()
         formset = ElementoFormSet()
-        return render(request, self.template_name, {'form': form, 'formset': formset, 'titulo': 'Registrar movimiento'})
-
+        
+        context = {
+            'form': form,
+            'formset': formset,
+            'titulo': 'Registrar nuevo movimiento',
+            'entidad': 'Registrar nuevo movimiento',
+            'listar_url': reverse_lazy('app:movimiento_lista'),
+            'crear_url': reverse_lazy('app:movimiento_crear'),
+        }
+        return render(request, self.template_name, context)
+    
     def post(self, request, *args, **kwargs):
         form = MovimientoForm(request.POST)
         formset = ElementoFormSet(request.POST)
@@ -76,9 +82,10 @@ class MovimientoCreateView(CreateView):
                 elemento.movimiento = movimiento
                 elemento.save()
 
-            return redirect(f"{reverse_lazy('app:movimiento_lista')}?created=True")
+            return JsonResponse({'success': True, 'message': 'Movimiento registrado.'})
 
-        return render(request, self.template_name, {'form': form, 'formset': formset, 'titulo': 'Registrar movimiento'})
+        errors = form.errors.as_json() + formset.errors.as_json()
+        return JsonResponse({'success': False, 'errors': errors})
     
 # ###### EDITAR ######
 

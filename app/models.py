@@ -15,7 +15,7 @@ class Movimiento(models.Model):
     dependencia = models.CharField(max_length=200, null=True, blank=False, verbose_name='Dependencia')
 
     def __str__(self):
-        return f"Movimiento {self.num_ficha} - Proyecto: {self.proyecto}"
+        return f"Programa de formación: {self.programa_formacion} - Ficha: {self.num_ficha}"
 
     class Meta:
         verbose_name = "Movimiento"
@@ -32,7 +32,7 @@ class Elemento(models.Model):
     observaciones = models.CharField(max_length=500, null=True, blank=True, verbose_name='Observaciones')
 
     def __str__(self):
-        return f"Ítem: {self.item} - Movimiento: {self.movimiento.id}"
+        return f"{self.movimiento} - {self.item}"
 
     class Meta:
         verbose_name = "Elemento"
