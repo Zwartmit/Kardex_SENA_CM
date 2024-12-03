@@ -86,7 +86,7 @@ ElementoFormSet = inlineformset_factory(
             'class': 'form-control',
         }),
         'saldo': forms.NumberInput(attrs={
-            'placeholder': 'Saldo pendiente de entrega',
+            'placeholder': '$',
             'required': True,
             'class': 'form-control',
         }),
@@ -96,13 +96,6 @@ ElementoFormSet = inlineformset_factory(
             'class': 'form-control',
         })
     },
-    extra=1,  # Número de formularios vacíos adicionales para agregar
-    can_delete=True  # Permite eliminar elementos
+    extra=1,
+    can_delete=True
 )
-
-class ReporteForm(forms.Form):
-    FORMATO_CHOICES = [
-        ('excel', 'Excel'),
-        ('pdf', 'PDF'),
-    ]
-    formato = forms.ChoiceField(choices=FORMATO_CHOICES, label='Formato del Reporte')

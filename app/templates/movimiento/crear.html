@@ -4,11 +4,8 @@
 
 {% block contenido %}
 <form method="post" id="formMovimiento" action="{% url 'app:movimiento_crear' %}">
-    <div class="card card-default">
+    <div class="card card-default" style="filter: drop-shadow(0 0 8px #000000);">
         <div class="card-header">
-            <h3 class="card-title">
-                <i class="fas fa-plus"></i><b>{{titulo}}</b>
-            </h3>
         </div>
         <div class="card-body">
             <div class="card-header" style="display: flex; justify-content: center; align-items: center; background-color: #094b39; color: white; text-align: center;">
