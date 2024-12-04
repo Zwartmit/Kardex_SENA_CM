@@ -15,7 +15,7 @@ class Movimiento(models.Model):
     dependencia = models.CharField(max_length=200, null=True, blank=False, verbose_name='Dependencia')
 
     def __str__(self):
-        return f"Programa de formación: {self.programa_formacion} - Ficha: {self.num_ficha}"
+        return f"{self.num_ficha}"
 
     class Meta:
         verbose_name = "Movimiento"
@@ -23,18 +23,29 @@ class Movimiento(models.Model):
         db_table = 'Movimiento'
 
 class Elemento(models.Model):
-    movimiento = models.ForeignKey(Movimiento, on_delete=models.CASCADE, related_name='elementos', verbose_name='Movimiento asociado')
-    item = models.CharField(max_length=100, verbose_name='Ítem')
-    descripcion = models.CharField(max_length=200, verbose_name='Descripción')
-    cantidad_recibida = models.PositiveIntegerField(verbose_name='Cantidad recibida')
-    cantidad_contratada = models.PositiveIntegerField(verbose_name='Cantidad contratada')
-    saldo = models.PositiveIntegerField(verbose_name='Saldo pendiente de entrega')
-    observaciones = models.CharField(max_length=500, null=True, blank=True, verbose_name='Observaciones')
+    descripcion = models.CharField(null=True, blank=False, max_length=200, verbose_name='Descripción')
 
     def __str__(self):
-        return f"{self.movimiento} - {self.item}"
+        return f"{self.descripcion}"
 
     class Meta:
         verbose_name = "Elemento"
         verbose_name_plural = 'Elementos'
         db_table = 'Elemento'
+
+class DetalleMovimiento(models.Model):
+    movimiento = models.ForeignKey(Movimiento, on_delete=models.CASCADE, related_name='detalles',)
+    elemento = models.ForeignKey(Elemento, on_delete=models.PROTECT, verbose_name="Elemento")
+    cantidad_recibida = models.PositiveIntegerField(null=True, blank=False, verbose_name="Cantidad recibida")
+    cantidad_contratada = models.PositiveIntegerField(null=True, blank=False, verbose_name="Cantidad contratada")
+    saldo = models.PositiveIntegerField(null=True, blank=False, verbose_name="Saldo pendiente de entrega")
+    observaciones = models.TextField(null=True, blank=False, verbose_name="Observaciones")
+
+    def __str__(self):
+        
+        return f"Detalle de {self.movimiento} - {self.elemento}"
+
+    class Meta:
+        verbose_name = "Detalle de Movimiento"
+        verbose_name_plural = "Detalles de Movimientos"
+        db_table = "DetalleMovimiento"

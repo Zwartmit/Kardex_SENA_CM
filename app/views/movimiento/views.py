@@ -23,14 +23,15 @@ class MovimientoListView(ListView):
     model = Movimiento
     template_name = 'movimiento/listar.html'
     context_object_name = 'movimientos'
-    
+
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        
+
+        # Información básica
         context['titulo'] = 'Movimientos realizados'
         context['entidad'] = 'Movimientos realizados'
         context['listar_url'] = reverse_lazy('app:movimiento_lista')
@@ -38,15 +39,13 @@ class MovimientoListView(ListView):
 
         movimientos_con_elementos = []
         for movimiento in context['movimientos']:
-            elementos = movimiento.elementos.all() 
+            detalles = movimiento.detalles.all()  
             movimientos_con_elementos.append({
                 'movimiento': movimiento,
-                'elementos': elementos,
-                'num_ficha': movimiento.num_ficha 
+                'elementos': detalles 
             })
-        
-        context['movimientos_con_elementos'] = movimientos_con_elementos
 
+        context['movimientos_con_elementos'] = movimientos_con_elementos
         return context
 
 ###### CREAR ######
@@ -55,11 +54,10 @@ class MovimientoListView(ListView):
 class MovimientoCreateView(CreateView):
     template_name = 'movimiento/crear.html'
     form_class = MovimientoForm
-
+    @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
-        form = MovimientoForm()
-        formset = ElementoFormSet()
-        
+        form = self.form_class()
+        formset = DetalleMovimientoFormSet()
         context = {
             'form': form,
             'formset': formset,
@@ -69,24 +67,23 @@ class MovimientoCreateView(CreateView):
             'crear_url': reverse_lazy('app:movimiento_crear'),
         }
         return render(request, self.template_name, context)
-    
     def post(self, request, *args, **kwargs):
-        form = MovimientoForm(request.POST)
-        formset = ElementoFormSet(request.POST)
-
+        form = self.form_class(request.POST)
+        formset = DetalleMovimientoFormSet(request.POST)
         if form.is_valid() and formset.is_valid():
             movimiento = form.save()
-
-            elementos = formset.save(commit=False)
-            for elemento in elementos:
-                elemento.movimiento = movimiento
-                elemento.save()
-
-            return JsonResponse({'success': True, 'message': 'Movimiento registrado.'})
-
-        errors = form.errors.as_json() + formset.errors.as_json()
+            detalles = formset.save(commit=False)
+            for detalle in detalles:
+                detalle.movimiento = movimiento
+                detalle.save()
+            return JsonResponse({'success': True, 'message': 'Movimiento registrado correctamente.'})
+        # Preparar y devolver errores en caso de no ser válidos
+        errors = {
+            'form_errors': form.errors.as_json(),
+            'formset_errors': formset.errors.as_json(),
+        }
         return JsonResponse({'success': False, 'errors': errors})
-    
+        
 # ###### EDITAR ######
 
 # @method_decorator(never_cache, name='dispatch')

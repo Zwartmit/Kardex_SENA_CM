@@ -1,0 +1,62 @@
+{% extends 'listar.html' %}
+
+{% block columnas %}
+<div class="card-header" style="display: flex; justify-content: center; align-items: center; background-color: #094b39; color: white; text-align: center;">
+    <h1>Elementos registrados</h1>
+</div>
+<tr>
+    <th scope="col" style="text-align: center;">Ítem</th>
+    <th scope="col" style="text-align: center;">Elemento</th>
+    <!-- <th scope="col" style="text-align: center;">Cantidad</th> -->
+    <th scope="col" style="text-align: center;">Opciones</th>
+</tr>
+<tr>
+    <th style="width: auto; text-align: center; align-content: center;"><input type="text" placeholder="Filtrar" class="filter-input" style="width: 100px;" /></th>
+    <th style="width: auto; text-align: center; align-content: center;"><input type="text" placeholder="Filtrar" class="filter-input" style="width: 100px;" /></th>
+    <!-- <th style="width: auto; text-align: center; align-content: center;"><input type="text" placeholder="Filtrar" class="filter-input" style="width: 100px;" /></th> -->
+    <th style="width: auto; text-align: center; align-content: center;"></th>
+</tr>
+{% endblock %}
+
+{% block filas %}
+    {% for p in object_list %}
+    <tr>
+        <td style="text-align: center; align-content: center;">{{ p.id }}</td>
+        <td style="text-align: center; align-content: center;">{{ p.descripcion }}</td>
+        <!-- <td style="text-align: center; align-content: center;">{{ p.cantidad }}</td> -->
+        <td style="text-align: center; align-content: center;">
+            <a href="{% url 'app:elemento_editar' p.id %}" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
+            <a href="{% url 'app:elemento_eliminar' p.id %}" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a>
+        </td>
+    </tr>
+    {% endfor %}
+{% endblock %}
+
+{% block javascript %}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const filterInputs = document.querySelectorAll('.filter-input');
+        const tableRows = document.querySelectorAll("tbody tr");
+
+        const dateStartInput = document.getElementById('filter-date-start');
+        const dateEndInput = document.getElementById('filter-date-end');
+
+        filterInputs.forEach((input, index) => {
+            input.addEventListener("input", function () {
+                const filterText = input.value.toLowerCase();
+
+                tableRows.forEach(row => {
+                    const cells = row.querySelectorAll("td");
+                    
+                    if (index < cells.length - 1 && index !== 5) {
+                        const cell = cells[index];
+                        const cellText = cell ? cell.textContent.toLowerCase() : "";
+                        row.style.display = cellText.includes(filterText) ? "" : "none";
+                    }
+                });
+            });
+        });
+    });
+</script>
+{% endblock %}

@@ -2,6 +2,19 @@ from django import forms
 from django.forms import inlineformset_factory
 from app.models import *
 
+class ElementoForm(forms.ModelForm):
+    class Meta:
+        model = Elemento
+        fields = ['descripcion']
+        widgets={
+            'descripcion': forms.TextInput(attrs={
+                'placeholder': 'Descripción del elemento',
+                'autofocus': True,
+                'required': True,
+                'class': 'form-control',
+            }),
+        }
+
 class MovimientoForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -21,10 +34,11 @@ class MovimientoForm(forms.ModelForm):
             'num_ficha': forms.NumberInput(attrs={
                 'placeholder': 'Número de ficha',
                 'class': 'form-control',
+                'autofocus': True,
                 'min': 1,
             }),
             'proyecto': forms.Textarea(attrs={
-                'placeholder': 'Proyectos',
+                'placeholder': 'Proyectos asociados',
                 'class': 'form-control',
                 'rows': 3,
             }),
@@ -46,7 +60,7 @@ class MovimientoForm(forms.ModelForm):
                 'class': 'form-control',
             }),
             'obs_general': forms.Textarea(attrs={
-                'placeholder': 'Observaciones',
+                'placeholder': 'Observaciones generales',
                 'class': 'form-control',
                 'rows': 3,
             }),
@@ -60,21 +74,12 @@ class MovimientoForm(forms.ModelForm):
                 'class': 'form-control',
             }),
         }
-ElementoFormSet = inlineformset_factory(
+
+DetalleMovimientoFormSet = inlineformset_factory(
     Movimiento,
-    Elemento,
-    fields=['item', 'descripcion', 'cantidad_recibida', 'cantidad_contratada', 'saldo', 'observaciones'],
+    DetalleMovimiento,
+    fields=('elemento', 'cantidad_recibida', 'cantidad_contratada', 'saldo', 'observaciones'),
     widgets={
-        'item': forms.TextInput(attrs={
-            'placeholder': 'Ítem',
-            'required': True,
-            'class': 'form-control',
-        }),
-        'descripcion': forms.TextInput(attrs={
-            'placeholder': 'Descripción del elemento',
-            'required': True,
-            'class': 'form-control',
-        }),
         'cantidad_recibida': forms.NumberInput(attrs={
             'placeholder': 'Cantidad recibida',
             'required': True,
@@ -96,13 +101,6 @@ ElementoFormSet = inlineformset_factory(
             'class': 'form-control',
         })
     },
-    extra=1,  # Número de formularios vacíos adicionales para agregar
-    can_delete=True  # Permite eliminar elementos
+    extra=1,
+    can_delete=True, 
 )
-
-class ReporteForm(forms.Form):
-    FORMATO_CHOICES = [
-        ('excel', 'Excel'),
-        ('pdf', 'PDF'),
-    ]
-    formato = forms.ChoiceField(choices=FORMATO_CHOICES, label='Formato del Reporte')

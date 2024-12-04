@@ -49,11 +49,11 @@
                         <div class="table-container" style="display: flex; justify-content: center; align-items: center;">
                             <table class="table table-bordered" id="tabla-datos" style="width: auto; max-width: auto; margin: auto;">
                                 <tr>
-                                    <th rowspan="2" class="logo" style="text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">
+                                    <th rowspan="2" class="logo" style="text-align: center; align-content: center; background-color: #c4c4c4; border: 0.5px solid #000000">
                                         <img src="{% static 'img/logoSENA_N.jpg' %}" style="height: 80px; width: 80px;" alt="Logo SENA" class="logo-image img-fluid">
                                     </th>
-                                    <td colspan="5" class="header" style="text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">
-                                        <strong style="font-size: 25px;">SISTEMA INTEGRADO DE GESTIÓN</strong><br>
+                                    <td colspan="6" class="header" style="text-align: center; align-content: center; background-color: #c4c4c4; border: 0.5px solid #000000">
+                                        <strong style="font-size: 30px;">SISTEMA INTEGRADO DE GESTIÓN</strong><br>
                                         <b>Formato:</b> Entrega de materiales de formación al aprendiz (SENA, Centro Minero)<br>
                                         <b>Proceso:</b> Gestión de formación profesional integral<br>
                                         <b>Procedimiento:</b> Ejecución de la formación profesional integral
@@ -62,74 +62,89 @@
                                 <tr></tr>
                                 <tr>
                                     <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Programa de formación:</th>
-                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ p.programa_formacion }}</span></td>
-                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Nº de ficha:</th>
-                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ p.num_ficha }}</span></td>
+                                    <td colspan="2" style="width: auto; text-align: center; align-content: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ p.programa_formacion }}</span></td>
                                     <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Fecha de inicio del programa:</th>
                                     <td style="width: auto; text-align: center; align-content: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ p.fecha_inicio_programa }}</span></td>
+                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Nº de ficha:</th>
+                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ p.num_ficha }}</span></td>
                                 </tr>
                                 <tr>
+                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Vocero:</th>
+                                    <td colspan="2" style="width: auto; text-align: center; align-content: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ p.aprendiz }}</span></td>
                                     <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Nº Aprendices:</th>
                                     <td style="width: auto; text-align: center; align-content: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ p.num_aprendices }}</span></td>
-                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Vocero:</th>
-                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ p.aprendiz }}</span></td>
-                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Instructor:</th>
-                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ p.instructor }}</span></td>
-                                </tr>
-                                <tr>
-                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Nº de contrato:</th>
-                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ p.num_contrato }}</span></td>
-                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Fecha de entrega:</th>
-                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ p.fecha }}</span></td>
                                     <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Dependencia:</th>
                                     <td style="width: auto; text-align: center; align-content: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ p.dependencia }}</span></td>
                                 </tr>
                                 <tr>
-                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Proyectos asociados:</th>
-                                    <td colspan="5" style="width: auto; text-align: center; align-content: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ p.proyecto }}</span></td>
+                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Instructor:</th>
+                                    <td colspan="2" style="width: auto; text-align: center; align-content: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ p.instructor }}</span></td>
+                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Nº de contrato:</th>
+                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ p.num_contrato }}</span></td>
+                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Fecha de entrega:</th>
+                                    <td style="width: auto; text-align: center; align-content: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ p.fecha }}</span></td>
                                 </tr>
-                                <th colspan="6" style="border: 0.5px solid #000000"></th>
+                                <tr>
+                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Proyectos asociados:</th>
+                                    <td colspan="2" style="width: auto; text-align: center; align-content: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ p.proyecto }}</span></td>
+                                    <th style="width: auto; text-align: center; background-color: #e8e8e8; border: 0.5px solid #000000"><b>Observaciones generales:</b></th>
+                                    <td colspan="3" style="width: auto; text-align: center; align-content: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ p.obs_general }}</span></td>
+                                </tr>
+                                <th colspan="7" style="border: 0.5px solid #000000"></th>
+                                <tr>
+                                </tr>
+                                <td colspan="7" style="text-align: center; background-color: #c4c4c4; border: 0.5px solid #000000; font-size: 18px"><b>Elementos entregados</b></td>
                                 <tr>
                                     <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Ítem</th>
-                                    <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Descripción del elemento</th>
+                                    <th colspan="2" style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Descripción del elemento</th>
                                     <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Cantidad recibida</th>
                                     <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Cantidad contratada</th>
                                     <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Saldo pendiente de entrega</th>
                                     <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Observaciones</th>
                                 </tr>
-                                {% for elemento in p.elementos.all %}
+                                {% for movimiento_info in movimientos_con_elementos %}
                                 <tr>
-                                    <td style="text-align: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ elemento.item }}</span></td>
-                                    <td style="text-align: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ elemento.descripcion }}</span></td>
-                                    <td style="text-align: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ elemento.cantidad_recibida }}</span></td>
-                                    <td style="text-align: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ elemento.cantidad_contratada }}</span></td>
-                                    <td style="text-align: center; background: #ffffff; border: 0.5px solid #000000"><span>$ {{ elemento.saldo }}</span></td>
-                                    <td style="text-align: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ elemento.observaciones }}</span></td>
+                                    <td colspan="7" style="text-align: center; background: #f2f2f2; font-weight: bold;">
+                                        Movimiento (ID#{{ movimiento_info.movimiento.id }})
+                                    </td>
                                 </tr>
+                                {% for detalle in movimiento_info.elementos %}
+                                    <tr>
+                                        <td style="text-align: center; background: #ffffff; border: 0.5px solid #000000">
+                                            <span>{{ detalle.elemento.id }}</span>
+                                        </td>
+                                        <td colspan="2" style="text-align: center; background: #ffffff; border: 0.5px solid #000000">
+                                            <span>{{ detalle.elemento.descripcion }}</span>
+                                        </td>
+                                        <td style="text-align: center; background: #ffffff; border: 0.5px solid #000000">
+                                            <span>{{ detalle.cantidad_recibida }}</span>
+                                        </td>
+                                        <td style="text-align: center; background: #ffffff; border: 0.5px solid #000000">
+                                            <span>{{ detalle.cantidad_contratada }}</span>
+                                        </td>
+                                        <td style="text-align: center; background: #ffffff; border: 0.5px solid #000000">
+                                            <span>$ {{ detalle.saldo }}</span>
+                                        </td>
+                                        <td style="text-align: center; background: #ffffff; border: 0.5px solid #000000">
+                                            <span>{{ detalle.observaciones }}</span>
+                                        </td>
+                                    </tr>
                                 {% endfor %}
-                                <th colspan="6" style="border: 0.5px solid #000000"></th>
+                                {% endfor %}
+                                <th colspan="7" style="border: 0.5px solid #000000"></th>
                                 <tr>
-                                    <th style="width: auto; text-align: center; background-color: #e8e8e8; border: 0.5px solid #000000"><b>Observaciones generales:</b></th>
-                                    <td colspan="5" style="width: auto; text-align: center; align-content: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ p.obs_general }}</span></td>
                                 </tr>
+                                <td colspan="7" style="text-align: center; background-color: #c4c4c4; border: 0.5px solid #000000; font-size: 18px"><b>FIRMAS</b></td>
                                 <tr>
-                                    <th colspan="6" style="border: 0.5px solid #000000"></th>
-                                </tr>
-                                <td colspan="6" style="text-align: center; background-color: #e8e8e8; border: 0.5px solid #000000; font-size: 18px"><b>FIRMAS</b></td>
-                                <tr>
-                                    <td colspan="2" style="text-align: center; border: 0.5px solid #000000; height: 130px;"></td>
+                                    <td colspan="3" style="text-align: center; border: 0.5px solid #000000; height: 130px;"></td>
                                     <td colspan="2" style="text-align: center; border: 0.5px solid #000000; height: 130px;"></td>
                                     <td colspan="2" style="text-align: center; border: 0.5px solid #000000; height: 130px;"></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2" style="text-align: center; background-color: #e8e8e8; border: 0.5px solid #000000"><b>Coordinador academico</b></td>
+                                    <td colspan="3" style="text-align: center; background-color: #e8e8e8; border: 0.5px solid #000000"><b>Coordinador academico</b></td>
                                     <td colspan="2" style="text-align: center; background-color: #e8e8e8; border: 0.5px solid #000000"><b>Instructor</b></td>
                                     <td colspan="2" style="text-align: center; background-color: #e8e8e8; border: 0.5px solid #000000"><b>Vocero</b></td>
                                 </tr>
-                                {% for movimiento_obj in movimientos_con_elementos %}
-                                <div class="movimiento" data-num-ficha="{{ movimiento_obj.num_ficha }}">
-                                </div>
-                                {% endfor %}
                             </table>
                         </div>
                     </div>
