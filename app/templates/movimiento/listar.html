@@ -103,12 +103,8 @@
                                     <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Observaciones</th>
                                 </tr>
                                 {% for movimiento_info in movimientos_con_elementos %}
-                                <tr>
-                                    <td colspan="7" style="text-align: center; background: #f2f2f2; font-weight: bold;">
-                                        Movimiento (ID#{{ movimiento_info.movimiento.id }})
-                                    </td>
-                                </tr>
                                 {% for detalle in movimiento_info.elementos %}
+                                {% if detalle.movimiento.id == p.id %}
                                     <tr>
                                         <td style="text-align: center; background: #ffffff; border: 0.5px solid #000000">
                                             <span>{{ detalle.elemento.id }}</span>
@@ -129,6 +125,7 @@
                                             <span>{{ detalle.observaciones }}</span>
                                         </td>
                                     </tr>
+                                {% endif %}
                                 {% endfor %}
                                 {% endfor %}
                                 <th colspan="7" style="border: 0.5px solid #000000"></th>

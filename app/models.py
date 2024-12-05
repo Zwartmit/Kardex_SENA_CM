@@ -15,7 +15,7 @@ class Movimiento(models.Model):
     dependencia = models.CharField(max_length=200, null=True, blank=False, verbose_name='Dependencia')
 
     def __str__(self):
-        return f"{self.num_ficha}"
+        return f"Entregado al aprendiz {self.aprendiz} de la ficha {self.num_ficha} ({self.programa_formacion})"
 
     class Meta:
         verbose_name = "Movimiento"

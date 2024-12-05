@@ -12,7 +12,8 @@ from app.forms import *
 def lista_movimientos(request):
     nombre = {
         'titulo': 'Registro de movimientos realizados',
-        'movimientos': Movimiento.objects.all()
+        'movimientos': Movimiento.objects.all(),
+        'elementos': DetalleMovimiento.objects.all()
     }
     return render(request, 'movimiento/listar.html', nombre)
 
@@ -31,7 +32,6 @@ class MovimientoListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        # Información básica
         context['titulo'] = 'Movimientos realizados'
         context['entidad'] = 'Movimientos realizados'
         context['listar_url'] = reverse_lazy('app:movimiento_lista')
@@ -67,6 +67,7 @@ class MovimientoCreateView(CreateView):
             'crear_url': reverse_lazy('app:movimiento_crear'),
         }
         return render(request, self.template_name, context)
+    
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         formset = DetalleMovimientoFormSet(request.POST)
@@ -77,7 +78,7 @@ class MovimientoCreateView(CreateView):
                 detalle.movimiento = movimiento
                 detalle.save()
             return JsonResponse({'success': True, 'message': 'Movimiento registrado correctamente.'})
-        # Preparar y devolver errores en caso de no ser válidos
+        
         errors = {
             'form_errors': form.errors.as_json(),
             'formset_errors': formset.errors.as_json(),

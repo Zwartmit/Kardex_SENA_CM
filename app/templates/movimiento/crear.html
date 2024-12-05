@@ -73,7 +73,7 @@
                         <div class="form-group row mt-4 form-item">
                             <div class="col-md-3">
                                 <label for="{{ form.elemento.id_for_label }}">Elemento:</label>
-                                {{ form.elemento|add_class:'form-control select2 select2-elemento' }}
+                                {{ form.elemento|add_class:'form-control' }}
                             </div>
                             <div class="col-md-3">
                                 <label for="{{ form.cantidad_recibida.id_for_label }}">Cantidad recibida:</label>
@@ -96,7 +96,7 @@
                         </div>
                         {% endfor %}
                     </div>
-                    <button type="button" id="addElement" class="btn btn-success mt-3" style="background: #094b39; color: white;"><i class="fas fa-plus"></i> Agregar elemento</button>
+                    <button type="button" id="addElement" onclick="addFormsetRow()">Agregar Elemento</button>
                 </div>
             </div>
         </div>
@@ -126,6 +126,55 @@
         });
     }
 </script>
+<script>
+    let formsetCounter = document.querySelectorAll('.formset').length;
+
+    function addFormsetRow() {
+        const container = document.querySelector('.container-ele');
+        const lastFormset = container.querySelector('.formset:last-of-type'); // Obtener el último formset
+        const newFormset = lastFormset.cloneNode(true); // Clonar el último formset
+    
+        // Actualizar los índices de los campos del formset clonado
+        const inputs = newFormset.querySelectorAll('input, select, textarea');
+        inputs.forEach(input => {
+            const name = input.name;
+            const id = input.id;
+    
+            // Actualizar el índice en los atributos name e id
+            if (name) {
+                const newName = name.replace(/-\d+-/, `-${formsetCounter}-`);
+                input.name = newName;
+            }
+            if (id) {
+                const newId = id.replace(/-\d+-/, `-${formsetCounter}-`);
+                input.id = newId;
+            }
+    
+            // Limpiar los valores de los campos
+            if (input.type !== 'hidden') {
+                input.value = ''; // Limpiar los valores de entrada
+            }
+        });
+    
+        // Añadir un botón de eliminación
+        const deleteButton = document.createElement('button');
+        deleteButton.type = 'button';
+        deleteButton.className = 'btn btn-danger mt-3';
+        deleteButton.textContent = 'Eliminar';
+        deleteButton.addEventListener('click', function () {
+            container.removeChild(newFormset); // Eliminar el formset clonado
+        });
+    
+        // Agregar el botón de eliminación al nuevo formset
+        newFormset.appendChild(deleteButton);
+    
+        // Insertar el nuevo formset antes del botón "Agregar Elemento"
+        container.insertBefore(newFormset, container.querySelector('#addElement'));
+    
+        // Incrementar el contador para el siguiente formset
+        formsetCounter++;
+    }    
+</script>        
 <script>
     $(document).ready(function () {
         $('.select2-elemento').select2({
