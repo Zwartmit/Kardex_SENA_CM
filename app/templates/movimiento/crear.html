@@ -53,25 +53,28 @@
                             {{ form.dependencia|add_class:'form-control' }}
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="proyecto">Proyectos asociados:</label>
-                        {{ form.proyecto|add_class:'form-control' }}
-                    </div>
-                    <div class="form-group">
-                        <label for="obs_general">Observaciones generales:</label>
-                        {{ form.obs_general|add_class:'form-control' }}
+                    <div class="form-group row mt-2">
+                        <div class="col-md-6">
+                            <label for="proyecto">Proyectos asociados:</label>
+                            {{ form.proyecto|add_class:'form-control' }}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="obs_general">Observaciones generales:</label>
+                            {{ form.obs_general|add_class:'form-control' }}
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="card-header" style="background-color: #d4d4d4; color: black; text-align: center;">
-                <h2 style="display: flex; justify-content: center; align-items: center;"><b>Elementos a entregar</b></h2>
+                <h2 style="display: flex; justify-content: center; align-items: center;"><b>Elementos a entregar</b>
+                </h2>
                 <div class="container-ele">
                     <div class="formset">
                         {{ formset.management_form }}
-                    
+
                         {% for form in formset %}
                         <div class="form-group row mt-4 form-item">
-                            <div class="col-md-3">
+                            <div class="col-md-6">
                                 <label for="{{ form.elemento.id_for_label }}">Elemento:</label>
                                 {{ form.elemento|add_class:'form-control' }}
                             </div>
@@ -83,27 +86,28 @@
                                 <label for="{{ form.cantidad_contratada.id_for_label }}">Cantidad contratada:</label>
                                 {{ form.cantidad_contratada|add_class:'form-control' }}
                             </div>
+                        </div>
+                        <div class="form-group row mt-3">
+                            <div class="col-md-9">
+                                <label for="{{ form.observaciones.id_for_label }}">Observaciones:</label>
+                                {{ form.observaciones|add_class:'form-control' }}
+                            </div>
                             <div class="col-md-3">
                                 <label for="{{ form.saldo.id_for_label }}">Saldo pendiente de entrega:</label>
                                 {{ form.saldo|add_class:'form-control' }}
                             </div>
                         </div>
-                        <div class="form-group row mt-3">
-                            <div class="col-md-12">
-                                <label for="{{ form.observaciones.id_for_label }}">Observaciones:</label>
-                                {{ form.observaciones|add_class:'form-control' }}
-                            </div>
+                        <div class="card-header" style="background-color: #d4d4d4; color: black; text-align: center;">
                         </div>
                         {% endfor %}
                     </div>
-                    <button type="button" id="addElement" onclick="addFormsetRow()">Agregar Elemento</button>
                 </div>
             </div>
         </div>
-        <div class="card-footer">
-            <button class="btn btn-primary btn-flat" type="submit"><i class="fas fa-plus"></i> Guardar</button>
-            <a href="#" class="btn btn-danger btn-flat" onclick="confirmCancel(event)"><i class="fas fa-times"></i> Cancelar</a>
-        </div>
+    </div>
+    <div class="card-footer">
+        <button class="btn btn-primary btn-flat" type="submit"><i class="fas fa-plus"></i> Guardar</button>
+        <a href="#" class="btn btn-danger btn-flat" onclick="confirmCancel(event)"><i class="fas fa-times"></i> Cancelar</a>
     </div>
 </form>
 <script src="{% static 'lib/sweetalert2/sweetHeader.js' %}"></script>
@@ -127,55 +131,6 @@
     }
 </script>
 <script>
-    let formsetCounter = document.querySelectorAll('.formset').length;
-
-    function addFormsetRow() {
-        const container = document.querySelector('.container-ele');
-        const lastFormset = container.querySelector('.formset:last-of-type'); // Obtener el último formset
-        const newFormset = lastFormset.cloneNode(true); // Clonar el último formset
-    
-        // Actualizar los índices de los campos del formset clonado
-        const inputs = newFormset.querySelectorAll('input, select, textarea');
-        inputs.forEach(input => {
-            const name = input.name;
-            const id = input.id;
-    
-            // Actualizar el índice en los atributos name e id
-            if (name) {
-                const newName = name.replace(/-\d+-/, `-${formsetCounter}-`);
-                input.name = newName;
-            }
-            if (id) {
-                const newId = id.replace(/-\d+-/, `-${formsetCounter}-`);
-                input.id = newId;
-            }
-    
-            // Limpiar los valores de los campos
-            if (input.type !== 'hidden') {
-                input.value = ''; // Limpiar los valores de entrada
-            }
-        });
-    
-        // Añadir un botón de eliminación
-        const deleteButton = document.createElement('button');
-        deleteButton.type = 'button';
-        deleteButton.className = 'btn btn-danger mt-3';
-        deleteButton.textContent = 'Eliminar';
-        deleteButton.addEventListener('click', function () {
-            container.removeChild(newFormset); // Eliminar el formset clonado
-        });
-    
-        // Agregar el botón de eliminación al nuevo formset
-        newFormset.appendChild(deleteButton);
-    
-        // Insertar el nuevo formset antes del botón "Agregar Elemento"
-        container.insertBefore(newFormset, container.querySelector('#addElement'));
-    
-        // Incrementar el contador para el siguiente formset
-        formsetCounter++;
-    }    
-</script>        
-<script>
     $(document).ready(function () {
         $('.select2-elemento').select2({
             placeholder: 'Seleccione un elemento',
@@ -194,7 +149,7 @@
     $(document).ready(function () {
         $('#formMovimiento').on('submit', function (event) {
             event.preventDefault();
-    
+
             $.ajax({
                 type: $(this).attr('method'),
                 url: $(this).attr('action'),
@@ -217,7 +172,7 @@
                                 errorMessages += `${error.message}<br>`;
                             }
                         }
-    
+
                         Swal.fire({
                             title: 'Error',
                             html: errorMessages,
