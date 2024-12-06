@@ -54,6 +54,7 @@ class MovimientoListView(ListView):
 class MovimientoCreateView(CreateView):
     template_name = 'movimiento/crear.html'
     form_class = MovimientoForm
+
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         form = self.form_class()
@@ -67,23 +68,32 @@ class MovimientoCreateView(CreateView):
             'crear_url': reverse_lazy('app:movimiento_crear'),
         }
         return render(request, self.template_name, context)
-    
+
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         formset = DetalleMovimientoFormSet(request.POST)
+
         if form.is_valid() and formset.is_valid():
-            movimiento = form.save()
-            detalles = formset.save(commit=False)
-            for detalle in detalles:
-                detalle.movimiento = movimiento
-                detalle.save()
-            return JsonResponse({'success': True, 'message': 'Movimiento registrado correctamente.'})
-        
-        errors = {
-            'form_errors': form.errors.as_json(),
-            'formset_errors': formset.errors.as_json(),
-        }
-        return JsonResponse({'success': False, 'errors': errors})
+            try:
+                movimiento = form.save()
+
+                detalles = formset.save(commit=False)
+                for detalle in detalles:
+                    detalle.movimiento = movimiento 
+                    detalle.save()
+
+                return JsonResponse({'success': True, 'message': 'Movimiento registrado correctamente.'})
+
+            except Exception as e:
+                print(f"Error al guardar el movimiento: {e}")
+                return JsonResponse({'success': False, 'errors': str(e)})
+
+        else:
+            errors = {
+                'form_errors': form.errors.as_json(),
+                'formset_errors': formset.errors.as_json(),
+            }
+            return JsonResponse({'success': False, 'errors': errors})
         
 # ###### EDITAR ######
 

@@ -101,6 +101,6 @@ DetalleMovimientoFormSet = inlineformset_factory(
             'class': 'form-control',
         })
     },
-    extra=1,
-    can_delete=True, 
+    extra=3,
+    can_delete=True,
 )
