@@ -10,7 +10,8 @@
             </h3>
         </div>
         <div class="card-body">
-            <div class="card-header" style="display: flex; justify-content: center; align-items: center; background-color: #094b39; color: white; text-align: center;">
+            <div class="card-header"
+                style="display: flex; justify-content: center; align-items: center; background-color: #094b39; color: white; text-align: center;">
                 <h1>Formato de entrega de materiales <br> de formación al aprendiz</h1>
             </div>
             {% csrf_token %}
@@ -66,14 +67,11 @@
                 </div>
             </div>
             <div class="card-header" style="background-color: #d4d4d4; color: black; text-align: center;">
-                <h2 style="display: flex; justify-content: center; align-items: center;"><b>Elementos a entregar</b>
-                </h2>
-                <div class="container-ele">
-                    <div class="formset">
-                        {{ formset.management_form }}
-
-                        {% for form in formset %}
-                        <div class="form-group row mt-4 form-item">
+                <h2 style="display: flex; justify-content: center; align-items: center;"><b>Elementos a entregar</b></h2>
+                <div id="formset-container" class="formset-container">
+                    {{ formset.management_form }}
+                    {% for form in formset %}
+                        <div class="form-row d-flex align-items-center">
                             <div class="col-md-6">
                                 <label for="{{ form.elemento.id_for_label }}">Elemento:</label>
                                 {{ form.elemento|add_class:'form-control' }}
@@ -86,8 +84,6 @@
                                 <label for="{{ form.cantidad_contratada.id_for_label }}">Cantidad contratada:</label>
                                 {{ form.cantidad_contratada|add_class:'form-control' }}
                             </div>
-                        </div>
-                        <div class="form-group row mt-3">
                             <div class="col-md-9">
                                 <label for="{{ form.observaciones.id_for_label }}">Observaciones:</label>
                                 {{ form.observaciones|add_class:'form-control' }}
@@ -96,18 +92,23 @@
                                 <label for="{{ form.saldo.id_for_label }}">Saldo pendiente de entrega:</label>
                                 {{ form.saldo|add_class:'form-control' }}
                             </div>
+                            <div class="col-md-12 d-flex justify-content-end" style="margin-top: 10px;">
+                                {% if not forloop.first %}
+                                <button type="button" class="btn btn-danger remove-form fas fa-trash"></button>
+                                {% endif %}
+                            </div>
+                
                         </div>
-                        <div class="card-header" style="background-color: #d4d4d4; color: black; text-align: center;">
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
+                    {% endfor %}
+                </div>                
+                <button type="button" class="btn btn-primary" id="add-form">Agregar elemento</button>
             </div>
         </div>
     </div>
     <div class="card-footer">
         <button class="btn btn-primary btn-flat" type="submit"><i class="fas fa-plus"></i> Guardar</button>
-        <a href="#" class="btn btn-danger btn-flat" onclick="confirmCancel(event)"><i class="fas fa-times"></i> Cancelar</a>
+        <a href="#" class="btn btn-danger btn-flat" onclick="confirmCancel(event)"><i class="fas fa-times"></i>
+            Cancelar</a>
     </div>
 </form>
 <script src="{% static 'lib/sweetalert2/sweetHeader.js' %}"></script>
@@ -142,6 +143,54 @@
             placeholder: 'Seleccione un programa',
             allowClear: true,
             width: '100%'
+        });
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const formsetContainer = document.getElementById('formset-container');
+        const addFormButton = document.getElementById('add-form');
+        const totalFormsInput = document.getElementById('id_detalles-TOTAL_FORMS');
+    
+        addFormButton.addEventListener('click', function () {
+            const totalForms = parseInt(totalFormsInput.value);
+            const newFormIndex = totalForms;
+            const emptyFormTemplate = formsetContainer.querySelector('.form-row').cloneNode(true);
+    
+            emptyFormTemplate.querySelectorAll('input, select, textarea').forEach(input => {
+                input.name = input.name.replace(/-\d+-/, `-${newFormIndex}-`);
+                input.id = input.id.replace(/-\d+-/, `-${newFormIndex}-`);
+                input.value = '';
+            });
+    
+            const removeButton = emptyFormTemplate.querySelector('.remove-form');
+            if (!removeButton) {
+                const newRemoveButton = document.createElement('button');
+                newRemoveButton.type = 'button';
+                newRemoveButton.className = 'btn btn-danger remove-form';
+                newRemoveButton.textContent = 'Quitar elemento';
+                emptyFormTemplate.appendChild(newRemoveButton);
+            }
+    
+            formsetContainer.appendChild(emptyFormTemplate);
+            totalFormsInput.value = totalForms + 1;
+        });
+    
+        formsetContainer.addEventListener('click', function (event) {
+            if (event.target.classList.contains('remove-form')) {
+                const formRow = event.target.closest('.form-row');
+                formRow.remove();
+    
+                const forms = formsetContainer.querySelectorAll('.form-row');
+                totalFormsInput.value = forms.length;
+    
+                forms.forEach((form, index) => {
+                    form.querySelectorAll('input, select, textarea').forEach(input => {
+                        input.name = input.name.replace(/-\d+-/, `-${index}-`);
+                        input.id = input.id.replace(/-\d+-/, `-${index}-`);
+                    });
+                });
+            }
         });
     });
 </script>

@@ -175,3 +175,15 @@ td {
     width: 100%;
     border-radius: 100px;
 }
+
+.remove-form {
+    margin-left: auto;
+    padding: 0.3rem 0.5rem;
+    margin-right: 5px;
+}
+
+.form-row {
+    border-bottom: 1px solid #aaaaaa;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}

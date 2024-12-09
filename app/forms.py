@@ -80,6 +80,11 @@ DetalleMovimientoFormSet = inlineformset_factory(
     DetalleMovimiento,
     fields=('elemento', 'cantidad_recibida', 'cantidad_contratada', 'saldo', 'observaciones'),
     widgets={
+        'elemento': forms.Select(attrs={
+            'placeholder': 'Elemento',
+            'required': True,
+            'class': 'form-control',
+        }),
         'cantidad_recibida': forms.NumberInput(attrs={
             'placeholder': 'Cantidad recibida',
             'required': True,
@@ -101,6 +106,6 @@ DetalleMovimientoFormSet = inlineformset_factory(
             'class': 'form-control',
         })
     },
-    extra=3,
+    extra=1,
     can_delete=True,
 )
