@@ -1,4 +1,5 @@
 from django.db import models
+from django.forms import ValidationError
 from .choices import programas
 
 class Movimiento(models.Model):
@@ -40,6 +41,14 @@ class DetalleMovimiento(models.Model):
     cantidad_contratada = models.PositiveIntegerField(null=True, blank=False, verbose_name="Cantidad contratada")
     saldo = models.PositiveIntegerField(null=True, blank=False, verbose_name="Saldo pendiente de entrega")
     observaciones = models.TextField(null=True, blank=False, verbose_name="Observaciones")
+
+    def clean(self):
+            super().clean()
+            if not self.cantidad_recibida and not self.cantidad_contratada:
+                raise ValidationError({
+                    'cantidad_recibida': 'Debe especificar al menos una cantidad recibida o contratada.',
+                    'cantidad_contratada': 'Debe especificar al menos una cantidad recibida o contratada.',
+                })
 
     def __str__(self):
         

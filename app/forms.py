@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import inlineformset_factory
+from django.forms import BaseInlineFormSet, inlineformset_factory
 from app.models import *
 
 class ElementoForm(forms.ModelForm):
@@ -75,6 +75,22 @@ class MovimientoForm(forms.ModelForm):
             }),
         }
 
+class DetalleMovimientoFormSet(BaseInlineFormSet):
+    def clean(self):
+        super().clean()
+        
+        for form in self.forms:
+            if self.can_delete and form.cleaned_data.get('DELETE', False):
+                continue
+
+            cantidad_recibida = form.cleaned_data.get('cantidad_recibida', 0)
+            cantidad_contratada = form.cleaned_data.get('cantidad_contratada', 0)
+
+            if not cantidad_recibida and not cantidad_contratada:
+                raise ValidationError(
+                    "Debe especificar al menos una cantidad recibida o contratada en cada detalle."
+                )
+                
 DetalleMovimientoFormSet = inlineformset_factory(
     Movimiento,
     DetalleMovimiento,
@@ -89,11 +105,13 @@ DetalleMovimientoFormSet = inlineformset_factory(
             'placeholder': 'Cantidad recibida',
             'required': True,
             'class': 'form-control',
+            'min': 1
         }),
         'cantidad_contratada': forms.NumberInput(attrs={
             'placeholder': 'Cantidad contratada',
             'required': True,
             'class': 'form-control',
+            'min': 1
         }),
         'saldo': forms.NumberInput(attrs={
             'placeholder': 'Saldo pendiente de entrega',

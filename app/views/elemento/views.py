@@ -54,7 +54,8 @@ class ElementoCreateView(CreateView):
         context['titulo'] = 'Registrar elemento'
         context['entidad'] = 'Registrar elemento'
         context['error'] = 'Este elemento ya está registrado.'
-        context['listar_url'] = reverse_lazy('app:elemento_lista')
+        context['listar_url'] = reverse_lazy('app:elemento_crear')
+        context['crear_url'] = reverse_lazy('app:elemento_lista')
         return context
     
     def form_valid(self, form):

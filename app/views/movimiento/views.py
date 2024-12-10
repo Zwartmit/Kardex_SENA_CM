@@ -64,8 +64,8 @@ class MovimientoCreateView(CreateView):
             'formset': formset,
             'titulo': 'Registrar nuevo movimiento',
             'entidad': 'Registrar nuevo movimiento',
-            'listar_url': reverse_lazy('app:movimiento_lista'),
-            'crear_url': reverse_lazy('app:movimiento_crear'),
+            'listar_url': reverse_lazy('app:movimiento_crear'),
+            'crear_url': reverse_lazy('app:movimiento_lista'),
         }
         return render(request, self.template_name, context)
 
