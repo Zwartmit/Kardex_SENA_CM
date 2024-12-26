@@ -105,6 +105,37 @@
             </div>
         </div>
     </div>
+
+    <div style="position: fixed; bottom: 20px; left: 20px;">
+        <button id="helpButton" class="btn btn-secondary" style="border-radius: 50%; width: 50px; height: 50px;">
+            <i class="fas fa-question"></i>
+        </button>
+        <div id="helpMenu" style="display: none; position: absolute; bottom: 60px; left: 0; background: white; border: 1px solid #ccc; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); z-index: 1000;">
+            <ul style="list-style: none; padding: 10px; margin: 0; width: 150px;">
+                <li style="margin-bottom: 10px">
+                    <a href="{% static 'Manual de usuario - Software Kardex.pdf' %}" target="_blank" style="text-decoration: none; color: #333;">Abrir manual PDF</a>
+                </li>
+                <li style="margin-bottom: 10px">
+                    <a href="https://youtu.be/QVIamQvdyOg?si=TtggNvLYEphTP2dq" target="_blank" style="text-decoration: none; color: #333;">Abrir video tutorial</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const helpButton = document.getElementById('helpButton');
+        const helpMenu = document.getElementById('helpMenu');
+
+        helpButton.addEventListener('click', () => {
+            helpMenu.style.display = helpMenu.style.display === 'none' ? 'block' : 'none';
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!helpButton.contains(event.target) && !helpMenu.contains(event.target)) {
+                helpMenu.style.display = 'none';
+            }
+        });
+    </script>
     <script src="{% static 'lib/adminlte-3.0.4/plugins/jquery/jquery.min.js' %}"></script>
     <script src="{% static 'lib/adminlte-3.0.4/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'lib/adminlte-3.0.4/js/adminlte.min.js' %}"></script>
