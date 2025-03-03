@@ -14,6 +14,19 @@ class ElementoForm(forms.ModelForm):
                 'class': 'form-control',
             }),
         }
+        
+class ProgramaForm(forms.ModelForm):
+    class Meta:
+        model = Programa
+        fields = ['programa']
+        widgets={
+            'programa': forms.TextInput(attrs={
+                'placeholder': 'Programa de formación',
+                'autofocus': True,
+                'required': True,
+                'class': 'form-control',
+            }),
+        }
 
 class MovimientoForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -22,12 +35,12 @@ class MovimientoForm(forms.ModelForm):
     class Meta:
         model = Movimiento
         fields = [
-            'programa_formacion', 'num_ficha', 'proyecto', 'instructor', 'aprendiz',
+            'programa', 'num_ficha', 'proyecto', 'instructor', 'aprendiz',
             'num_aprendices', 'num_contrato', 'obs_general', 'fecha_inicio_programa',
             'dependencia'
         ]
         widgets = {
-            'programa_formacion': forms.Select(attrs={
+            'programa': forms.Select(attrs={
                 'placeholder': 'Programa de formación',
                 'class': 'form-control',
             }),

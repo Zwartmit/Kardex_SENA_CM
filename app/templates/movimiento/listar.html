@@ -33,7 +33,7 @@
 <tr>
     <td style="width: auto; text-align: center; align-content: center;">{{ p.id }}</td>
     <td style="width: auto; text-align: center; align-content: center;">{{ p.num_ficha }}</td>
-    <td style="width: auto; text-align: center; align-content: center;">{{ p.programa_formacion }}</td>
+    <td style="width: auto; text-align: center; align-content: center;">{{ p.programa }}</td>
     <td style="width: auto; text-align: center; align-content: center;">{{ p.aprendiz }}</td>
     <td style="width: auto; text-align: center; align-content: center;">{{ p.instructor }}</td>
     <td style="width: auto; text-align: center; align-content: center;">{{ p.fecha|date:"Y-m-d H:i:s" }}</td>
@@ -62,7 +62,7 @@
                                 <tr></tr>
                                 <tr>
                                     <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Programa de formación:</th>
-                                    <td colspan="2" style="width: auto; text-align: center; align-content: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ p.programa_formacion }}</span></td>
+                                    <td colspan="2" style="width: auto; text-align: center; align-content: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ p.programa }}</span></td>
                                     <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Fecha de inicio del programa:</th>
                                     <td style="width: auto; text-align: center; align-content: center; background: #ffffff; border: 0.5px solid #000000"><span>{{ p.fecha_inicio_programa }}</span></td>
                                     <th style="width: auto; text-align: center; align-content: center; background-color: #e8e8e8; border: 0.5px solid #000000">Nº de ficha:</th>
@@ -146,8 +146,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary generatePdfButton" data-num-ficha="{{ p.num_ficha }}"><i class="fas fa-file-pdf"></i> Generar PDF</button>
-                        <button type="button" class="btn btn-danger" style="filter: drop-shadow(0 0 3px #000000);" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-primary generatePdfButton" style="filter: drop-shadow(0 0 2px #000000);" data-num-ficha="{{ p.num_ficha }}"><i class="fas fa-file-pdf"></i> Generar PDF</button>
+                        <button type="button" class="btn btn-danger" style="filter: drop-shadow(0 0 2px #000000);" data-dismiss="modal">Cerrar</button>
                     </div>
                 </div>
             </div>

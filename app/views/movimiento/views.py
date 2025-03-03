@@ -13,7 +13,7 @@ def lista_movimientos(request):
     nombre = {
         'titulo': 'Registro de movimientos realizados',
         'movimientos': Movimiento.objects.all(),
-        'elementos': DetalleMovimiento.objects.all()
+        'elementos': DetalleMovimiento.objects.all(),
     }
     return render(request, 'movimiento/listar.html', nombre)
 
@@ -66,6 +66,7 @@ class MovimientoCreateView(CreateView):
             'entidad': 'Registrar nuevo movimiento',
             'listar_url': reverse_lazy('app:movimiento_crear'),
             'crear_url': reverse_lazy('app:movimiento_lista'),
+            'programas': Programa.objects.all()
         }
         return render(request, self.template_name, context)
 

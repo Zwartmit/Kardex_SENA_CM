@@ -1,10 +1,31 @@
 from django.db import models
 from django.forms import ValidationError
-from .choices import programas
 
+class Elemento(models.Model):
+    descripcion = models.CharField(null=True, blank=False, max_length=200, verbose_name='Descripción')
+
+    def __str__(self):
+        return f"{self.descripcion}"
+
+    class Meta:
+        verbose_name = "Elemento"
+        verbose_name_plural = 'Elementos'
+        db_table = 'Elemento'
+
+class Programa(models.Model):
+    programa = models.CharField(null=True, blank=False, max_length=200, verbose_name='Descripción')
+
+    def __str__(self):
+        return f"{self.programa}"
+
+    class Meta: 
+        verbose_name = "Programa"
+        verbose_name_plural = "Programas"
+        db_table = "Programa"
+        
 class Movimiento(models.Model):
     fecha = models.DateTimeField(auto_now_add=True, verbose_name='Fecha')
-    programa_formacion = models.CharField(max_length=100, choices=[(prog, prog) for prog in programas], null=True, blank=False, verbose_name='Programa de formación')
+    programa = models.ForeignKey(Programa, on_delete=models.PROTECT, verbose_name="Programa", null=True, blank=True)
     num_ficha = models.PositiveIntegerField(null=True, blank=False, verbose_name='Ficha')
     proyecto = models.CharField(max_length=200, null=True, blank=False, verbose_name='Proyecto')
     instructor = models.CharField(max_length=200, null=True, blank=False, verbose_name='Instructor')
@@ -22,17 +43,6 @@ class Movimiento(models.Model):
         verbose_name = "Movimiento"
         verbose_name_plural = "Movimientos"
         db_table = 'Movimiento'
-
-class Elemento(models.Model):
-    descripcion = models.CharField(null=True, blank=False, max_length=200, verbose_name='Descripción')
-
-    def __str__(self):
-        return f"{self.descripcion}"
-
-    class Meta:
-        verbose_name = "Elemento"
-        verbose_name_plural = 'Elementos'
-        db_table = 'Elemento'
 
 class DetalleMovimiento(models.Model):
     movimiento = models.ForeignKey(Movimiento, on_delete=models.CASCADE, related_name='detalles',)
@@ -58,3 +68,4 @@ class DetalleMovimiento(models.Model):
         verbose_name = "Detalle de Movimiento"
         verbose_name_plural = "Detalles de Movimientos"
         db_table = "DetalleMovimiento"
+    

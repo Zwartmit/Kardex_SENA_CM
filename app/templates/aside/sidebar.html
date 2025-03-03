@@ -33,7 +33,7 @@
             </ul>
             <a class="nav-link d-flex justify-content-between align-items-center" data-toggle="" aria-expanded="true" style="color: white; font-size: 13px; border-radius: 10px;">
                 <div class="d-flex align-items-center" style="border-radius: 10px;">
-                    <i class="nav-icon fas fa-boxes" style="font-size: 23px; margin-right: 5px;"></i>
+                    <i class="nav-icon fas fa-exchange" style="font-size: 23px; margin-right: 5px;"></i>
                     <p class="mb-0" style="font-size: 18px; border-radius: 10px;">Movimientos</p>
                 </div>
             </a>
@@ -47,8 +47,29 @@
                 </li>
                 <li class="nav-item" style="border-radius: 10px;">
                     <a class="nav-link d-flex align-items-center" href="{% url 'app:movimiento_lista' %}" style="font-size: 19px; color: white; border-radius: 10px;">
-                        <i class="nav-icon fas fa-right-left" style="font-size: 20px; margin-right: 5px; color: white; border-radius: 10px;"></i>
+                        <i class="nav-icon fas fa-list" style="font-size: 20px; margin-right: 5px; color: white; border-radius: 10px;"></i>
                         <span class="nav-text" style="border-radius: 10px; font-size: 17px;"><em>Consultar movimientos</em></span>
+                    </a>
+                </li>
+            </ul>
+            <a class="nav-link d-flex justify-content-between align-items-center" data-toggle="" aria-expanded="true" style="color: white; font-size: 13px; border-radius: 10px;">
+                <div class="d-flex align-items-center" style="border-radius: 10px;">
+                    <i class="nav-icon fas fa-hard-hat" style="font-size: 23px; margin-right: 5px;"></i>
+                    <p class="mb-0" style="font-size: 18px; border-radius: 10px;">Programas de formación</p>
+                </div>
+            </a>
+            <div class="sidebar-divider" style="border-bottom: 2px solid #ffffff; margin: -5px 10px;"></div>
+            <ul class="list-unstyled pl-4 show" id="submenu2" style="border-radius: 10px; padding-top: 15px;">
+                <li class="nav-item" style="border-radius: 10px;">
+                    <a class="nav-link d-flex align-items-center" href="{% url 'app:programa_crear' %}" style="font-size: 19px; color: white; border-radius: 10px;">
+                        <i class="nav-icon fas fa-folder-plus" style="font-size: 20px; margin-right: 5px; color: white; border-radius: 10px;"></i>
+                        <span class="nav-text" style="border-radius: 10px; font-size: 17px;"><em>Registrar programa</em></span>
+                    </a>
+                </li>
+                <li class="nav-item" style="border-radius: 10px;">
+                    <a class="nav-link d-flex align-items-center" href="{% url 'app:programa_lista' %}" style="font-size: 19px; color: white; border-radius: 10px;">
+                        <i class="nav-icon fas fa-folder" style="font-size: 20px; margin-right: 5px; color: white; border-radius: 10px;"></i>
+                        <span class="nav-text" style="border-radius: 10px; font-size: 17px;"><em>Programas registrados</em></span>
                     </a>
                 </li>
             </ul>
