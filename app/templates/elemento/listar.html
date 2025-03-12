@@ -7,13 +7,13 @@
 <tr>
     <th scope="col" style="text-align: center;">Ítem</th>
     <th scope="col" style="text-align: center;">Elemento</th>
-    <!-- <th scope="col" style="text-align: center;">Cantidad</th> -->
+    <th scope="col" style="text-align: center;">Cantidad</th>
     <th scope="col" style="text-align: center;">Opciones</th>
 </tr>
 <tr>
     <th style="width: auto; text-align: center; align-content: center;"><input type="text" placeholder="Filtrar" class="filter-input" style="width: 100px;" /></th>
     <th style="width: auto; text-align: center; align-content: center;"><input type="text" placeholder="Filtrar" class="filter-input" style="width: 100px;" /></th>
-    <!-- <th style="width: auto; text-align: center; align-content: center;"><input type="text" placeholder="Filtrar" class="filter-input" style="width: 100px;" /></th> -->
+    <th style="width: auto; text-align: center; align-content: center;"><input type="text" placeholder="Filtrar" class="filter-input" style="width: 100px;" /></th>
     <th style="width: auto; text-align: center; align-content: center;"></th>
 </tr>
 {% endblock %}
@@ -23,7 +23,7 @@
     <tr>
         <td style="text-align: center; align-content: center;">{{ p.id }}</td>
         <td style="text-align: center; align-content: center;">{{ p.descripcion }}</td>
-        <!-- <td style="text-align: center; align-content: center;">{{ p.cantidad }}</td> -->
+        <td style="text-align: center; align-content: center;">{{ p.cantidad }}</td>
         <td style="text-align: center; align-content: center;">
             <a href="{% url 'app:elemento_editar' p.id %}" class="btn btn-info btn-sm" title="Editar elemento"><i class="fas fa-edit"></i></a>
             <a href="{% url 'app:elemento_eliminar' p.id %}" class="btn btn-danger btn-sm" title="Eliminar elemento"><i class="fas fa-trash"></i></a>

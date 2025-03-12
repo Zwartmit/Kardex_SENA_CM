@@ -15,7 +15,7 @@
                 {% csrf_token %}
                 {% for field in form.visible_fields %}
                 <div class="form-group">
-                    <label for="text">Elemento:</label>
+                    <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
                     {{ field|add_class:'form-control'|attr:'autocomplete:off' }}
                 </div>
                 {% endfor %}

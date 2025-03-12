@@ -7,3 +7,5 @@ django-backup
 django-select2
 openpyxl
 reportlab
+captcha
+django-recaptcha

@@ -78,6 +78,9 @@
                             </div>
                         </div>
                     </div>
+                     <div class="form-group">
+                        {{ form.captcha }}
+                    </div>
                     <div class="row">
                         <div class="col-8">
                             <div class="icheck-primary">
@@ -91,16 +94,29 @@
                         </div>
                     </div>
                     <script>
-                        {% if form.errors %}
-                        Swal.fire({
-                            title: 'Error',
-                            text: 'Usuario o contraseña incorrectos, intente nuevamente.',
-                            icon: 'error',
-                            confirmButtonText: 'Aceptar',
-                            confirmButtonColor: '#094b39',
-                        });
-                        {% endif %}
-                    </script>
+                   document.addEventListener("DOMContentLoaded", function () {
+                            {% if captcha_error %}
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'Es necesario completar el captcha para continuar.',
+                                icon: 'error',
+                                confirmButtonText: 'Aceptar',
+                                confirmButtonColor: '#094b39',
+                            });
+                            {% endif %}
+                    
+                            {% if form.errors and not form.captcha.errors %}
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'Usuario o contraseña incorrectos, intente nuevamente.',
+                                icon: 'error',
+                                confirmButtonText: 'Aceptar',
+                                confirmButtonColor: '#094b39',
+                            });
+                            {% endif %}
+                        });   
+                        
+                        </script>
                 </form>
             </div>
         </div>

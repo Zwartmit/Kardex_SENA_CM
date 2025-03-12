@@ -5,10 +5,16 @@ from app.models import *
 class ElementoForm(forms.ModelForm):
     class Meta:
         model = Elemento
-        fields = ['descripcion']
+        fields = ['descripcion', 'cantidad']
         widgets={
             'descripcion': forms.TextInput(attrs={
                 'placeholder': 'Descripción del elemento',
+                'autofocus': True,
+                'required': True,
+                'class': 'form-control',
+            }),
+            'cantidad': forms.NumberInput(attrs={
+                'placeholder': 'Cantidad',
                 'autofocus': True,
                 'required': True,
                 'class': 'form-control',

@@ -2,6 +2,9 @@ from django import forms
 from django.contrib.auth.forms import SetPasswordForm as DjangoSetPasswordForm
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import AuthenticationForm
+from django_recaptcha.widgets import ReCaptchaV2Checkbox
+from django_recaptcha.fields import ReCaptchaField
 
 UserModel = get_user_model()
 
@@ -39,3 +42,9 @@ class SetPasswordForm(DjangoSetPasswordForm):
         if commit:
             self.user.save()
         return self.user
+
+class CustomLoginForm(AuthenticationForm):
+    captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox())
+ 
+class LoginForm(forms.Form):
+    captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox())

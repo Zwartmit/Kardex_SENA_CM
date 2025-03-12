@@ -107,18 +107,17 @@
                         {% endif %}
                         <div class="col-md-6">
                             <label for="{{ form.elemento.id_for_label }}">Elemento:</label>
-                            {{ form.elemento|add_class:'form-control' }}
-                            {% for error in form.elemento.errors %}
-                            <div class="text-danger">{{ error }}</div>
-                            {% endfor %}
+                            <select id="elementoSeleccionado" name="{{ form.elemento.name }}" class="form-control">
+                                <option value="">Seleccione un elemento</option>
+                                {% for e in elementos %}
+                                <option value="{{ e.id }}" data-cantidad="{{ e.cantidad }}">{{ e.descripcion }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                         <div class="col-md-3">
-                            <label for="{{ form.cantidad_recibida.id_for_label }}">Cantidad recibida:</label>
-                            {{ form.cantidad_recibida|add_class:'form-control' }}
-                            {% for error in form.cantidad_recibida.errors %}
-                            <div class="text-danger">{{ error }}</div>
-                            {% endfor %}
-                        </div>
+                            <label for="cantidadDisponible">Cantidad disponible:</label>
+                            <input type="text" id="cantidadDisponible" class="form-control" style="background-color: white" readonly>
+                        </div>                        
                         <div class="col-md-3">
                             <label for="{{ form.cantidad_contratada.id_for_label }}">Cantidad contratada:</label>
                             {{ form.cantidad_contratada|add_class:'form-control' }}
@@ -190,6 +189,18 @@
                 placeholder: "Seleccione un programa",
                 allowClear: true
             });
+        });
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let selectElemento = document.getElementById("elementoSeleccionado");
+        let cantidadInput = document.getElementById("cantidadDisponible");
+
+        selectElemento.addEventListener("change", function () {
+            let selectedOption = selectElemento.options[selectElemento.selectedIndex];
+            let cantidad = selectedOption.getAttribute("data-cantidad") || "";
+            cantidadInput.value = cantidad;
         });
     });
 </script>

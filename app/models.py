@@ -3,6 +3,7 @@ from django.forms import ValidationError
 
 class Elemento(models.Model):
     descripcion = models.CharField(null=True, blank=False, max_length=200, verbose_name='Descripción')
+    cantidad = models.PositiveIntegerField(null=True, blank=False, verbose_name='Cantidad')
 
     def __str__(self):
         return f"{self.descripcion}"
@@ -13,7 +14,7 @@ class Elemento(models.Model):
         db_table = 'Elemento'
 
 class Programa(models.Model):
-    programa = models.CharField(null=True, blank=False, max_length=200, verbose_name='Descripción')
+    programa = models.CharField(null=True, blank=False, max_length=200, verbose_name='Programa')
 
     def __str__(self):
         return f"{self.programa}"

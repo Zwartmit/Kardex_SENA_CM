@@ -15,16 +15,26 @@ from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from django.contrib.auth import get_user_model
 from django.views.generic import TemplateView
+from .forms import CustomLoginForm 
 
 UserModel = get_user_model()
+
 class LoginFormView(LoginView):
-    template_name="login.html"
-    
+    template_name = "login.html"
+    authentication_form = CustomLoginForm 
+
+    def form_invalid(self, form):
+        captcha_error = "captcha" in form.errors
+        print("Captcha Error:", captcha_error)  
+        return self.render_to_response(self.get_context_data(form=form, captcha_error=captcha_error))
+
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context ["titulo"] = "Iniciar Sesion"
+        context["titulo"] = "Iniciar Sesión"
+        context["captcha_error"] = kwargs.get("captcha_error", False)
         return context
-
+    
 class logoutredirect(RedirectView):
     pattern_name="login"
     
