@@ -8,7 +8,7 @@ class ElementoForm(forms.ModelForm):
         fields = ['descripcion', 'cantidad']
         widgets={
             'descripcion': forms.TextInput(attrs={
-                'placeholder': 'Descripción del elemento',
+                'placeholder': 'Elemento',
                 'autofocus': True,
                 'required': True,
                 'class': 'form-control',

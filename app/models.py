@@ -2,7 +2,7 @@ from django.db import models
 from django.forms import ValidationError
 
 class Elemento(models.Model):
-    descripcion = models.CharField(null=True, blank=False, max_length=200, verbose_name='Descripción')
+    descripcion = models.CharField(null=True, blank=False, max_length=200, verbose_name='Elemento')
     cantidad = models.PositiveIntegerField(null=True, blank=False, verbose_name='Cantidad')
 
     def __str__(self):

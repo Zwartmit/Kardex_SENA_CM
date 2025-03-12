@@ -59,15 +59,18 @@ class ElementoCreateView(CreateView):
         return context
     
     def form_valid(self, form):
-        elemento = form.cleaned_data.get('elemento')
-        if elemento is not None:
-            elemento = elemento.lower()
+        descripcion = form.cleaned_data.get('descripcion')
+        if descripcion is not None:
+            descripcion = descripcion.strip().lower().capitalize()
             
-            if Elemento.objects.filter(elemento_exact=elemento).exists():
-                form.add_error('elemento', 'Ya existe un elemento registrado con ese nombre.')
+            if Elemento.objects.filter(descripcion=descripcion).exists():
+                form.add_error('descripcion', 'Ya existe un programa registrado con ese nombre.')
                 return self.form_invalid(form)
 
-        response = super().form_valid(form)
+        self.object = form.save(commit=False)
+        self.object.descripcion = descripcion
+        self.object.save()
+
         success_url = reverse('app:elemento_crear') + '?created=True'
         return redirect(success_url)
     

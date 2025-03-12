@@ -5,12 +5,12 @@
     <h1>Programas de formación registrados</h1>
 </div>
 <tr>
-    <th scope="col" style="text-align: center;">Ítem</th>
-    <th scope="col" style="text-align: center;">Programa</th>
+    {% comment %} <th scope="col" style="text-align: center;">Ítem</th> {% endcomment %}
+    <th scope="col" style="text-align: center;">Programa de formación</th>
     <th scope="col" style="text-align: center;">Opciones</th>
 </tr>
 <tr>
-    <th style="width: auto; text-align: center; align-content: center;"><input type="text" placeholder="Filtrar" class="filter-input" style="width: 100px;" /></th>
+    {% comment %} <th style="width: auto; text-align: center; align-content: center;"><input type="text" placeholder="Filtrar" class="filter-input" style="width: 100px;" /></th> {% endcomment %}
     <th style="width: auto; text-align: center; align-content: center;"><input type="text" placeholder="Filtrar" class="filter-input" style="width: 100px;" /></th>
     <th style="width: auto; text-align: center; align-content: center;"></th>
 </tr>
@@ -19,7 +19,7 @@
 {% block filas %}
     {% for p in object_list %}
     <tr>
-        <td style="text-align: center; align-content: center;">{{ p.id }}</td>
+        {% comment %} <td style="text-align: center; align-content: center;">{{ p.id }}</td> {% endcomment %}
         <td style="text-align: center; align-content: center;">{{ p.programa }}</td>
         <td style="text-align: center; align-content: center;">
             <a href="{% url 'app:programa_editar' p.id %}" class="btn btn-info btn-sm" title="Editar programa"><i class="fas fa-edit"></i></a>

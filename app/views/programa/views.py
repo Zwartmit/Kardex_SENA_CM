@@ -12,7 +12,7 @@ from app.forms import ProgramaForm
 @method_decorator(never_cache, name='dispatch')
 def lista_programas(request):
     nombre = {
-        'titulo': 'Listado de programas',
+        'titulo': 'Programas de formación',
         'programas': Programa.objects.all()
     }
     return render(request, 'programa/listar.html', nombre)
@@ -30,8 +30,8 @@ class ProgramaListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['titulo'] = 'Listado de programas'
-        context['entidad'] = 'Listado de programas'
+        context['titulo'] = 'Programas de formación'
+        context['entidad'] = 'Programas de formación'
         context['listar_url'] = reverse_lazy('app:programa_lista')
         context['crear_url'] = reverse_lazy('app:programa_crear')
         return context
