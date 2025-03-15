@@ -1,36 +1,28 @@
-# Usa una imagen ligera y compatible
-FROM python:3.10-slim-bullseye
+FROM python:3.9-slim
 
-# Establece el directorio de trabajo en /app
-WORKDIR /app
-
-# Instala dependencias del sistema necesarias para mysqlclient
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
-    gcc \
-    python3-dev \
-    libmariadb-dev \
     build-essential \
+    libmysqlclient-dev \
+    python3-dev \
     libssl-dev \
     libffi-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Copia los archivos del proyecto al contenedor
-COPY . .
+# Upgrade pip and setuptools
+RUN pip install --upgrade pip setuptools
 
-# Crea un entorno virtual
-RUN python -m venv venv && . venv/bin/activate
+# Copy requirements file
+COPY requirements.txt /app/requirements.txt
 
-# Instala las dependencias de Python
-RUN pip install --no-cache-dir -r requirements.txt
+# Install Python dependencies
+RUN pip install --no-cache-dir -r /app/requirements.txt
 
-# Recoge archivos estáticos
-RUN python manage.py collectstatic --noinput
+# Copy the rest of the application
+COPY . /app
 
-# Aplica migraciones
-RUN python manage.py migrate
+# Set working directory
+WORKDIR /app
 
-# Expone el puerto 8000
-EXPOSE 8000
-
-# Comando para ejecutar Django con Gunicorn
-CMD ["gunicorn", "kardex.wsgi:application", "--bind", "0.0.0.0:8000"]
+# Run the application
+CMD ["python", "manage.py", "runserver"]
