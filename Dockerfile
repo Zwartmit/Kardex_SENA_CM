@@ -7,14 +7,17 @@ WORKDIR /app
 # Copia los archivos del proyecto al contenedor
 COPY . .
 
-# Instala las dependencias del sistema
+# Instala dependencias del sistema
 RUN apt-get update && apt-get install -y \
     gcc \
     python3-dev \
     default-libmysqlclient-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Crea un entorno virtual
+# Instala mysqlclient manualmente antes de instalar requirements.txt
+RUN pip install --no-cache-dir mysqlclient
+
+# Crea un entorno virtual y activa
 RUN python -m venv venv && . venv/bin/activate
 
 # Instala las dependencias de Python
