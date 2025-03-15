@@ -5,7 +5,8 @@ FROM python:3.10
 WORKDIR /app
 
 # Instala dependencias del sistema
-RUN apt-get update && apt-get install -y \
+RUN apt-get update 
+RUN apt-get install -y \
     python3-dev \
     libmariadb-dev-compat \
     libmariadb-dev \
