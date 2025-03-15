@@ -7,7 +7,7 @@ WORKDIR /app
 # Instala dependencias del sistema
 RUN apt-get update && apt-get install -y \
     python3-dev \
-    default-libmysqlclient-dev \
+    libmariadb-dev-compat \  # ✅ Alternativa a default-libmysqlclient-dev
     build-essential \
     libssl-dev \
     libffi-dev \
