@@ -4,20 +4,20 @@ FROM python:3.10-slim-bullseye
 # Establece el directorio de trabajo en /app
 WORKDIR /app
 
-# Copia los archivos del proyecto al contenedor
-COPY . .
-
-# Instala dependencias del sistema
+# Instala dependencias del sistema necesarias para mysqlclient
 RUN apt-get update && apt-get install -y \
     gcc \
     python3-dev \
-    default-libmysqlclient-dev \
+    libmariadb-dev \
+    build-essential \
+    libssl-dev \
+    libffi-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Instala mysqlclient manualmente antes de instalar requirements.txt
-RUN pip install --no-cache-dir mysqlclient
+# Copia los archivos del proyecto al contenedor
+COPY . .
 
-# Crea un entorno virtual y activa
+# Crea un entorno virtual
 RUN python -m venv venv && . venv/bin/activate
 
 # Instala las dependencias de Python
